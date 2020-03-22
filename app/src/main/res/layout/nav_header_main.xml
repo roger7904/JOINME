@@ -14,7 +14,7 @@ android:orientation="vertical">
     android:background="@color/colorMain">
 
     <Button
-        android:id="@+id/usernamebtn"
+        android:id="@+id/btn_user"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="122dp"
         android:layout_height="45dp"
@@ -29,12 +29,12 @@ android:orientation="vertical">
         app:layout_constraintVertical_bias="0.504" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView_user"
         android:layout_width="115dp"
         android:layout_height="88dp"
         android:layout_marginLeft="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/usernamebtn"
+        app:layout_constraintEnd_toStartOf="@+id/btn_user"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +59,7 @@ android:orientation="vertical">
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/homebtn"
+                android:id="@+id/btn_to_homepage"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@android:color/transparent"
@@ -68,7 +68,7 @@ android:orientation="vertical">
                 android:gravity="center"/>
 
             <Button
-                android:id="@+id/ownpagebtn"
+                android:id="@+id/btn_to_personalpage"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@android:color/transparent"
@@ -77,7 +77,7 @@ android:orientation="vertical">
                 android:gravity="center" />
 
             <Button
-                android:id="@+id/activitybtn"
+                android:id="@+id/btn_to_activitypage"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@android:color/transparent"
@@ -86,7 +86,7 @@ android:orientation="vertical">
                 android:gravity="center" />
 
             <Button
-                android:id="@+id/friendbtn"
+                android:id="@+id/btn_to_friendpage"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@android:color/transparent"
@@ -98,7 +98,7 @@ android:orientation="vertical">
 
         <Button
             android:text="@string/logout"
-            android:id="@+id/logoutbtn"
+            android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorDrawer"

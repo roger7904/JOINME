@@ -11,17 +11,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button login;
     private Button register;
-    private Button forgetpw;
+    private Button forgetpwd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //初始化控制項
         initViews();
-        //初始化資料
         initData();
-        //設定監聽事件
         setListeners();
     }
 
@@ -29,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     {
         login=(Button)findViewById(R.id.login);
         register=(Button)findViewById(R.id.register);
-        forgetpw=(Button)findViewById(R.id.forgetpassword);
+        forgetpwd=(Button)findViewById(R.id.forgetpassword);
     }
 
     private void initData()
@@ -38,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners()
     {
-        Button login=(Button)findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,5 +43,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,register.class);
+                startActivity(intent);
+            }
+        });
+        forgetpwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,forgetpwd.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

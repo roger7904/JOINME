@@ -14,6 +14,8 @@
             android:label="@string/title_activity_homepage"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".register" />
+        <activity android:name=".forgetpwd" />
+        <activity android:name=".informationedit" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
