@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         initData();
         setListeners();
+
+        //pushtest
     }
 
     private void initViews()
