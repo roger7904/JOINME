@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "700532999648-fpgsdec9g0513jtced698t2ki06dng94.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roger.joinme",
+            "certificate_hash": "06020579bd0c076e72bbee80596a92e0ffca9f7e"
+          }
+        },
+        {
           "client_id": "700532999648-697d2ga9n1q1nb9t3hsk82lvsfuh5k3n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
