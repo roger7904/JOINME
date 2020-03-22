@@ -110,6 +110,7 @@
         android:layout_marginLeft="91dp"
         android:layout_marginTop="82dp"
         android:layout_marginBottom="18dp"
+        android:background="@drawable/outside"
         app:layout_constraintBottom_toTopOf="@+id/button8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
