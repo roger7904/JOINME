@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="60dp"
+android:background="@android:color/background_light"
+android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/linear_chatroom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+
+        <ImageButton
+            android:id="@+id/imgbtn_chatroom"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/chatroom" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/imgbtn_favorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/favorite" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_jo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/imgbtn_jo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/jo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linner_notice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/imgbtn_notice"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/notice" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linner_setting"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/imgbtn_setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/setting" />
+
+    </LinearLayout>
+
+</LinearLayout>
