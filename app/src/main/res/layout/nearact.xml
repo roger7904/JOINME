@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="408dp"
         android:layout_height="59dp"
         android:orientation="vertical"
@@ -88,7 +89,7 @@
             android:layout_width="212dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/Head" />
+            app:srcCompat="@drawable/head" />
 
         <TextView
             android:id="@+id/contenct"
@@ -251,13 +252,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/calllistbtn"
-            android:layout_width="46dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/p6" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

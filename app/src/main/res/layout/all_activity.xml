@@ -31,7 +31,10 @@
             android:layout_width="212dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/Head" />
+            app:layout_constraintEnd_toStartOf="@+id/contenct"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/head" />
 
         <TextView
             android:id="@+id/contenct"
