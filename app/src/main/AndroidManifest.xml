@@ -16,13 +16,14 @@
         <activity android:name=".register" />
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".allactivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-    </application>
+        </application>
+
 
 </manifest>

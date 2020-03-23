@@ -5,7 +5,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class activitycontenct extends AppCompatActivity {
+public class allactivity extends AppCompatActivity {
     private Button actbtn;
     private Button joinbtn;
     private Button holdonbtn;
