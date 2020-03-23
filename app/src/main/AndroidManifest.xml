@@ -17,7 +17,7 @@
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
         <activity android:name=".MainActivity"/>
-        <activity android:name=".allactivity"/>
+<!--        <activity android:name=".allactivity"/>-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
