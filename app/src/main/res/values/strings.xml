@@ -29,5 +29,14 @@
     <string name="send">送出</string>
     <string name="name">姓名</string>
     <string name="birth">生日</string>
+    <string name="activity">活動</string>
+    <string name="holdon">我舉辦的</string>
+    <string name="join">我參加的</string>
+    <string name="nearact">附近活動</string>
+    <string name="ballsort">球類</string>
+    <string name="eating">吃飯</string>
+    <string name="travel">旅遊</string>
+    <string name="information">限時</string>
+    <string name="actcontenct">鬥牛啦 時間：2020/04/31 18:00 地點：高雄大學路307號 備註：風雨球場</string>
 
 </resources>

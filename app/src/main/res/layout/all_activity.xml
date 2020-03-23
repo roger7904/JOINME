@@ -19,19 +19,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayout6"
-        android:layout_width="409dp"
-        android:layout_height="147dp"
+        android:layout_width="392dp"
+        android:layout_height="149dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="77dp"
-            android:layout_height="84dp"
-            android:layout_weight="1"
-            android:text=" " />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -42,11 +35,11 @@
 
         <TextView
             android:id="@+id/contenct"
-            android:layout_width="269dp"
-            android:layout_height="match_parent"
+            android:layout_width="239dp"
+            android:layout_height="172dp"
             android:layout_weight="1"
-            android:text="鬥牛啦"
-            android:textSize="30sp" />
+            android:text="@string/actcontenct"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
@@ -68,7 +61,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="36dp"
             android:layout_marginBottom="454dp"
-            android:text="球類" />
+            android:text="@string/ballsort" />
 
         <Button
             android:id="@+id/eatbtn"
@@ -78,7 +71,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="36dp"
             android:layout_marginBottom="454dp"
-            android:text="吃飯" />
+            android:text="@string/eating" />
 
         <Button
             android:id="@+id/viewbtn"
@@ -88,7 +81,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="36dp"
             android:layout_marginBottom="454dp"
-            android:text="限時" />
+            android:text="@string/information" />
 
         <Button
             android:id="@+id/tripbtn"
@@ -98,7 +91,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="36dp"
             android:layout_marginBottom="454dp"
-            android:text="旅遊" />
+            android:text="@string/travel" />
     </LinearLayout>
 
     <LinearLayout
@@ -115,8 +108,8 @@
             android:layout_width="80dp"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:background="@drawable/p2"
-            android:text="活動"
+            android:background="@drawable/selectactbtn"
+            android:text="@string/activity"
             android:textSize="16dp" />
 
         <Button
@@ -124,8 +117,8 @@
             android:layout_width="82dp"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:background="@drawable/p3"
-            android:text="我參加的"
+            android:background="@drawable/selectactbtn"
+            android:text="@string/join"
             android:textSize="16dp" />
 
         <Button
@@ -133,8 +126,8 @@
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/p3"
-            android:text="我舉辦的"
+            android:background="@drawable/selectactbtn"
+            android:text="@string/holdon"
             android:textSize="16dp" />
 
         <Button
@@ -142,8 +135,8 @@
             android:layout_width="69dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/p3"
-            android:text="附近活動"
+            android:background="@drawable/selectactbtn"
+            android:text="@string/nearact"
             android:textSize="16dp" />
     </LinearLayout>
 
