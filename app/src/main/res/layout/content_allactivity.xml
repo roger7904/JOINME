@@ -77,8 +77,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView"
+        <EditText
+            android:id="@+id/editsuffer"
             android:layout_width="213dp"
             android:layout_height="45dp"
             android:layout_marginStart="91dp"

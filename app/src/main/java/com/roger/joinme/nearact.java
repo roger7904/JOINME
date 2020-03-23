@@ -1,41 +1,39 @@
 package com.roger.joinme;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Button;
+
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class allactivity extends AppCompatActivity {
-    private Button nearactbtn;
+public class nearact extends AppCompatActivity {
+    private Button actbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allactivity);
+        setContentView(R.layout.activity_register);
 
         initViews();
-        initData();
         setListeners();
     }
-    private void initData()
+
+    private void initViews()
     {
-    }
-    private void initViews() {
-        nearactbtn=(Button)findViewById(R.id.nearactbtn);
+        actbtn=(Button)findViewById(R.id.activitybtn);
     }
 
     private void setListeners()
     {
-        nearactbtn.setOnClickListener(new View.OnClickListener() {
+        actbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(allactivity.this,nearact.class);
+                intent.setClass(nearact.this,allactivity.class);
                 startActivity(intent);
             }
         });
     }
+
 }

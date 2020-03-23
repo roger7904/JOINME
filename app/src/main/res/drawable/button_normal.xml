@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle" >
-    <solid android:color="#87CEFA" />
-    <stroke
-        android:drawable="@drawable/p2"/>
+    android:shape="rectangle" android:drawable="@drawable/p2">
+<!--    <solid android:color="#87CEFA" />-->
+
 </shape>
