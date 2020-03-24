@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<!--    tools:context="com.example.givemepass.edittextdemo.nearact">-->
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -87,7 +88,8 @@
             android:layout_marginLeft="91dp"
             android:layout_marginTop="82dp"
             android:layout_marginBottom="18dp"
-            android:background="@drawable/outside" />
+            android:background="@drawable/outside"
+            android:inputType="text" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="104dp"

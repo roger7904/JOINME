@@ -17,10 +17,10 @@
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
         <activity android:name=".MainActivity"/>
-<!--        <activity android:name=".allactivity"/>-->
+        <activity android:name=".allactivity"/>
+        <activity android:name=".nearact"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </application>
