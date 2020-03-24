@@ -85,6 +85,7 @@
             android:layout_marginLeft="91dp"
             android:layout_marginTop="82dp"
             android:layout_marginBottom="18dp"
+            android:background="@drawable/outside"
             android:inputType="text" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
