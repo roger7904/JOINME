@@ -24,8 +24,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
+
     </LinearLayout>
 
+    <include
+        layout="@layout/content_allactivity"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
