@@ -114,5 +114,14 @@ public class homepage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        activitypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, allactivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
