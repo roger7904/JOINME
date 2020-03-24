@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_createact">
+
+
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/mobile_navigation" />
+
+    <include
+        layout="@layout/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nestedScrollView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="408dp"
+        android:layout_height="735dp"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動名稱"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/editText6"
+                    android:layout_width="237dp"
+                    android:layout_height="57dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動類型"
+                    android:textSize="24sp" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="237dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動時間"
+                    android:textSize="24sp" />
+
+                <Spinner
+                    android:id="@+id/spinner8"
+                    android:layout_width="253dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView42"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動地址"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/editText10"
+                    android:layout_width="237dp"
+                    android:layout_height="57dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView43"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="人數限制"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/editText11"
+                    android:layout_width="237dp"
+                    android:layout_height="57dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView44"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動封面"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/button14"
+                    android:layout_width="239dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="上傳" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView45"
+                    android:layout_width="96dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="備註"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/editText12"
+                    android:layout_width="269dp"
+                    android:layout_height="212dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
