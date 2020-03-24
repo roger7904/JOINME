@@ -9,6 +9,65 @@
 
 
     <LinearLayout
+        android:layout_width="401dp"
+        android:layout_height="112dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/likebtn"
+            android:layout_width="15dp"
+            android:layout_height="51dp"
+            android:layout_weight="1"
+            android:background="@drawable/p12" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/applycounts"
+            android:layout_width="7dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/p11" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/talkbtn"
+            android:layout_width="13dp"
+            android:layout_height="51dp"
+            android:layout_weight="1"
+            android:background="@drawable/p10" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="  " />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="453dp"
         android:layout_height="183dp"
@@ -47,115 +106,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="331dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/linearLayout6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="180dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="212dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        app:layout_constraintEnd_toStartOf="@+id/contenct"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/head" />
-
-                    <TextView
-                        android:id="@+id/contenct"
-                        android:layout_width="239dp"
-                        android:layout_height="172dp"
-                        android:layout_weight="1"
-                        android:text="@string/actcontenct"
-                        android:textSize="24sp" />
-
-                    <Button
-                        android:id="@+id/button"
-                        android:layout_width="111dp"
-                        android:layout_height="51dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/p13" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=" " />
-
-                    <Button
-                        android:id="@+id/likebtn"
-                        android:layout_width="15dp"
-                        android:layout_height="51dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/p12" />
-
-                    <TextView
-                        android:id="@+id/textView9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=" " />
-
-                    <Button
-                        android:id="@+id/applycounts"
-                        android:layout_width="7dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/p11" />
-
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=" " />
-
-                    <Button
-                        android:id="@+id/talkbtn"
-                        android:layout_width="13dp"
-                        android:layout_height="51dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/p10" />
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="  " />
-                </LinearLayout>
-
-            </LinearLayout>
-        </ScrollView>
     </LinearLayout>
 
     <LinearLayout
@@ -256,6 +206,35 @@
             android:layout_marginTop="36dp"
             android:layout_marginBottom="454dp"
             android:text="@string/travel" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="392dp"
+        android:layout_height="149dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="212dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toStartOf="@+id/contenct"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/head" />
+
+        <TextView
+            android:id="@+id/contenct"
+            android:layout_width="239dp"
+            android:layout_height="172dp"
+            android:layout_weight="1"
+            android:text="@string/actcontenct"
+            android:textSize="24sp" />
+
     </LinearLayout>
 
     <LinearLayout
