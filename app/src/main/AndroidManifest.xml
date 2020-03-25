@@ -31,7 +31,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".allactivity"/>
-        <activity android:name=".nearact"/>
         <activity android:name=".signup"/>
 
 
