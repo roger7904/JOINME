@@ -21,7 +21,7 @@ public class homepage extends AppCompatActivity {
     private Button activitypage;
     private Button friendpage;
     private Button logout;
-
+    //test
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
