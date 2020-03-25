@@ -1,21 +1,30 @@
 package com.roger.joinme;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class nearact extends AppCompatActivity implements OnMapReadyCallback {
+//    FragmentActivity 可能得拆另一個頁面寫或是這個頁面只顯示地圖
     private Button actbtn;
     private MapView mMapView;
+
+//    MapFragment mMapFragment= MapFragment.newInstance();
+//    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//    fragmentTransaction.add(R.id.map, mMapFragment);
+//    fragmentTransaction.commit();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +33,12 @@ public class nearact extends AppCompatActivity implements OnMapReadyCallback {
         initViews();
         setListeners();
 
-        mMapView = (MapView) findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-
-        mMapView.getMapAsync(this);
     }
 
     @Override
     protected  void onResume(){
         super.onResume();
-        mMapView.onResume();
+
     }
 
     private void initViews()
@@ -58,22 +63,19 @@ public class nearact extends AppCompatActivity implements OnMapReadyCallback {
 //        map.addMarker(new MArkerOptions().position(new LatLng(0,0)).title("Marker"));
     }
 
-    @Override
-    protected void onDestroy(){
-        mMapView.onDestroy();
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy(){
+
+//    }
 
     @Override
     public void onLowMemory(){
-        super.onLowMemory();
-        mMapView.onLowMemory();
+
     }
     
     @Override
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
     }
 
 //    private class MArkerOptions {
