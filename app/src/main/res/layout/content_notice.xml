@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_notice">
+
+
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/mobile_navigation" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="392dp"
+        android:layout_height="921dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5sp"
+            android:shadowColor="#000000"
+            android:text="交友邀請"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="298dp"
+            android:padding="5sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="83dp"
+                    android:layout_marginBottom="5sp"
+                    android:background="#FFEB3B"
+                    android:orientation="vertical"
+                    android:padding="5sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:orientation="horizontal"
+                        android:padding="10sp">
+
+                        <ImageView
+                            android:id="@+id/imageView23"
+                            android:layout_width="51dp"
+                            android:layout_height="53dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/photo" />
+
+                        <TextView
+                            android:id="@+id/textView51"
+                            android:layout_width="154dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="useraccount"
+                            android:textColor="#000000" />
+
+                        <Button
+                            android:id="@+id/button27"
+                            android:layout_width="14dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/ic_input_add"
+                            android:stateListAnimator="@null" />
+
+                        <Button
+                            android:id="@+id/button28"
+                            android:layout_width="7dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/ic_delete"
+                            android:stateListAnimator="@null" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5sp"
+                    android:background="#FFEB3B"
+                    android:orientation="vertical"
+                    android:padding="5sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:orientation="horizontal"
+                        android:padding="10sp">
+
+                        <ImageView
+                            android:id="@+id/imageView22"
+                            android:layout_width="51dp"
+                            android:layout_height="53dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/photo" />
+
+                        <TextView
+                            android:id="@+id/textView50"
+                            android:layout_width="154dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="useraccount"
+                            android:textColor="#000000" />
+
+                        <Button
+                            android:id="@+id/button25"
+                            android:layout_width="14dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/ic_input_add"
+                            android:stateListAnimator="@null" />
+
+                        <Button
+                            android:id="@+id/button26"
+                            android:layout_width="7dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/ic_delete"
+                            android:stateListAnimator="@null" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/textView52"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5sp"
+            android:shadowColor="#000000"
+            android:text="活動審核"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="303dp"
+            android:padding="5sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="83dp"
+                    android:layout_marginBottom="5sp"
+                    android:background="#FFEB3B"
+                    android:orientation="vertical"
+                    android:padding="5sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:orientation="horizontal"
+                        android:padding="10sp">
+
+                        <TextView
+                            android:id="@+id/textView53"
+                            android:layout_width="95dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="活動1"
+                            android:textColor="#000000"
+                            android:textSize="18sp" />
+
+                        <Button
+                            android:id="@+id/button30"
+                            android:layout_width="5dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="#FFFFFF"
+                            android:stateListAnimator="@null"
+                            android:text="useraccount"
+                            android:textColor="#3F51B5" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5sp"
+                    android:background="#FFEB3B"
+                    android:orientation="vertical"
+                    android:padding="5sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:orientation="horizontal"
+                        android:padding="10sp">
+
+                        <TextView
+                            android:id="@+id/textView54"
+                            android:layout_width="95dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="活動1"
+                            android:textColor="#000000"
+                            android:textSize="18sp" />
+
+                        <Button
+                            android:id="@+id/button31"
+                            android:layout_width="5dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="#FFFFFF"
+                            android:stateListAnimator="@null"
+                            android:text="useraccount"
+                            android:textColor="#3F51B5" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <include layout="@layout/bottom_bar" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
