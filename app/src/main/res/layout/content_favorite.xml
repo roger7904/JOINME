@@ -107,7 +107,8 @@
                             android:layout_height="43dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@drawable/p12" />
+                            android:background="@drawable/p12"
+                            android:stateListAnimator="@null"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -174,7 +175,8 @@
                             android:layout_height="43dp"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:background="@drawable/p12" />
+                            android:background="@drawable/p12"
+                            android:stateListAnimator="@null"/>
 
                     </LinearLayout>
                 </LinearLayout>
