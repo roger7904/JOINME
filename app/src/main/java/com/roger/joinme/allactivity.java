@@ -44,7 +44,7 @@ public class allactivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(allactivity.this,nearact.class);
+                intent.setClass(allactivity.this,MapsActivity.class);
                 startActivity(intent);
             }
         });
@@ -76,6 +76,7 @@ public class allactivity extends AppCompatActivity {
                 break;
             case R.id.joinbtn:
                 setContentView(R.layout.activity_joinact);
+                break;
         }
     }
 }

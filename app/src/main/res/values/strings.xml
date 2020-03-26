@@ -41,5 +41,8 @@
     <string name="acttitle">鬥牛啦</string>
     <string name="actdetail">時間：2020/04/31 18:00 地點：高雄大學路307號 備註：風雨球場</string>
     <string name="sigin">報名</string>
+    <string name="title_activity_maps">Map</string>
+<!--    <string name="google_maps_key"></string>-->
+
 
 </resources>
