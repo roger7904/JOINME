@@ -20,15 +20,18 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <LinearLayout
-        android:layout_width="412dp"
-        android:layout_height="786dp"
+        android:id="@+id/linearLayout11"
+        android:layout_width="415dp"
+        android:layout_height="594dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="401dp"
-            android:layout_height="724dp"
+            android:layout_width="415dp"
+            android:layout_height="539dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -63,7 +66,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="665dp"
+                android:layout_height="400dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -84,8 +87,8 @@
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true">
+                    android:layout_height="400dp"
+                    android:fillViewport="false">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -297,7 +300,7 @@
                             </LinearLayout>
 
                             <Button
-                                android:id="@+id/button5"
+                                android:id="@+id/btn_chattingwith2"
                                 android:layout_width="17dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="right"
@@ -316,6 +319,7 @@
         </LinearLayout>
 
         <include layout="@layout/bottom_bar" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

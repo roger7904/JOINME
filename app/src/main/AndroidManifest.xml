@@ -49,9 +49,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".allactivity" />
-        <activity android:name=".signup" />
+    </activity>
+    <activity android:name=".allactivity" />
+    <activity android:name=".signup" />
+    <activity android:name=".friend" />
+    <activity android:name=".chatroom" />
+    <activity android:name=".favorite" />
+        <activity android:name=".jo" />
+        <activity android:name=".notice" />
+        <activity android:name=".setting" />
+        <activity android:name=".chatting" />
+        <activity android:name=".verify" />
     </application>
 
 </manifest>

@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_notice">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="391dp"
+        android:layout_height="598dp"
         app:defaultNavHost="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -21,9 +20,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout8"
-        android:layout_width="392dp"
-        android:layout_height="921dp"
+        android:layout_width="393dp"
+        android:layout_height="597dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +40,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="298dp"
+            android:layout_height="249dp"
             android:padding="5sp">
 
             <LinearLayout
@@ -163,7 +163,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="303dp"
+            android:layout_height="231dp"
             android:padding="5sp">
 
             <LinearLayout
@@ -186,18 +186,17 @@
                         android:orientation="horizontal"
                         android:padding="10sp">
 
-                        <TextView
-                            android:id="@+id/textView53"
-                            android:layout_width="95dp"
+                        <Button
+                            android:id="@+id/btn_toverify"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="活動1"
-                            android:textColor="#000000"
-                            android:textSize="18sp" />
+                            android:background="#FFFFFF"
+                            android:stateListAnimator="@null"
+                            android:text="活動1" />
 
                         <Button
-                            android:id="@+id/button30"
+                            android:id="@+id/btn_toverify3"
                             android:layout_width="5dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -223,18 +222,17 @@
                         android:orientation="horizontal"
                         android:padding="10sp">
 
-                        <TextView
-                            android:id="@+id/textView54"
-                            android:layout_width="95dp"
+                        <Button
+                            android:id="@+id/btn_toverify2"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="活動1"
-                            android:textColor="#000000"
-                            android:textSize="18sp" />
+                            android:background="#FFFFFF"
+                            android:stateListAnimator="@null"
+                            android:text="活動1" />
 
                         <Button
-                            android:id="@+id/button31"
+                            android:id="@+id/btn_toverify4"
                             android:layout_width="5dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

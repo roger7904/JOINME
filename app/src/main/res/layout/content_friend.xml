@@ -22,7 +22,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +60,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="665dp"
+            android:layout_height="463dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -114,7 +118,7 @@
                             android:textSize="18sp" />
 
                         <Button
-                            android:id="@+id/button5"
+                            android:id="@+id/btn_chattingwith2"
                             android:layout_width="3dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="right"
@@ -470,7 +474,7 @@
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
 
-        <include layout="@layout/bottom_bar"/>
+        <include layout="@layout/bottom_bar" />
 
     </LinearLayout>
 

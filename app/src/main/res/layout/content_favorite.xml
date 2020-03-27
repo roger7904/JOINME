@@ -22,11 +22,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="730dp"
+            android:layout_height="532dp"
             android:padding="5sp">
 
             <LinearLayout
@@ -108,7 +112,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:background="@drawable/p12"
-                            android:stateListAnimator="@null"/>
+                            android:stateListAnimator="@null" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -176,7 +180,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:background="@drawable/p12"
-                            android:stateListAnimator="@null"/>
+                            android:stateListAnimator="@null" />
 
                     </LinearLayout>
                 </LinearLayout>

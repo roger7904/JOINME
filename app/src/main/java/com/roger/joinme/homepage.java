@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,6 +22,11 @@ public class homepage extends AppCompatActivity {
     private Button activitypage;
     private Button friendpage;
     private Button logout;
+    private ImageButton chatroom;
+    private ImageButton favorite;
+    private ImageButton jo;
+    private ImageButton notice;
+    private ImageButton setting;
     //test
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -76,6 +82,11 @@ public class homepage extends AppCompatActivity {
         activitypage=(Button)findViewById(R.id.btn_to_activitypage);
         friendpage=(Button)findViewById(R.id.btn_to_friendpage);
         logout=(Button)findViewById(R.id.btn_logout);
+        chatroom=(ImageButton)findViewById(R.id.imgbtn_chatroom);
+        favorite=(ImageButton)findViewById(R.id.imgbtn_favorite);
+        jo=(ImageButton)findViewById(R.id.imgbtn_jo);
+        notice=(ImageButton)findViewById(R.id.imgbtn_notice);
+        setting=(ImageButton)findViewById(R.id.imgbtn_setting);
 
     }
 
@@ -125,6 +136,62 @@ public class homepage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(homepage.this, selfpage.class);
+                startActivity(intent);
+            }
+        });
+
+        chatroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, chatroom.class);
+                startActivity(intent);
+            }
+        });
+
+        friendpage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, friend.class);
+                startActivity(intent);
+            }
+        });
+
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, favorite.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+        jo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, jo.class);
+                startActivity(intent);
+            }
+        });
+
+        notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, notice.class);
+                startActivity(intent);
+            }
+        });
+
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, setting.class);
                 startActivity(intent);
             }
         });

@@ -21,8 +21,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout10"
-        android:layout_width="411dp"
-        android:layout_height="78dp"
+        android:layout_width="435dp"
+        android:layout_height="65dp"
         android:layout_weight="1"
         android:background="#E6E6E6"
         android:orientation="horizontal"
@@ -80,8 +80,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout9"
-        android:layout_width="416dp"
-        android:layout_height="60dp"
+        android:layout_width="423dp"
+        android:layout_height="55dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
