@@ -42,6 +42,13 @@
     <string name="actdetail">時間：2020/04/31 18:00 地點：高雄大學路307號 備註：風雨球場</string>
     <string name="sigin">報名</string>
     <string name="title_activity_maps">Map</string>
+    <string name="recommend_activity">推薦活動</string>
+    <string name="push_content">推撥內容</string>
+    <string name="age">20歲</string>
+    <string name="gender">女</string>
+    <string name="addfriend">+好友</string>
+    <string name="friend">好友</string>
+    <string name="activity_history">活動紀錄</string>
 <!--    <string name="google_maps_key"></string>-->
 
 

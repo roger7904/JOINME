@@ -17,7 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 public class homepage extends AppCompatActivity {
     private Button user;
     private Button homepage;
-    private Button personalpage;
+    private Button selfpage;
     private Button activitypage;
     private Button friendpage;
     private Button logout;
@@ -72,7 +72,7 @@ public class homepage extends AppCompatActivity {
     {
         user=(Button)findViewById(R.id.btn_user);
         homepage=(Button)findViewById(R.id.btn_to_homepage);
-        personalpage=(Button)findViewById(R.id.btn_to_personalpage);
+        selfpage=(Button)findViewById(R.id.btn_to_selfpage);
         activitypage=(Button)findViewById(R.id.btn_to_activitypage);
         friendpage=(Button)findViewById(R.id.btn_to_friendpage);
         logout=(Button)findViewById(R.id.btn_logout);
@@ -116,6 +116,15 @@ public class homepage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(homepage.this, allactivity.class);
+                startActivity(intent);
+            }
+        });
+
+        selfpage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(homepage.this, selfpage.class);
                 startActivity(intent);
             }
         });

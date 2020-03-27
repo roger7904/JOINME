@@ -42,6 +42,7 @@
         <activity android:name=".register" />
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
+        <activity android:name=".selfpage" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -68,7 +68,7 @@ android:orientation="vertical">
                 android:gravity="center"/>
 
             <Button
-                android:id="@+id/btn_to_personalpage"
+                android:id="@+id/btn_to_selfpage"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@android:color/transparent"
