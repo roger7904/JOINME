@@ -8,33 +8,10 @@
     tools:showIn="@layout/app_bar_createact">
 
 
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
-
-    <include
-        layout="@layout/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nestedScrollView"
-        app:layout_constraintVertical_bias="1.0" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
-        android:layout_width="444dp"
-        android:layout_height="522dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -261,4 +238,25 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/mobile_navigation" />
+    <include
+        layout="@layout/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nav_host_fragment"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

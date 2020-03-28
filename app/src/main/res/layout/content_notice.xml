@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_notice">
 
 
     <fragment
@@ -20,8 +21,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout8"
-        android:layout_width="393dp"
-        android:layout_height="597dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -246,8 +247,16 @@
             </LinearLayout>
         </ScrollView>
 
-        <include layout="@layout/bottom_bar" />
-
     </LinearLayout>
-
+    <include
+        layout="@layout/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nav_host_fragment"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
