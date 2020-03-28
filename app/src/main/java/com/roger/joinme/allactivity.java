@@ -25,21 +25,51 @@ public class allactivity extends AppCompatActivity {
         initViews();
         initData();
         setListeners();
+
     }
+
     private void initData()
     {
     }
     private void initViews() {
-        nearactbtn=(Button)findViewById(R.id.nearactbtn);
         holdonactbtn=(Button)findViewById(R.id.holdonbtn);
         joinactbtn=(Button)findViewById(R.id.joinbtn);
         allactbtn=(Button)findViewById(R.id.activitybtn);
+        nearactbtn=(Button)findViewById(R.id.nearactbtn);
         signupbtn=(Button)findViewById(R.id.gogo);
         signupbtn2=(Button)findViewById(R.id.gotosignup);
     }
 
     private void setListeners()
     {
+
+        allactbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Intent intent = new Intent();
+               intent.setClass(allactivity.this,allactivity.class);
+               startActivity(intent);
+            }
+        });
+
+        joinactbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(allactivity.this,joinact.class);
+                startActivity(intent);
+            }
+        });
+
+        holdonactbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(allactivity.this,holdonact.class);
+                startActivity(intent);
+            }
+        });
+
         nearactbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,17 +96,4 @@ public class allactivity extends AppCompatActivity {
         });
     }
 
-    public void onClick(View v){
-        switch(v.getId()){
-            case R.id.activitybtn:
-                setContentView(R.layout.activity_allactivity);
-                break;
-            case R.id.holdonbtn:
-                setContentView(R.layout.activity_holdonact);
-                break;
-            case R.id.joinbtn:
-                setContentView(R.layout.activity_joinact);
-                break;
-        }
-    }
 }

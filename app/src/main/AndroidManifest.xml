@@ -7,9 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="com.example.myamazingapp.SOME_PERMISSION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +25,6 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-<!--        <uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -49,12 +46,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-    </activity>
-    <activity android:name=".allactivity" />
-    <activity android:name=".signup" />
-    <activity android:name=".friend" />
-    <activity android:name=".chatroom" />
-    <activity android:name=".favorite" />
+        </activity>
+        <activity android:name=".allactivity" />
+        <activity android:name=".joinact" />
+        <activity android:name=".holdonact" />
+        <activity android:name=".signup" />
+        <activity android:name=".friend" />
+        <activity android:name=".chatroom" />
+        <activity android:name=".favorite" />
         <activity android:name=".jo" />
         <activity android:name=".notice" />
         <activity android:name=".setting" />

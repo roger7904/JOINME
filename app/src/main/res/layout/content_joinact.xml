@@ -132,9 +132,9 @@
             android:layout_width="82dp"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:background="@drawable/selectactbtn"
-            android:text="@string/join"
+            android:background="@drawable/p2"
             android:onClick="onClick"
+            android:text="@string/join"
             android:textSize="16dp" />
 
         <Button

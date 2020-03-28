@@ -192,9 +192,9 @@
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/selectactbtn"
-            android:text="@string/holdon"
+            android:background="@drawable/p2"
             android:onClick="onClick"
+            android:text="@string/holdon"
             android:textSize="16dp" />
 
         <Button
