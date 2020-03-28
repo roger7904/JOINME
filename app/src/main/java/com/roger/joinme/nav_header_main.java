@@ -26,12 +26,17 @@ public class nav_header_main extends AppCompatActivity {
     //test
     private AppBarConfiguration mAppBarConfiguration;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.nav_header_main);
-            initViews();
-            setListeners();
+
+//        protected void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            setContentView(R.layout.nav_header_main);
+//            initViews();
+//            setListeners();
+//    }
+
+    public void navheader(){
+        initViews();
+        setListeners();
     }
 
     @Override

@@ -39,7 +39,10 @@
         <activity android:name=".register" />
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
-        <activity android:name=".selfpage" />
+        <activity
+            android:name=".selfpage"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_homepage"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,18 +50,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".allactivity" />
-        <activity android:name=".joinact" />
-        <activity android:name=".holdonact" />
-        <activity android:name=".signup" />
-        <activity android:name=".friend" />
-        <activity android:name=".chatroom" />
-        <activity android:name=".favorite" />
-        <activity android:name=".jo" />
-        <activity android:name=".notice" />
-        <activity android:name=".setting" />
-        <activity android:name=".chatting" />
-        <activity android:name=".verify" />
+        <activity android:name=".allactivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".joinact"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".holdonact"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".signup"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".friend"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".chatroom"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".favorite"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".jo"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".notice"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".setting"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".chatting"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".verify"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

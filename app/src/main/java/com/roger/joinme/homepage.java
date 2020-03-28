@@ -28,12 +28,13 @@ public class homepage extends AppCompatActivity {
     private ImageButton notice;
     private ImageButton setting;
     //test
-    private AppBarConfiguration mAppBarConfiguration;
+    private AppBarConfiguration mAppBarConfiguration; //宣告
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        //這下面複製
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        FloatingActionButton fab = findViewById(R.id.fab);
@@ -73,7 +74,7 @@ public class homepage extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
+    //複製到這邊
     private void initViews()
     {
         user=(Button)findViewById(R.id.btn_user);
