@@ -1,12 +1,14 @@
 package com.roger.joinme;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
 import android.widget.Button;
 import android.content.Intent;
 import android.view.View;
 
-public class joinact extends AppCompatActivity {
+public class joinact extends FragmentActivity {
 
     private Button nearactbtn;
     private Button holdonactbtn;

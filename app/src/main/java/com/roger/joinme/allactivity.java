@@ -7,8 +7,9 @@ import android.content.Intent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
-public class allactivity extends AppCompatActivity {
+public class allactivity extends FragmentActivity {
     private Button nearactbtn;
     private Button holdonactbtn;
     private Button joinactbtn;
