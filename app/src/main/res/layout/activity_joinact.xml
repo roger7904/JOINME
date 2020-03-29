@@ -28,7 +28,7 @@
     </LinearLayout>
 
     <include
-        layout="@layout/content_joinact"
+        layout="@layout/app_bar_joinact"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 

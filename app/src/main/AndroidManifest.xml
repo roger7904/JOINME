@@ -63,7 +63,7 @@
         <activity android:name=".holdonact"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".signup"
+        <activity android:name="signup"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".friend"

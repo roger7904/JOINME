@@ -8,6 +8,9 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
+
+
     <LinearLayout
         android:id="@+id/nav_view"
         android:layout_width="250dp"
@@ -25,7 +28,9 @@
     </LinearLayout>
 
     <include
-        layout="@layout/content_signup"
+        layout="@layout/app_bar_signup"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
+
+
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -28,7 +28,7 @@
     </LinearLayout>
 
     <include
-        layout="@layout/content_holdonact"
+        layout="@layout/app_bar_holdonact"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
