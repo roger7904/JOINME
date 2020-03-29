@@ -10,7 +10,7 @@
 
 
     <include
-        layout="@layout/content_chatting"
+        layout="@layout/app_bar_chatting"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
