@@ -30,12 +30,11 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".homepage"
             android:label="@string/title_activity_homepage"
@@ -45,8 +44,8 @@
         <activity android:name=".informationedit" />
         <activity
             android:name=".selfpage"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_homepage"/>
+            android:label="@string/title_activity_homepage"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,42 +53,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".allactivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".joinact"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".holdonact"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name="signup"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".friend"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".chatroom"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".favorite"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".jo"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".notice"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".setting"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".chatting"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".verify"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+        <activity
+            android:name=".allactivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".joinact"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".holdonact"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".signup"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".friend"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".chatroom"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".favorite"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jo"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".notice"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".setting"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".chatting"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".verify"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
