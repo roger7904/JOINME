@@ -12,11 +12,13 @@ import android.os.Bundle;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
@@ -29,6 +31,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private GoogleMap mMapp;
     double lat, lng;
     private Location mLastKnownLocation;
     private Boolean mLocationPermissionGranted = false;
@@ -165,46 +168,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMapp = googleMap;
+//        LatLng[] locate3 = new LatLng[1000000000];
+
+        //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置
+        LatLng locate = new LatLng(23.861053,120.915834);
+        LatLng locatee = new LatLng(22.44065,120.285000);
+        mMap.addMarker(new MarkerOptions().position(locate).snippet("Test"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
+
+        mMapp.addMarker(new MarkerOptions().position(locatee).snippet("Testt"));
+        mMapp.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
 
     }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-////        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        lat = location.getLatitude();
-//        lng = location.getLatitude();
-
-//        LatLng Home = new LatLng(lat,lng);
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Home, 15.0f));
-
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//    }
 
 }
