@@ -6,13 +6,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private GoogleMap mMapp;
-    double lat, lng;
     private Location mLastKnownLocation;
     private Boolean mLocationPermissionGranted = false;
     private GoogleApiClient mGoogleApiClient;
@@ -68,8 +69,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 })
                 .addConnectionCallbacks(connectionCallbacks)
                 .addApi(LocationServices.API)
-//                .addApi(Places.GEO_DATA_API)
-//                .addApi(Places.PLACE_DETECTION_API)
                 .build();
         mGoogleApiClient.connect();
     }
@@ -173,14 +172,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        LatLng[] locate3 = new LatLng[1000000000];
 
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置
+        LatLng locate2 = getLocationFromAddress("高雄市楠梓區楠陽路63巷8弄");
         LatLng locate = new LatLng(23.861053,120.915834);
         LatLng locatee = new LatLng(22.44065,120.285000);
-        mMap.addMarker(new MarkerOptions().position(locate).snippet("Test"));
+
+        //設定座標的標題以及詳細內容 之後從資料庫抓取
+        mMap.addMarker(new MarkerOptions().position(locate).title("sunmoonlake").snippet("Test"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
 
-        mMapp.addMarker(new MarkerOptions().position(locatee).snippet("Testt"));
+        mMapp.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
         mMapp.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
 
+    }
+
+    //地址轉經緯度method
+    public LatLng getLocationFromAddress(String address){
+        Geocoder geo = new Geocoder(this);
+        List<Address> adres;
+        LatLng point = null;
+        try{
+            adres = geo.getFromLocationName(address,5);
+            if(adres == null){
+                return null;
+            }
+            Address location = adres.get(0);
+            point = new LatLng(location.getLatitude(),location.getLongitude());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return point;
     }
 
 }

@@ -44,19 +44,4 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
-    <LinearLayout
-        android:id="@+id/show_mark"
-        android:layout_width="254dp"
-        android:layout_height="324dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
-        <!--        android:background="@android:drawable/picture_frame"-->
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="AutoCompleteTextView" />
-    </LinearLayout>
-
 </FrameLayout>
