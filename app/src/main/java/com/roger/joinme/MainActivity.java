@@ -79,7 +79,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,homepage.class);
+                intent.setClass(MainActivity.this,MapsActivity.class);
                 startActivity(intent);
             }
         });

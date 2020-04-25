@@ -34,13 +34,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".homepage"
             android:label="@string/title_activity_homepage"
@@ -52,7 +46,12 @@
             android:name=".selfpage"
             android:label="@string/title_activity_homepage"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".allactivity"
             android:theme="@style/AppTheme.NoActionBar" />
