@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
@@ -171,13 +174,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMapp = googleMap;
 //        LatLng[] locate3 = new LatLng[1000000000];
 
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置
-        LatLng locate2 = getLocationFromAddress("高雄市楠梓區楠陽路63巷8弄");
         LatLng locate = new LatLng(23.861053,120.915834);
         LatLng locatee = new LatLng(22.44065,120.285000);
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
-        mMap.addMarker(new MarkerOptions().position(locate).title("sunmoonlake").snippet("Test"));
+        mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("開始時間：3/11 15:00" + "\n"+
+                "結束時間：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
 
         mMapp.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
