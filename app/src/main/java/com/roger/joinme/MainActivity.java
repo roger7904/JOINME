@@ -43,8 +43,6 @@ public class MainActivity extends FragmentActivity {
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +56,7 @@ public class MainActivity extends FragmentActivity {
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().logOut();
         loginButton.setReadPermissions("email");
+
         // If using in a fragment
 //        loginButton.setFragment(this);
 
@@ -74,6 +73,7 @@ public class MainActivity extends FragmentActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try{
                                     String email = object.getString("email");
+                                    System.out.println(email);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -95,6 +95,7 @@ public class MainActivity extends FragmentActivity {
                 System.out.println("onError"+error.toString());
             }
         });
+
 
         //取得fb金鑰
 //        try{
@@ -187,6 +188,14 @@ public class MainActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(MainActivity.this,MapsActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 }

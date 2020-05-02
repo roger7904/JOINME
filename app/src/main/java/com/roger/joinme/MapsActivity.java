@@ -56,20 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-//        try{
-//            System.out.println("2");
-//            PackageInfo info = getPackageManager().getPackageInfo("com.roger.joinme.MapsActivity",PackageManager.GET_SIGNATURES);
-//            System.out.println("2");
-//            for(Signature signature : info.signatures){
-//                System.out.println("1");
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.v("tag:",Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//                System.out.println(Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
 
         if (chechPermission()) {
             init();
