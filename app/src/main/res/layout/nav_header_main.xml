@@ -94,16 +94,34 @@ android:orientation="vertical">
                 android:textSize="25sp"
                 android:gravity="center" />
 
+            <Button
+                android:id="@+id/btn_to_messagepage"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/message_page"
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/btn_to_setting"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/setting_page"
+                android:textSize="25sp" />
+
         </LinearLayout>
 
         <Button
-            android:text="@string/logout"
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorDrawer"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/logout"
+            android:textSize="25sp" />
 
     </LinearLayout>
 

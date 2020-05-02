@@ -3,8 +3,10 @@
     <string name="user_name">Weilin</string>
     <string name="home_page">主頁</string>
     <string name="self_page">個人頁面</string>
-    <string name="activity_page">活動頁面</string>
-    <string name="friends_page">好友頁面</string>
+    <string name="activity_page">揪團</string>
+    <string name="friends_page">通知</string>
+    <string name="message_page">訊息</string>
+    <string name="setting_page">設定</string>
     <string name="logout">登出</string>
     <string name="login">登入</string>
     <string name="forget_pwd">忘記密碼</string>
