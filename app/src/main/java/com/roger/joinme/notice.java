@@ -84,7 +84,7 @@ public class notice extends AppCompatActivity {
         homepage=(Button)findViewById(R.id.btn_to_homepage);
         selfpage=(Button)findViewById(R.id.btn_to_selfpage);
         activitypage=(Button)findViewById(R.id.btn_to_activitypage);
-        friendpage=(Button)findViewById(R.id.btn_to_friendpage);
+        friendpage=(Button)findViewById(R.id.btn_to_notice);
         logout=(Button)findViewById(R.id.btn_logout);
         chatroom=(ImageButton)findViewById(R.id.imgbtn_chatroom);
         favorite=(ImageButton)findViewById(R.id.imgbtn_favorite);

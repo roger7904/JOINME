@@ -1,19 +1,15 @@
 package com.roger.joinme;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 public class nav_header_main extends AppCompatActivity {
     private Button user;
@@ -59,7 +55,7 @@ public class nav_header_main extends AppCompatActivity {
         homepage=(Button)findViewById(R.id.btn_to_homepage);
         selfpage=(Button)findViewById(R.id.btn_to_selfpage);
         activitypage=(Button)findViewById(R.id.btn_to_activitypage);
-        friendpage=(Button)findViewById(R.id.btn_to_friendpage);
+        friendpage=(Button)findViewById(R.id.btn_to_notice);
         logout=(Button)findViewById(R.id.btn_logout);
 
 
