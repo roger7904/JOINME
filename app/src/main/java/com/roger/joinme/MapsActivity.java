@@ -5,13 +5,19 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -22,18 +28,21 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private GoogleMap mMapp;
@@ -42,10 +51,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient mGoogleApiClient;
     private LatLng mDefaultLocation;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+//        try{
+//            System.out.println("2");
+//            PackageInfo info = getPackageManager().getPackageInfo("com.roger.joinme.MapsActivity",PackageManager.GET_SIGNATURES);
+//            System.out.println("2");
+//            for(Signature signature : info.signatures){
+//                System.out.println("1");
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.v("tag:",Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//                System.out.println(Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
 
         if (chechPermission()) {
             init();
@@ -55,10 +79,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     public void init() {
-
         mLocationPermissionGranted = true;
 
         Places.initialize(getApplicationContext(),"AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4");
@@ -183,8 +207,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng locatee = new LatLng(22.44065,120.285000);
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
-        mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("開始時間：3/11 15:00" + "\n"+
-                "結束時間：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+        getInfowWindow(mMap);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
 
         mMapp.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
@@ -208,6 +233,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
         return point;
+    }
+
+    public void getInfowWindow(GoogleMap marker){
+
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //氣泡視窗訊息
+//        Toast.makeText(this, "鬥牛啦\n"+"開始時間：2020/3/11 15:00"+"\n"+"結束時間：2020/3/11 17:00",
+//                Toast.LENGTH_LONG).show();
+        Intent intent = new Intent();
+        intent.setClass(MapsActivity.this, signup.class);
+        startActivity(intent);
     }
 
 }

@@ -9,6 +9,8 @@
     <string name="setting_page">設定</string>
     <string name="logout">登出</string>
     <string name="login">登入</string>
+    <string name="or">或</string>
+    <string name="fblogin">使用Facebook登入</string>
     <string name="forget_pwd">忘記密碼</string>
     <string name="account">帳號</string>
     <string name="password">密碼</string>
@@ -52,6 +54,8 @@
     <string name="friend">好友</string>
     <string name="activity_history">活動紀錄</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="facebook_app_id">576207433007230</string>
+    <string name="fb_login_protocol_scheme">fb576207433007230</string>
     <!--    <string name="google_maps_key"></string>-->
 
 

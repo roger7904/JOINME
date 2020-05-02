@@ -13,7 +13,6 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -46,5 +45,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation "com.google.android.libraries.places:places:1.1.0"
     implementation 'com.google.firebase:firebase-database:19.2.1'
+
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
 }
