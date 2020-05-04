@@ -9,6 +9,7 @@
     <string name="setting_page">設定</string>
     <string name="logout">登出</string>
     <string name="login">登入</string>
+    <string name="favorite_page">收藏</string>
     <string name="or">或</string>
     <string name="fblogin">使用Facebook登入</string>
     <string name="forget_pwd">忘記密碼</string>

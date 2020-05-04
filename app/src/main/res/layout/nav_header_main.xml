@@ -61,43 +61,52 @@ android:orientation="vertical">
             <Button
                 android:id="@+id/btn_to_homepage"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="45dp"
                 android:background="@android:color/transparent"
+                android:gravity="center"
                 android:text="@string/home_page"
-                android:textSize="25sp"
-                android:gravity="center"/>
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/btn_to_selfpage"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="45dp"
                 android:background="@android:color/transparent"
+                android:gravity="center"
                 android:text="@string/self_page"
-                android:textSize="25sp"
-                android:gravity="center" />
+                android:textSize="25sp" />
 
             <Button
-                android:id="@+id/btn_to_activitypage"
+                android:id="@+id/btn_to_jo"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="45dp"
                 android:background="@android:color/transparent"
+                android:gravity="center"
                 android:text="@string/activity_page"
-                android:textSize="25sp"
-                android:gravity="center" />
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/btn_to_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/favorite_page"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/btn_to_notice"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="45dp"
                 android:background="@android:color/transparent"
+                android:gravity="center"
                 android:text="@string/friends_page"
-                android:textSize="25sp"
-                android:gravity="center" />
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/btn_to_messagepage"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="45dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:text="@string/message_page"
@@ -106,10 +115,10 @@ android:orientation="vertical">
             <Button
                 android:id="@+id/btn_to_setting"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="45dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
-                android:text="@string/message_page"
+                android:text="@string/setting_page"
                 android:textSize="25sp" />
 
         </LinearLayout>

@@ -54,7 +54,7 @@ public class nav_header_main extends AppCompatActivity {
         user=(Button)findViewById(R.id.btn_user);
         homepage=(Button)findViewById(R.id.btn_to_homepage);
         selfpage=(Button)findViewById(R.id.btn_to_selfpage);
-        activitypage=(Button)findViewById(R.id.btn_to_activitypage);
+        activitypage=(Button)findViewById(R.id.btn_to_jo);
         friendpage=(Button)findViewById(R.id.btn_to_notice);
         logout=(Button)findViewById(R.id.btn_logout);
 

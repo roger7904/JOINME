@@ -79,7 +79,7 @@ public class chatroom extends AppCompatActivity {
         user=(Button)findViewById(R.id.btn_user);
         homepage=(Button)findViewById(R.id.btn_to_homepage);
         selfpage=(Button)findViewById(R.id.btn_to_selfpage);
-        activitypage=(Button)findViewById(R.id.btn_to_activitypage);
+        activitypage=(Button)findViewById(R.id.btn_to_jo);
         friendpage=(Button)findViewById(R.id.btn_to_notice);
         logout=(Button)findViewById(R.id.btn_logout);
         chatroom=(ImageButton)findViewById(R.id.imgbtn_chatroom);
@@ -147,6 +147,7 @@ public class chatroom extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(chatroom.this, selfpage.class);
                 startActivity(intent);
+
             }
         });
 
@@ -203,6 +204,7 @@ public class chatroom extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(chatroom.this, setting.class);
                 startActivity(intent);
+
             }
         });
 
