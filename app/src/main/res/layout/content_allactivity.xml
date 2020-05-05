@@ -88,7 +88,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="454dp"
-                android:text="@string/eating" />
+                android:text="@string/disaccount" />
 
             <Button
                 android:id="@+id/viewbtn"
@@ -108,7 +108,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="454dp"
-                android:text="@string/travel" />
+                android:text="@string/singing" />
         </LinearLayout>
 
         <LinearLayout

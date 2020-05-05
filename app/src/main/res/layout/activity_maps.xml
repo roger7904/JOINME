@@ -1,35 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/frame"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:id="@+id/nav_view"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:orientation="horizontal">
-
-        <include
-            layout="@layout/nav_header_main"
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:fitsSystemWindows="true"
+            tools:openDrawer="start">
 
 
-    </LinearLayout>
+            <!--        <com.google.android.material.navigation.NavigationView-->
+            <!--        android:id="@+id/nav_iew"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="match_parent"-->
+            <!--        android:layout_gravity="start"-->
+            <!--        android:fitsSystemWindows="true"-->
+            <!--        app:headerLayout="@layout/nav_header_homepage"-->
+            <!--        app:menu="@menu/activity_homepage_drawer" />-->
 
-    <include
-        layout="@layout/app_bar_maps"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+            <LinearLayout
+                android:id="@+id/nav_view"
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:orientation="horizontal">
 
-</androidx.drawerlayout.widget.DrawerLayout>
+                <include
+                    layout="@layout/nav_header_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+
+        </androidx.drawerlayout.widget.DrawerLayout>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MapsActivity"
+            tools:layout_editor_absoluteY="55dp" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="200dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/drawer_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/editsuffer"
+                android:layout_width="202dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="91dp"
+                android:layout_marginLeft="91dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/outside"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/button16"
+                android:layout_width="35dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="59dp"
+                android:layout_marginRight="59dp"
+                android:background="@drawable/p5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="130dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/ballbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="454dp"
+                android:text="@string/ballsort" />
+
+            <Button
+                android:id="@+id/eatbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="454dp"
+                android:text="@string/disaccount" />
+
+            <Button
+                android:id="@+id/viewbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="454dp"
+                android:text="@string/singing" />
+
+            <Button
+                android:id="@+id/tripbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="454dp"
+                android:text="@string/information" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="206dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    側選單未完成    -->
+
+</FrameLayout>

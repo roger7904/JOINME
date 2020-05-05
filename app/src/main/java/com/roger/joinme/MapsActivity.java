@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -18,20 +17,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
-import android.view.Menu;
-
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,8 +30,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -64,24 +55,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean mLocationPermissionGranted = false;
     private GoogleApiClient mGoogleApiClient;
     private LatLng mDefaultLocation;
-    private Button homepage;
-    private Button selfpage;
-    private Button logout;
-    private Button chatroom;
-    private Button favorite;
-    private Button jo;
-    private Button notice;
-    private Button setting;
-    private Button ball;
-    //test
-    private AppBarConfiguration mAppBarConfiguration; //宣告
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        initViews();
-        setListeners();
 
         if (chechPermission()) {
             init();
@@ -92,6 +71,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection ( "users" )
+                . get ()
+                . addOnCompleteListener ( new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                        if ( task . isSuccessful ()) {
+                            for ( QueryDocumentSnapshot document : task . getResult ()) {
+                                Log . d ("TAG", document . getId () + " => " + document . getData ());
+                            }
+                        } else {
+                            Log . w ("TAG", "Error getting documents." , task . getException ());
+                        }
+                    }
+                });
 
     }
 
@@ -205,21 +199,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-    private void initViews()
-    {
-        homepage=(Button)findViewById(R.id.btn_to_homepage);
-        selfpage=(Button)findViewById(R.id.btn_to_selfpage);
-        logout=(Button)findViewById(R.id.btn_logout);
-        chatroom=(Button)findViewById(R.id.btn_to_messagepage);
-        favorite=(Button)findViewById(R.id.btn_to_favorite);
-        jo=(Button)findViewById(R.id.btn_to_jo);
-        notice=(Button)findViewById(R.id.btn_to_notice);
-        setting=(Button)findViewById(R.id.btn_to_setting);
-        ball=(Button)findViewById(R.id.ballbtn);
-
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -275,94 +254,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent();
         intent.setClass(MapsActivity.this, signup.class);
         startActivity(intent);
-    }
-
-    private void setListeners() {
-
-        homepage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, MapsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, MapsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        selfpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, selfpage.class);
-                startActivity(intent);
-            }
-        });
-
-        chatroom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, chatroom.class);
-                startActivity(intent);
-            }
-        });
-
-
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, favorite.class);
-                startActivity(intent);
-            }
-        });
-
-
-
-        jo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, jo.class);
-                startActivity(intent);
-            }
-        });
-
-        notice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, notice.class);
-                startActivity(intent);
-            }
-        });
-
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapsActivity.this, setting.class);
-                startActivity(intent);
-            }
-        });
-
-        ball.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.print("ball");
-            }
-        });
-        System.out.println("test");
-
     }
 
 }

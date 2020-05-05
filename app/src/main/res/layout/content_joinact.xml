@@ -114,13 +114,13 @@
 
             <Button
                 android:id="@+id/eatbtn"
-                android:layout_width="66dp"
-                android:layout_height="43dp"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="454dp"
-                android:text="@string/eating" />
+                android:text="@string/disaccount" />
 
             <Button
                 android:id="@+id/viewbtn"
@@ -130,7 +130,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="454dp"
-                android:text="@string/information" />
+                android:text="@string/singing" />
 
             <Button
                 android:id="@+id/tripbtn"
@@ -140,7 +140,7 @@
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="454dp"
-                android:text="@string/travel" />
+                android:text="@string/information" />
         </LinearLayout>
 
         <LinearLayout
