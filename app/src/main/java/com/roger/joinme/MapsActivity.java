@@ -6,16 +6,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,8 +36,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,18 +66,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //讀取資料庫資料
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection ( "users" )
-                . get ()
-                . addOnCompleteListener ( new OnCompleteListener<QuerySnapshot>() {
+        //抓集合
+        db.collection ( "user" )
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-                        if ( task . isSuccessful ()) {
-                            for ( QueryDocumentSnapshot document : task . getResult ()) {
-                                Log . d ("TAG", document . getId () + " => " + document . getData ());
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", document.getId () + " => " + document.getData());
                             }
                         } else {
-                            Log . w ("TAG", "Error getting documents." , task . getException ());
+                            Log.w("TAG", "Error getting documents." , task.getException());
                         }
                     }
                 });
@@ -209,8 +206,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
 
-        //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置
-        LatLng locate = new LatLng(23.861053,120.915834);
+        //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
+        LatLng locate = new LatLng(22.734315,120.277872);
         LatLng locatee = new LatLng(22.44065,120.285000);
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
