@@ -80,16 +80,14 @@
             android:id="@+id/ballbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginTop="140dp"
             android:layout_marginEnd="308dp"
             android:layout_marginRight="308dp"
-            android:layout_marginBottom="543dp"
             android:text="@string/ballsort"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/drawer_layout" />
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintStart_toEndOf="@id/eatbtn"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/eatbtn"
@@ -122,11 +120,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="710dp"
-            android:layout_marginLeft="710dp"
             android:layout_marginTop="140dp"
             android:text="@string/information"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/drawer_layout"
+            app:layout_constraintEnd_toStartOf="@id/drawer_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

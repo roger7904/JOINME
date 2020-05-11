@@ -14,6 +14,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,6 +34,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -50,6 +53,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean mLocationPermissionGranted = false;
     private GoogleApiClient mGoogleApiClient;
     private LatLng mDefaultLocation;
+    private Button ballbtn;
+    private Button eatbtn;
+    private Button viewbtn;
+    private Button tripbtn;
 
 
     @Override
@@ -66,24 +73,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //讀取資料庫資料
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //抓集合
-        db.collection ( "user" )
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId () + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents." , task.getException());
-                        }
-                    }
-                });
+        initViews();
+        setListeners();
+//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+//        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+//                .setTimestampsInSnapshotsEnabled(true)
+//                .build();
+//        firestore.setFirestoreSettings(settings);
+    }
 
+    private void initViews() {
+        ballbtn = (Button)findViewById(R.id.ballbtn);
+        eatbtn = (Button)findViewById(R.id.eatbtn);
+        viewbtn = (Button)findViewById(R.id.viewbtn);
+        tripbtn = (Button)findViewById(R.id.tripbtn);
     }
 
     public void init() {
@@ -251,6 +254,122 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent();
         intent.setClass(MapsActivity.this, signup.class);
         startActivity(intent);
+    }
+
+    private void setListeners()
+    {
+        String data[];
+        ballbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                        .setTimestampsInSnapshotsEnabled(true)
+                        .build();
+                firestore.setFirestoreSettings(settings);
+                //讀取資料庫資料
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //抓集合
+                db.collection( "activity" )
+                        .whereEqualTo("activityType", "ball")
+                        .orderBy("startTime")
+                        .limit(20)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        document.getData();
+                                        //抓取document名稱及內部欄位資料
+                                        System.out.println(document.getId () + " => " );
+                                    }
+                                } else {
+                                    Log.w("TAG", "Error getting documents.",task.getException());
+                                }
+                            }
+                        });
+            }
+        });
+        eatbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //讀取資料庫資料
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //抓集合
+                db.collection( "activity" )
+                        .whereEqualTo("activityType", "ball")
+                        .orderBy("startTime")
+                        .limit(20)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        document.getData();
+                                        System.out.println(document.getId () + " => " + document.getData());
+                                    }
+                                } else {
+                                    Log.w("TAG", "Error getting documents.",task.getException());
+                                }
+                            }
+                        });
+            }
+        });
+        viewbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //讀取資料庫資料
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //抓集合
+                db.collection( "activity" )
+                        .whereEqualTo("activityType", "ball")
+                        .orderBy("startTime")
+                        .limit(20)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        document.getData();
+                                        System.out.println(document.getId() + " => " + document.getData());
+//                                      document.getString();
+                                    }
+                                } else {
+                                    Log.w("TAG", "Error getting documents.",task.getException());
+                                }
+                            }
+                        });
+            }
+        });
+        tripbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //讀取資料庫資料
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //抓集合
+                db.collection( "activity" )
+                        .whereEqualTo("activityType", "ball")
+                        .orderBy("startTime")
+                        .limit(20)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        document.getData();
+                                        System.out.println(document.getId () + " => " + document.getData());
+                                    }
+                                } else {
+                                    Log.w("TAG", "Error getting documents.",task.getException());
+                                }
+                            }
+                        });
+            }
+        });
     }
 
 }
