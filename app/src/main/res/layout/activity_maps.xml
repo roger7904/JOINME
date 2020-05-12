@@ -55,8 +55,8 @@
 
         <EditText
             android:id="@+id/editsuffer"
-            android:layout_width="202dp"
-            android:layout_height="35dp"
+            android:layout_width="162dp"
+            android:layout_height="32dp"
             android:layout_marginTop="75dp"
             android:layout_marginEnd="400dp"
             android:layout_marginRight="400dp"
@@ -67,14 +67,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button16"
-            android:layout_width="35dp"
-            android:layout_height="37dp"
-            android:layout_marginBottom="1280dp"
+            android:id="@+id/search"
+            android:layout_width="32dp"
+            android:layout_height="31dp"
             android:background="@drawable/p5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editsuffer"
-            app:layout_constraintTop_toBottomOf="@+id/drawer_layout" />
+            app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/viewbtn"
+            app:layout_constraintTop_toTopOf="@id/ballbtn" />
 
         <Button
             android:id="@+id/ballbtn"

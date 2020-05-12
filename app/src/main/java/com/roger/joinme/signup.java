@@ -14,6 +14,8 @@ import androidx.navigation.ui.NavigationUI;
 
 public class signup extends AppCompatActivity {
 
+    private Button signupbtn = (Button)findViewById(R.id.signupbtn);
+
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override

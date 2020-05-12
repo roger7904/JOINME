@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+//import com.google.firebase.database.DataSnapshot;
+//import com.google.firebase.database.DatabaseError;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.ValueEventListener;
 
 public class register extends AppCompatActivity {
 
@@ -63,15 +63,15 @@ public class register extends AppCompatActivity {
         String passwd = editText_pwd.getText().toString();
         Log.d(email,"1");
 
-        //連結資料庫
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //欄位名
-        DatabaseReference memberemail = database.getReference("member/"+email+"/emailinfo");
-        //值
-        memberemail.setValue(email);
-
-        DatabaseReference memberpasswd = database.getReference("member/"+email+"/passwd");
-        memberpasswd.setValue(passwd);
+//        //連結資料庫
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        //欄位名
+//        DatabaseReference memberemail = database.getReference("member/"+email+"/emailinfo");
+//        //值
+//        memberemail.setValue(email);
+//
+//        DatabaseReference memberpasswd = database.getReference("member/"+email+"/passwd");
+//        memberpasswd.setValue(passwd);
 
         back_to_login.setOnClickListener(new View.OnClickListener() {
             @Override

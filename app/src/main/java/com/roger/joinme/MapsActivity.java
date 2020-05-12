@@ -203,11 +203,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMapp = googleMap;
-//        LatLng[] locate3 = new LatLng[1000000000];
+        final LatLng[] locate2 = new LatLng[100000];
 
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+        //重新設定firestore
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firestore.setFirestoreSettings(settings);
+
+        //讀取資料庫資料
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //抓集合
+        db.collection( "activity" )
+                .orderBy("startTime")
+                .limit(20)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                        if (task.isSuccessful()) {
+                            for(int i=0;i<20;i++){
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    //抓取document名稱及內部欄位資料
+                                    System.out.println(document.getId ());
+                                    locate2[i] = getLocationFromAddress(document.getString("location"));
+                                }
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.",task.getException());
+                        }
+                    }
+                });
 
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
         LatLng locate = new LatLng(22.734315,120.277872);
@@ -308,7 +339,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                                        document.getData();
-                                        System.out.println(document.getId () + " => " + document.getData());
+                                        System.out.println(document.getId () + " => " + document.getData().size());
                                     }
                                 } else {
                                     Log.w("TAG", "Error getting documents.",task.getException());
@@ -352,22 +383,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //抓集合
                 db.collection( "activity" )
                         .whereEqualTo("activityType", "ball")
-                        .orderBy("startTime")
-                        .limit(20)
+//                        .orderBy("startTime")
+//                        .limit(20)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
+                    @Override
                             public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-//                                        document.getData();
-                                        System.out.println(document.getId () + " => " + document.getData());
+                                        System.out.println(document.getString("location"));
                                     }
-                                } else {
-                                    Log.w("TAG", "Error getting documents.",task.getException());
-                                }
+                            } else {
+                                Log.w("TAG", "Error getting documents.",task.getException());
                             }
-                        });
+                    }
+                });
+
+
             }
         });
     }
