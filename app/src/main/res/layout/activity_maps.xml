@@ -6,44 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/mobile_navigation" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            tools:openDrawer="start">
-
-
-            <!--        <com.google.android.material.navigation.NavigationView-->
-            <!--        android:id="@+id/nav_iew"-->
-            <!--        android:layout_width="wrap_content"-->
-            <!--        android:layout_height="match_parent"-->
-            <!--        android:layout_gravity="start"-->
-            <!--        android:fitsSystemWindows="true"-->
-            <!--        app:headerLayout="@layout/nav_header_homepage"-->
-            <!--        app:menu="@menu/activity_homepage_drawer" />-->
-
-            <LinearLayout
-                android:id="@+id/nav_view"
-                android:layout_width="250dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:orientation="horizontal">
-
-                <include
-                    layout="@layout/nav_header_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-
-        </androidx.drawerlayout.widget.DrawerLayout>
 
         <fragment
             android:id="@+id/map"
@@ -57,13 +33,12 @@
             android:id="@+id/editsuffer"
             android:layout_width="202dp"
             android:layout_height="35dp"
-            android:layout_marginTop="75dp"
-            android:layout_marginEnd="400dp"
-            android:layout_marginRight="400dp"
+            android:layout_marginTop="76dp"
             android:background="@drawable/outside"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/drawer_layout"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -73,58 +48,42 @@
             android:layout_marginBottom="1280dp"
             android:background="@drawable/p5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editsuffer"
-            app:layout_constraintTop_toBottomOf="@+id/drawer_layout" />
+            app:layout_constraintStart_toEndOf="@+id/editsuffer" />
 
         <Button
             android:id="@+id/ballbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="140dp"
-            android:layout_marginEnd="308dp"
-            android:layout_marginRight="308dp"
+            android:layout_marginTop="128dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="@string/ballsort"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@id/guideline"
-            app:layout_constraintStart_toEndOf="@id/eatbtn"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/eatbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="140dp"
-            android:layout_marginEnd="500dp"
-            android:layout_marginRight="500dp"
-            android:text="@string/disaccount"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/drawer_layout"
+            app:layout_constraintEnd_toStartOf="@+id/tripbtn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/viewbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="140dp"
-            android:layout_marginEnd="300dp"
-            android:layout_marginRight="300dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="128dp"
             android:text="@string/singing"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/drawer_layout"
+            app:layout_constraintStart_toEndOf="@+id/eatbtn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/tripbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="710dp"
-            android:layout_marginTop="140dp"
+            android:layout_marginTop="128dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
             android:text="@string/information"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@id/drawer_layout"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.appbar.AppBarLayout
@@ -151,6 +110,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="206dp" />
+
+        <Button
+            android:id="@+id/eatbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="128dp"
+            android:layout_marginEnd="112dp"
+            android:layout_marginRight="112dp"
+            android:text="@string/disaccount"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
