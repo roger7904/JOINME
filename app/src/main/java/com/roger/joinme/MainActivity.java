@@ -21,11 +21,11 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.*;
+//import com.google.firebase.database.DatabaseError;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.ValueEventListener;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
@@ -38,6 +38,7 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends FragmentActivity {
 
     private Button login;
+    private Button button5;
     private Button register;
     private Button forgetpwd;
     private LoginButton loginButton;
@@ -134,6 +135,7 @@ public class MainActivity extends FragmentActivity {
         register=(Button)findViewById(R.id.register);
         forgetpwd=(Button)findViewById(R.id.forgetpassword);
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        button5=(Button)findViewById(R.id.button5);
     }
     //123
     private void initData()
@@ -146,7 +148,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,home.class);
+                intent.setClass(MainActivity.this,MapsActivity.class);
                 startActivity(intent);
             }
         });
@@ -155,6 +157,15 @@ public class MainActivity extends FragmentActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this,register.class);
+                startActivity(intent);
+            }
+        });
+
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,notice.class);
                 startActivity(intent);
             }
         });
