@@ -137,7 +137,7 @@ public class MainActivity extends FragmentActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         button5=(Button)findViewById(R.id.button5);
     }
-    //123
+
     private void initData()
     {
     }
@@ -148,7 +148,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,MapsActivity.class);
+                intent.setClass(MainActivity.this,home.class);
                 startActivity(intent);
             }
         });
