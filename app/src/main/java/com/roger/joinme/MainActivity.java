@@ -135,7 +135,7 @@ public class MainActivity extends FragmentActivity {
         forgetpwd=(Button)findViewById(R.id.forgetpassword);
         loginButton = (LoginButton) findViewById(R.id.login_button);
     }
-
+    //123
     private void initData()
     {
     }
