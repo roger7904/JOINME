@@ -1,9 +1,19 @@
 package com.roger.joinme;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -39,8 +49,7 @@ public class signup extends AppCompatActivity {
 
         initViews();
         initData();
-//        setListeners();
-
+        setListeners();
     }
 
     @Override
@@ -57,6 +66,15 @@ public class signup extends AppCompatActivity {
     }
     private void initViews() {
 
+    }
+    private void setListeners() {
+
+        signupbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 }

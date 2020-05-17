@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -57,7 +60,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button eatbtn;
     private Button viewbtn;
     private Button tripbtn;
-
+    private LocationManager locationMgr;
+    private String provider;
+    private static int count = 0;
+    private LatLng[] locate = new LatLng[10000];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (chechPermission()) {
             init();
         }
+
+        //讀取資料庫資料
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //抓集合
+        db.collection( "activity" )
+                        .orderBy("startTime")
+                        .limit(20)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                while(count<20){
+                                    locate[count] = getLocationFromAddress(document.getString("location"));
+                                    count++;
+                                    System.out.println(locate[count]);
+                                    break;
+                                }
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.",task.getException());
+                        }
+                    }
+                });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -80,6 +111,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                .setTimestampsInSnapshotsEnabled(true)
 //                .build();
 //        firestore.setFirestoreSettings(settings);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+//        float zoom = 0;
+//        GoogleMap mMap = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
+
+//        SupportMapFragment mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+//        mapFrag.getMapAsync(this);
+
+        System.out.println("1");
+//        System.out.println("1");
+//        zoom = mapFrag.getCameraPosition().zoom;
+//        if(zoom>16){
+//            System.out.println(zoom);
+//        }
     }
 
     private void initViews() {
@@ -139,6 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
+
         }
     };
 
@@ -203,42 +252,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMapp = googleMap;
+
         final LatLng[] locate2 = new LatLng[100000];
 
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
 
-        //重新設定firestore
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        firestore.setFirestoreSettings(settings);
-
         //讀取資料庫資料
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
         //抓集合
-        db.collection( "activity" )
-                .orderBy("startTime")
-                .limit(20)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-                        if (task.isSuccessful()) {
-                            for(int i=0;i<20;i++){
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    //抓取document名稱及內部欄位資料
-                                    System.out.println(document.getId ());
-                                    locate2[i] = getLocationFromAddress(document.getString("location"));
-                                }
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents.",task.getException());
-                        }
-                    }
-                });
+//        db.collection( "activity" )
+//                .orderBy("startTime")
+//                .limit(20)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+//                        if (task.isSuccessful()) {
+//                            for(int i=0;i<20;i++){
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    //抓取document名稱及內部欄位資料
+//                                    System.out.println(document.getId ());
+//                                    locate2[i] = getLocationFromAddress(document.getString("location"));
+//                                }
+//                            }
+//                        } else {
+//                            Log.w("TAG", "Error getting documents.",task.getException());
+//                        }
+//                    }
+//                });
 
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
         LatLng locate = new LatLng(22.734315,120.277872);
@@ -249,6 +292,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         getInfowWindow(mMap);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
+
+//        System.out.println(mMap.getMaxZoomLevel() + " " + mMap.getMinZoomLevel());
 
         mMapp.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
         mMapp.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
@@ -286,6 +331,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         intent.setClass(MapsActivity.this, signup.class);
         startActivity(intent);
     }
+
+//    private boolean locationprovider(){
+//        locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+//            provider = LocationManager.GPS_PROVIDER;
+//            return true;
+//        }
+//        return false;
+//        public void OnMapReady(GoogleMap googleMap){
+//            mMap = googleMap;
+//        }
+//    }
 
     private void setListeners()
     {
@@ -398,8 +455,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                     }
                 });
-
-
             }
         });
     }

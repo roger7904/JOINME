@@ -38,6 +38,7 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends FragmentActivity {
 
     private Button login;
+    private Button button5;
     private Button register;
     private Button forgetpwd;
     private LoginButton loginButton;
@@ -134,6 +135,7 @@ public class MainActivity extends FragmentActivity {
         register=(Button)findViewById(R.id.register);
         forgetpwd=(Button)findViewById(R.id.forgetpassword);
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        button5=(Button)findViewById(R.id.button5);
     }
 
     private void initData()
@@ -146,7 +148,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,home.class);
+                intent.setClass(MainActivity.this,MapsActivity.class);
                 startActivity(intent);
             }
         });
@@ -155,6 +157,15 @@ public class MainActivity extends FragmentActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this,register.class);
+                startActivity(intent);
+            }
+        });
+
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,notice.class);
                 startActivity(intent);
             }
         });
