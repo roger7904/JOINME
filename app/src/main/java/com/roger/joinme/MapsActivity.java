@@ -15,6 +15,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,10 +49,15 @@ import java.util.List;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
+        GoogleMap.OnCameraMoveStartedListener,
+        GoogleMap.OnCameraMoveListener,
+        GoogleMap.OnCameraMoveCanceledListener,
+        GoogleMap.OnCameraIdleListener
+        {
 
-    private GoogleMap mMap;
-    private GoogleMap mMapp;
+    public GoogleMap mMap;
+    public GoogleMap mMapp;
     private Location mLastKnownLocation;
     private Boolean mLocationPermissionGranted = false;
     private GoogleApiClient mGoogleApiClient;
@@ -64,6 +70,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String provider;
     private static int count = 0;
     private LatLng[] locate = new LatLng[10000];
+    private Handler handler = new Handler();
+    public String location = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,29 +83,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //讀取資料庫資料
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
         //抓集合
-        db.collection( "activity" )
-                        .orderBy("startTime")
-                        .limit(20)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                while(count<20){
-                                    locate[count] = getLocationFromAddress(document.getString("location"));
-                                    count++;
-                                    System.out.println(locate[count]);
-                                    break;
-                                }
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents.",task.getException());
-                        }
-                    }
-                });
+//        db.collection( "activity" )
+//                        .orderBy("startTime")
+//                        .limit(20)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    locate[count] = getLocationFromAddress(document.getString("location"));
+//                                    System.out.println(locate[count]);
+//                                    System.out.println(count);
+//                                    count++;
+//                            }
+//                        } else {
+//                            Log.w("TAG", "Error getting documents.",task.getException());
+//                        }
+//                    }
+//                });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -106,29 +112,102 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         initViews();
         setListeners();
-//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-//        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-//                .setTimestampsInSnapshotsEnabled(true)
-//                .build();
-//        firestore.setFirestoreSettings(settings);
     }
 
-    protected void onResume() {
-        super.onResume();
+    //或許之後可以想辦法用thread做嗎?
+//    private Runnable checkozoom = new Runnable() {
+//
+//        @Override
+//        public void run() {
+//            SupportMapFragment mapFrag = ((SupportMapFragment) getSupportFragmentManager()
+//                    .findFragmentById(R.id.map));
+//            mapFrag.getMapAsync(this);
+//        }
+//    };
 
-//        float zoom = 0;
-//        GoogleMap mMap = ((SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map));
+            //監聽攝影機(使用者)是否開始移動
+        @Override
+        public void onCameraMoveStarted(int reason) {
 
-//        SupportMapFragment mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-//        mapFrag.getMapAsync(this);
+            if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+//                Toast.makeText(this, "The user gestured on the map.",
+//                        Toast.LENGTH_SHORT).show();
+            } else if (reason == GoogleMap.OnCameraMoveStartedListener
+                    .REASON_API_ANIMATION) {
+//                Toast.makeText(this, "The user tapped something on the map.",
+//                        Toast.LENGTH_SHORT).show();
+            } else if (reason == GoogleMap.OnCameraMoveStartedListener
+                    .REASON_DEVELOPER_ANIMATION) {
+//                Toast.makeText(this, "The app moved the camera.",
+//                        Toast.LENGTH_SHORT).show();
+            }
+        }
 
-        System.out.println("1");
+        //抓取使用者當下狀態--移動地圖
+        @Override
+        public void onCameraMove() {
+//            Toast.makeText(this, "The camera is moving.",
+//                    Toast.LENGTH_SHORT).show();
+        }
+
+        //抓取使用者當下狀態--取消移動地圖的瞬間
+        @Override
+        public void onCameraMoveCanceled() {
+//            Toast.makeText(this, "Camera movement canceled.",
+//                    Toast.LENGTH_SHORT).show();
+        }
+
+        //抓取使用者當下狀態--停止移動地圖後一段時間
+        @Override
+        public void onCameraIdle() {
+            float zoom = 0;
+            Toast.makeText(this, "數據加載中",
+                    Toast.LENGTH_SHORT).show();
+            zoom = mMap.getCameraPosition().zoom;
+            if(zoom<13){
+//                System.out.println(zoom);
+                //讀取資料庫資料
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //抓集合
+                db.collection( "activity" )
+                        .orderBy("startTime")
+                        .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                while(count<20){
+                                    document.getString("location");
+//                                    if(document.getString())
+                                    locate[count] = getLocationFromAddress(document.getString("location"));
+                                    System.out.println(locate[count]);
+                                    System.out.println(count);
+                                    count++;
+                                }
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.",task.getException());
+                        }
+                    }
+                });
+            }
+        }
+
+
+//        SupportMapFragment mapFrag = ((SupportMapFragment) getSupportFragmentManager()
+//               getSupportFragmentManager .findFragmentByIdragmentById(R.id.map));
+//        if(mapFrag.setClickable())
+//        mapFragFrag.getMapAsync(this);
+//        GoogleMap map = mapFrag;
+
 //        System.out.println("1");
-//        zoom = mapFrag.getCameraPosition().zoom;
+//        System.out.println("1");
+//        zoom = mMap.getCameraPosition().zoom;
 //        if(zoom>16){
 //            System.out.println(zoom);
 //        }
-    }
+//    }
 
     private void initViews() {
         ballbtn = (Button)findViewById(R.id.ballbtn);
@@ -137,6 +216,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         tripbtn = (Button)findViewById(R.id.tripbtn);
     }
 
+    //取得使用者當前位置 -1
     public void init() {
         mLocationPermissionGranted = true;
 
@@ -155,6 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mGoogleApiClient.connect();
     }
 
+    //取得使用者當前位置 -2
     private GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
         @Override
         public void onConnected(@Nullable Bundle bundle) {
@@ -168,6 +249,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
+    //取得使用者當前位置 -3 & 初始化地圖
     private OnMapReadyCallback onMapReadyCallback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -191,6 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
+    //使用者是否開啟定位
     private Boolean getDeviceLocation() {
 
         if (mLocationPermissionGranted) {
@@ -210,6 +293,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
+    //是否給予JOINME讀取定位資訊
     public Boolean chechPermission(){
         String[] pm = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION};
 
@@ -227,6 +311,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    //是否給予joinme權限
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch(requestCode) {
@@ -248,10 +333,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    //地圖初始化
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMapp = googleMap;
+
+        mMap.setOnCameraIdleListener(this);
+        mMap.setOnCameraMoveStartedListener(this);
+        mMap.setOnCameraMoveListener(this);
+        mMap.setOnCameraMoveCanceledListener(this);
 
         final LatLng[] locate2 = new LatLng[100000];
 
@@ -291,12 +381,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(this);
         mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         getInfowWindow(mMap);
+        mMap.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
-
-//        System.out.println(mMap.getMaxZoomLevel() + " " + mMap.getMinZoomLevel());
-
-        mMapp.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
-        mMapp.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
 
     }
 
@@ -331,18 +417,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         intent.setClass(MapsActivity.this, signup.class);
         startActivity(intent);
     }
-
-//    private boolean locationprovider(){
-//        locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if(locationMgr.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-//            provider = LocationManager.GPS_PROVIDER;
-//            return true;
-//        }
-//        return false;
-//        public void OnMapReady(GoogleMap googleMap){
-//            mMap = googleMap;
-//        }
-//    }
 
     private void setListeners()
     {
