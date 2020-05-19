@@ -68,6 +68,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng[] locate = new LatLng[10000];
     public double userlat;
     public double userlnt;
+    public double distanceresult;
+    public Marker marker;
+    public Marker marker1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,44 +136,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onCameraIdle() {
             float zoom = 0;
+
+            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
+            Bitmap b = bitmapdraw.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+
             Toast.makeText(this, "數據加載中",
                     Toast.LENGTH_SHORT).show();
+
             zoom = mMap.getCameraPosition().zoom;
             if(zoom<13 && zoom>9){
+                System.out.println(zoom);
+                marker.setVisible(false);
+                marker1.setVisible(true);
+//                distanceresult = getDistance(userlnt,userlat,120.277872,22.734315);
+//                if(distanceresult <= 5000) {
+
+                System.out.println("1");
+//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(test, 14));
+//                }
+                //這一部分還有很大問題 geocoder的調用
 //                System.out.println(zoom);
                 //讀取資料庫資料
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
-                db.collection( "activity" )
-                        .orderBy("startTime")
-                        .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                while(count<20){
-//                                    if(document.getString())
+//                db.collection( "activity" )
+//                        .orderBy("startTime")
+//                        .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                while(count<20){
+////                                    if(document.getString())
 //                                    System.out.println(getLocationFromAddress(document.getString("location")));
-                                    locate[count] = getLocationFromAddress(document.getString("location"));
-                                    String locateString = locate[count].toString();
-                                    String[] locatesplit = locateString.replaceAll("lat/lng: \\p{Punct} ","").split(",");
+//                                    locate[count] = getLocationFromAddress(document.getString("location"));
+//                                    String locateString = locate[count].toString();
+//                                    String[] locatesplit = locateString.replaceAll("lat/lng: \\p{Punct} ","").split(",");
 //                                    for(int i = 0;i<25;i++){
 //                                        System.out.println(locatesplit[i]);
 //                                    }
-                                    System.out.println(locate[count]);
-                                    System.out.println(count);
-                                    count++;
-                                }
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents.",task.getException());
-                        }
-                    }
-                });
+//                                    System.out.println(locate[count]);
+//                                    System.out.println(count);
+//                                    count++;
+//                                }
+//                            }
+//                        } else {
+//                            Log.w("TAG", "Error getting documents.",task.getException());
+//                        }
+//                    }
+//                });
             }
         }
 
+    //計算結果單位為公尺
     public double getDistance(double lng1,double lat1,double lng2,double lat2){
         double radLat1 = rad(lat1);
         double radLat2 = rad(lat2);
@@ -323,6 +344,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnCameraMoveCanceledListener(this);
 
         final LatLng[] locate2 = new LatLng[100000];
+        LatLng test = new LatLng(120.277872,22.734315);
 
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
         Bitmap b = bitmapdraw.getBitmap();
@@ -358,10 +380,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
         mMap.setOnInfoWindowClickListener(this);
-        mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+        marker = mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
         getInfowWindow(mMap);
         mMap.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
+        marker1 = mMap.addMarker(new MarkerOptions().position(test).title("鬥牛啦").snippet("起：2020/5/12 14:00" + "\n" + "迄：2020/5/12 17:00"));
+//.icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+        marker1.setVisible(false);
+        getInfowWindow(mMap);
+        mMap.setOnInfoWindowClickListener(this);
 
     }
 

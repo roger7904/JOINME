@@ -149,7 +149,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,MapsActivity.class);
+                intent.setClass(MainActivity.this,home.class);
                 startActivity(intent);
             }
         });
@@ -166,7 +166,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,notice.class);
+                intent.setClass(MainActivity.this,MapsActivity.class);
                 startActivity(intent);
             }
         });
