@@ -15,7 +15,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,7 +56,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
 
     public GoogleMap mMap;
-    public GoogleMap mMapp;
     private Location mLastKnownLocation;
     private Boolean mLocationPermissionGranted = false;
     private GoogleApiClient mGoogleApiClient;
@@ -66,12 +64,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button eatbtn;
     private Button viewbtn;
     private Button tripbtn;
-    private LocationManager locationMgr;
-    private String provider;
     private static int count = 0;
     private LatLng[] locate = new LatLng[10000];
-    private Handler handler = new Handler();
-    public String location = "";
+    public double userlat;
+    public double userlnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,30 +77,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (chechPermission()) {
             init();
         }
-
-        //讀取資料庫資料
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //抓集合
-//        db.collection( "activity" )
-//                        .orderBy("startTime")
-//                        .limit(20)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    locate[count] = getLocationFromAddress(document.getString("location"));
-//                                    System.out.println(locate[count]);
-//                                    System.out.println(count);
-//                                    count++;
-//                            }
-//                        } else {
-//                            Log.w("TAG", "Error getting documents.",task.getException());
-//                        }
-//                    }
-//                });
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -164,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(this, "數據加載中",
                     Toast.LENGTH_SHORT).show();
             zoom = mMap.getCameraPosition().zoom;
-            if(zoom<13){
+            if(zoom<13 && zoom>9){
 //                System.out.println(zoom);
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -178,9 +150,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 while(count<20){
-                                    document.getString("location");
 //                                    if(document.getString())
+//                                    System.out.println(getLocationFromAddress(document.getString("location")));
                                     locate[count] = getLocationFromAddress(document.getString("location"));
+                                    String locateString = locate[count].toString();
+                                    String[] locatesplit = locateString.replaceAll("lat/lng: \\p{Punct} ","").split(",");
+//                                    for(int i = 0;i<25;i++){
+//                                        System.out.println(locatesplit[i]);
+//                                    }
                                     System.out.println(locate[count]);
                                     System.out.println(count);
                                     count++;
@@ -194,20 +171,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
+    public double getDistance(double lng1,double lat1,double lng2,double lat2){
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
+        double a = radLat1 - radLat2;
+        double b = rad(lng1) - rad(lng2);
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b/2),2)));
+        double result = Math.round(s * 10000d) / 10000d;
+        return result;
+    }
 
-//        SupportMapFragment mapFrag = ((SupportMapFragment) getSupportFragmentManager()
-//               getSupportFragmentManager .findFragmentByIdragmentById(R.id.map));
-//        if(mapFrag.setClickable())
-//        mapFragFrag.getMapAsync(this);
-//        GoogleMap map = mapFrag;
-
-//        System.out.println("1");
-//        System.out.println("1");
-//        zoom = mMap.getCameraPosition().zoom;
-//        if(zoom>16){
-//            System.out.println(zoom);
-//        }
-//    }
+    private static double rad(double d){
+        return d * Math.PI /180.0;
+    }
 
     private void initViews() {
         ballbtn = (Button)findViewById(R.id.ballbtn);
@@ -276,6 +252,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //使用者是否開啟定位
     private Boolean getDeviceLocation() {
 
+
         if (mLocationPermissionGranted) {
             if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return false;
@@ -288,6 +265,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLastKnownLocation.getLatitude(),
                             mLastKnownLocation.getLongitude()), 12));
+            userlat = mLastKnownLocation.getLatitude();
+            userlnt = mLastKnownLocation.getLongitude();
             return true;
         }
         return false;
@@ -386,19 +365,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    //地址轉經緯度method
+    //地址轉經緯度method(很容易讀不到資料)
     public LatLng getLocationFromAddress(String address){
         Geocoder geo = new Geocoder(this);
         List<Address> adres;
         LatLng point = null;
         try{
             adres = geo.getFromLocationName(address,5);
-            if(adres == null){
-                return null;
+            Thread.sleep(500);
+            while(adres.size() == 0){
+                adres = geo.getFromLocationName(address,5);
+                Thread.sleep(500);
             }
             Address location = adres.get(0);
             point = new LatLng(location.getLatitude(),location.getLongitude());
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return point;

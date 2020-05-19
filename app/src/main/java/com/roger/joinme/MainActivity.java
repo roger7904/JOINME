@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 public class MainActivity extends FragmentActivity {
 
@@ -148,7 +149,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this,home.class);
+                intent.setClass(MainActivity.this,MapsActivity.class);
                 startActivity(intent);
             }
         });
