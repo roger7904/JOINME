@@ -32,6 +32,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -80,12 +81,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button viewbtn;
     private Button tripbtn;
     private static int count = 0;
-    private LatLng[] locate = new LatLng[10000];
     public double userlat;
     public double userlnt;
     public double distanceresult;
     public Marker marker;
     public Marker marker1;
+    public Marker markerSmall;
+    private LatLng[] locateArray = new LatLng[10000];
+    private LatLng[] locate = new LatLng[10000];
+    private String[] title=new String[10000];
+    private int dbcount = 0;
+    private Marker[] markerArray=new Marker[10000];
+
 
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
@@ -126,6 +133,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
         initViews();
         setListeners();
+        initDB();
 
     }
 
@@ -189,10 +197,13 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Toast.LENGTH_SHORT).show();
 
         zoom = mMap.getCameraPosition().zoom;
-        if(zoom<13 && zoom>9){
+        if(zoom<13){
             System.out.println(zoom);
-            marker.setVisible(false);
-            marker1.setVisible(true);
+//            marker.setVisible(false);
+            markerSmall.setVisible(true);
+            for(int i =0 ;i<dbcount;i++){
+                markerArray[i].setVisible(false);
+            }
 //                distanceresult = getDistance(userlnt,userlat,120.277872,22.734315);
 //                if(distanceresult <= 5000) {
 
@@ -231,6 +242,13 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                        }
 //                    }
 //                });
+        }else{
+//            marker.setVisible(true);
+            for(int i =0 ;i<dbcount;i++){
+                markerArray[i].setVisible(true);
+            }
+            markerSmall.setVisible(false);
+            System.out.println(zoom);
         }
     }
 
@@ -381,6 +399,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //地圖初始化
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
 
         mMap.setOnCameraIdleListener(this);
@@ -421,17 +440,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
         LatLng locate = new LatLng(22.734315,120.277872);
-        LatLng locatee = new LatLng(22.44065,120.285000);
+        LatLng locatee = new LatLng(22.718379,120.304477);
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
         mMap.setOnInfoWindowClickListener(this);
-        marker = mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
-        getInfowWindow(mMap);
-        mMap.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
+//        marker = mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+//        getInfowWindow(mMap);
+        markerSmall= mMap.addMarker(new MarkerOptions().position(locatee).title("楠梓區").snippet("4個活動"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
-        marker1 = mMap.addMarker(new MarkerOptions().position(test).title("鬥牛啦").snippet("起：2020/5/12 14:00" + "\n" + "迄：2020/5/12 17:00"));
+//        marker1 = mMap.addMarker(new MarkerOptions().position(test).title("鬥牛啦").snippet("起：2020/5/12 14:00" + "\n" + "迄：2020/5/12 17:00"));
 //.icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-        marker1.setVisible(false);
+//        marker1.setVisible(false);
+
         getInfowWindow(mMap);
         mMap.setOnInfoWindowClickListener(this);
 
@@ -600,6 +620,39 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         });
             }
         });
+    }
+
+    public void initDB(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //抓集合
+        db.collection( "activity" )
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                        document.getData();
+                                //抓取document名稱及內部欄位資料
+                                title[dbcount]=document.getData().get("title").toString();
+                                GeoPoint geoPoint = document.getGeoPoint("geopoint");
+                                double lat=geoPoint.getLatitude();
+                                double lng=geoPoint.getLongitude();
+                                locateArray[dbcount]=new LatLng(lat,lng);
+                                System.out.println(title[dbcount]+":"+locateArray[dbcount]);
+                                dbcount++;
+                            }
+                            for(int i = 0 ; i < dbcount ; i++){
+                                markerArray[i]=mMap.addMarker(new MarkerOptions().position(locateArray[i]).title(title[i]));
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.",task.getException());
+                        }
+
+                    }
+                });
+
     }
 
 }
