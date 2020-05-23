@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private ImageButton notice;
     private ImageButton setting;
     private Button ball;
-    public static GoogleMap mMap;
+    public GoogleMap mMap;
     private Location mLastKnownLocation;
     private Boolean mLocationPermissionGranted = false;
     private GoogleApiClient mGoogleApiClient;
@@ -86,6 +87,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public double distanceresult;
     public Marker marker;
     public Marker marker1;
+    private ClusterManager<MyItem> mClusterManager;
 
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
@@ -188,15 +190,29 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         Toast.makeText(this, "數據加載中",
                 Toast.LENGTH_SHORT).show();
 
-        zoom = mMap.getCameraPosition().zoom;
-        if(zoom<13 && zoom>9){
-            System.out.println(zoom);
-            marker.setVisible(false);
-            marker1.setVisible(true);
+        double lat = 51.5009;
+        double lng = -0.122;
+
+// Set the title and snippet strings.
+        String title = "This is the title";
+        String snippet = "and this is the snippet.";
+
+// Create a cluster item for the marker and set the title and snippet using the constructor.
+        MyItem infoWindowItem = new MyItem(lat, lng, title, snippet);
+
+        setUpClusterer();
+// Add the cluster item (marker) to the cluster manager.
+        mClusterManager.addItem(infoWindowItem);
+
+//        zoom = mMap.getCameraPosition().zoom;
+//        if(zoom<13 && zoom>9){
+//            System.out.println(zoom);
+//            marker.setVisible(false);
+//            marker1.setVisible(true);
 //                distanceresult = getDistance(userlnt,userlat,120.277872,22.734315);
 //                if(distanceresult <= 5000) {
 
-            System.out.println("1");
+//            System.out.println("1");
 //                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(test, 14));
 //                }
             //這一部分還有很大問題 geocoder的調用
@@ -231,6 +247,38 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                        }
 //                    }
 //                });
+//        }
+    }
+
+    private void setUpClusterer() {
+        // Position the map.
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<MyItem>(this, mMap);
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+
+        // Add cluster items (markers) to the cluster manager.
+        addItems();
+    }
+
+    private void addItems() {
+        // Set some lat/lng coordinates to start with.
+        double lat = 51.5145160;
+        double lng = -0.1270060;
+
+        // Add ten cluster items in close proximity, for purposes of this example.
+        for (int i = 0; i < 10; i++) {
+            double offset = i / 60d;
+            lat = lat + offset;
+            lng = lng + offset;
+            MyItem offsetItem = new MyItem(lat, lng,"","");
+            mClusterManager.addItem(offsetItem);
         }
     }
 
