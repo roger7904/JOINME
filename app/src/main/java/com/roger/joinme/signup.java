@@ -24,7 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 
 public class signup extends AppCompatActivity {
 
-    private Button signupbtn = (Button)findViewById(R.id.signupbtn);
+//    private Button signupbtn = (Button)findViewById(R.id.signupbtn);
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -69,12 +69,12 @@ public class signup extends AppCompatActivity {
     }
     private void setListeners() {
 
-        signupbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        signupbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 
 }

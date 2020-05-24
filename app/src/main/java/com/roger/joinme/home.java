@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.IOException;
@@ -82,6 +83,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button eatbtn;
     private Button viewbtn;
     private Button tripbtn;
+    private Button homebtn;
+    private Button jobtn;
+    private Button favoritebtn;
+    private Button noticebtn;
+    private Button messagepagebtn;
+    private Button settingbtn;
     private static int count = 0;
     private LatLng[] locate = new LatLng[10000];
     public double userlat;
@@ -194,25 +201,14 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         Toast.makeText(this, "數據加載中",
                 Toast.LENGTH_SHORT).show();
 
-//        double lat = 22.732375;
-//        double lng = 120.276439;
-
-// Set the title and snippet strings.
-//        String title = "";
-//        String snippet = "";
-
-// Create a cluster item for the marker and set the title and snippet using the constructor.
-//        MyItem infoWindowItem = new MyItem(lat, lng, title, snippet);
-
         setUpClusterer();
-// Add the cluster item (marker) to the cluster manager.
-//        mClusterManager.addItem(infoWindowItem);
-
-//        zoom = mMap.getCameraPosition().zoom;
+        final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
     }
 
     private void setUpClusterer() {
         // Position the map.
+        //抓使用者定位  mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
 
         // Initialize the manager with the context and the map.
@@ -223,11 +219,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         // manager.
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
-
-
-
         // Add cluster items (markers) to the cluster manager.
         addItems();
+        mClusterManager.setOnClusterItemInfoWindowClickListener(
+                new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
+                    @Override public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
+                        Intent intent = new Intent();
+                        intent.setClass(home.this, signup.class);
+                        startActivity(intent);
+                    }
+                });
+
+        mMap.setOnInfoWindowClickListener(mClusterManager);
     }
 
     private void addItems() {
@@ -247,11 +250,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 Date snnippet = document.getTimestamp("startTime").toDate();
                                 SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
                                 MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
-//                                offsetItem.setOn
+
                                 mClusterManager.addItem(offsetItem);
                                 mMap.setOnInfoWindowClickListener(mClusterManager);
-//                                mClusterManager.setOnClusterClickListener(this);
-//                                mClusterManager.setOnClusterInfoWindowClickListener(offsetItem);
+
                             }
                         }
                     }
@@ -272,28 +274,17 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     }
 
-    //計算結果單位為公尺
-    public double getDistance(double lng1,double lat1,double lng2,double lat2){
-        double radLat1 = rad(lat1);
-        double radLat2 = rad(lat2);
-        double a = radLat1 - radLat2;
-        double b = rad(lng1) - rad(lng2);
-        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b/2),2)));
-        double result = Math.round(s * 10000d) / 10000d;
-        return result;
-    }
-
-    private static double rad(double d){
-        return d * Math.PI /180.0;
-    }
-
     private void initViews() {
         ballbtn = (Button)findViewById(R.id.ballbtn);
         eatbtn = (Button)findViewById(R.id.eatbtn);
         viewbtn = (Button)findViewById(R.id.viewbtn);
         tripbtn = (Button)findViewById(R.id.tripbtn);
         selfpage = (Button)findViewById(R.id.btn_to_selfpage);
-        ball = (Button)findViewById(R.id.ballbtn);
+        homebtn = (Button)findViewById(R.id.btn_to_homepage);
+        jobtn = (Button)findViewById(R.id.btn_to_jo);
+        favoritebtn = (Button)findViewById(R.id.btn_to_favorite);
+        settingbtn = (Button)findViewById(R.id.btn_to_setting);
+
     }
 
     //取得使用者當前位置 -1
@@ -518,13 +509,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         selfpage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("123");
+                Intent intent = new Intent();
+                intent.setClass(home.this, selfpage.class);
+                startActivity(intent);
             }
         });
-        ball.setOnClickListener(new View.OnClickListener() {
+        homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("123");
+                Intent intent = new Intent();
+                intent.setClass(home.this, home.class);
+                startActivity(intent);
+            }
+        });
+        jobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, jo.class);
+                startActivity(intent);
             }
         });
         String data[];
