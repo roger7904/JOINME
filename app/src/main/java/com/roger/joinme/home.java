@@ -37,7 +37,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -87,6 +89,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public double distanceresult;
     public Marker marker;
     public Marker marker1;
+    double lat;
+    double lng;
     private ClusterManager<MyItem> mClusterManager;
 
     //test
@@ -190,69 +194,26 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         Toast.makeText(this, "數據加載中",
                 Toast.LENGTH_SHORT).show();
 
-        double lat = 51.5009;
-        double lng = -0.122;
+//        double lat = 22.732375;
+//        double lng = 120.276439;
 
 // Set the title and snippet strings.
-        String title = "This is the title";
-        String snippet = "and this is the snippet.";
+//        String title = "";
+//        String snippet = "";
 
 // Create a cluster item for the marker and set the title and snippet using the constructor.
-        MyItem infoWindowItem = new MyItem(lat, lng, title, snippet);
+//        MyItem infoWindowItem = new MyItem(lat, lng, title, snippet);
 
         setUpClusterer();
 // Add the cluster item (marker) to the cluster manager.
-        mClusterManager.addItem(infoWindowItem);
+//        mClusterManager.addItem(infoWindowItem);
 
 //        zoom = mMap.getCameraPosition().zoom;
-//        if(zoom<13 && zoom>9){
-//            System.out.println(zoom);
-//            marker.setVisible(false);
-//            marker1.setVisible(true);
-//                distanceresult = getDistance(userlnt,userlat,120.277872,22.734315);
-//                if(distanceresult <= 5000) {
-
-//            System.out.println("1");
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(test, 14));
-//                }
-            //這一部分還有很大問題 geocoder的調用
-//                System.out.println(zoom);
-            //讀取資料庫資料
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-            //抓集合
-//                db.collection( "activity" )
-//                        .orderBy("startTime")
-//                        .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                while(count<20){
-////                                    if(document.getString())
-//                                    System.out.println(getLocationFromAddress(document.getString("location")));
-//                                    locate[count] = getLocationFromAddress(document.getString("location"));
-//                                    String locateString = locate[count].toString();
-//                                    String[] locatesplit = locateString.replaceAll("lat/lng: \\p{Punct} ","").split(",");
-//                                    for(int i = 0;i<25;i++){
-//                                        System.out.println(locatesplit[i]);
-//                                    }
-//                                    System.out.println(locate[count]);
-//                                    System.out.println(count);
-//                                    count++;
-//                                }
-//                            }
-//                        } else {
-//                            Log.w("TAG", "Error getting documents.",task.getException());
-//                        }
-//                    }
-//                });
-//        }
     }
 
     private void setUpClusterer() {
         // Position the map.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
@@ -263,23 +224,52 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
 
+
+
         // Add cluster items (markers) to the cluster manager.
         addItems();
     }
 
     private void addItems() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection( "activity" )
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                lat = document.getGeoPoint("geopoint").getLatitude();
+                                lng = document.getGeoPoint("geopoint").getLongitude();
+
+                                //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                Date snnippet = document.getTimestamp("startTime").toDate();
+                                SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
+                                MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
+//                                offsetItem.setOn
+                                mClusterManager.addItem(offsetItem);
+                                mMap.setOnInfoWindowClickListener(mClusterManager);
+//                                mClusterManager.setOnClusterClickListener(this);
+//                                mClusterManager.setOnClusterInfoWindowClickListener(offsetItem);
+                            }
+                        }
+                    }
+                });
+
         // Set some lat/lng coordinates to start with.
-        double lat = 51.5145160;
-        double lng = -0.1270060;
+//        double lat = 51.5145160;
+//        double lng = -0.1270060;
 
         // Add ten cluster items in close proximity, for purposes of this example.
-        for (int i = 0; i < 10; i++) {
-            double offset = i / 60d;
-            lat = lat + offset;
-            lng = lng + offset;
-            MyItem offsetItem = new MyItem(lat, lng,"","");
-            mClusterManager.addItem(offsetItem);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            double offset = i / 60d;
+//            lat = lat + offset;
+//            lng = lng + offset;
+//            MyItem offsetItem = new MyItem(lat, lng,"","");
+//            mClusterManager.addItem(offsetItem);
+//        }
+
     }
 
     //計算結果單位為公尺
@@ -302,8 +292,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         eatbtn = (Button)findViewById(R.id.eatbtn);
         viewbtn = (Button)findViewById(R.id.viewbtn);
         tripbtn = (Button)findViewById(R.id.tripbtn);
-        selfpage=(Button)findViewById(R.id.btn_to_selfpage);
-        ball=(Button)findViewById(R.id.ballbtn);
+        selfpage = (Button)findViewById(R.id.btn_to_selfpage);
+        ball = (Button)findViewById(R.id.ballbtn);
     }
 
     //取得使用者當前位置 -1
@@ -472,16 +462,16 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         LatLng locatee = new LatLng(22.44065,120.285000);
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
-        mMap.setOnInfoWindowClickListener(this);
-        marker = mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
-        getInfowWindow(mMap);
-        mMap.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
-        marker1 = mMap.addMarker(new MarkerOptions().position(test).title("鬥牛啦").snippet("起：2020/5/12 14:00" + "\n" + "迄：2020/5/12 17:00"));
+//        mMap.setOnInfoWindowClickListener(this);
+//        marker = mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+//        getInfowWindow(mMap);
+//        mMap.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
+//        marker1 = mMap.addMarker(new MarkerOptions().position(test).title("鬥牛啦").snippet("起：2020/5/12 14:00" + "\n" + "迄：2020/5/12 17:00"));
 //.icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-        marker1.setVisible(false);
-        getInfowWindow(mMap);
-        mMap.setOnInfoWindowClickListener(this);
+//        marker1.setVisible(false);
+//        getInfowWindow(mMap);
+//        mMap.setOnInfoWindowClickListener(this);
 
     }
 
