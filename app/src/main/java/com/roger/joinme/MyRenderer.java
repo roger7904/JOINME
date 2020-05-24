@@ -9,6 +9,7 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
+//用來繼承監聽clusterItem內Marker的InfoWindow
 public class MyRenderer extends DefaultClusterRenderer<MyItem> {
 
     public MyRenderer(Context context, GoogleMap map, ClusterManager<MyItem> clusterManager) {
