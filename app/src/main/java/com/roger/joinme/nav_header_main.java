@@ -18,6 +18,7 @@ public class nav_header_main extends AppCompatActivity {
     private Button activitypage;
     private Button friendpage;
     private Button logout;
+//    private Button messagebtn;
 
     //test
     private AppBarConfiguration mAppBarConfiguration;
@@ -57,7 +58,7 @@ public class nav_header_main extends AppCompatActivity {
         activitypage=(Button)findViewById(R.id.btn_to_jo);
         friendpage=(Button)findViewById(R.id.btn_to_notice);
         logout=(Button)findViewById(R.id.btn_logout);
-
+//        messagebtn=(Button)findViewById(R.id.btn_to_messagepage);
 
     }
 

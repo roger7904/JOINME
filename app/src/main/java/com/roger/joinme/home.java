@@ -85,6 +85,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button tripbtn;
     private Button homebtn;
     private Button jobtn;
+    private Button messagebtn;
     private Button favoritebtn;
     private Button noticebtn;
     private Button messagepagebtn;
@@ -284,7 +285,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         jobtn = (Button)findViewById(R.id.btn_to_jo);
         favoritebtn = (Button)findViewById(R.id.btn_to_favorite);
         settingbtn = (Button)findViewById(R.id.btn_to_setting);
-
+        messagebtn = (Button)findViewById(R.id.btn_to_messagepage);
     }
 
     //取得使用者當前位置 -1
@@ -534,6 +535,15 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
+        messagebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, chatroom.class);
+                startActivity(intent);
+            }
+        });
+
         String data[];
         ballbtn.setOnClickListener(new View.OnClickListener() {
             @Override

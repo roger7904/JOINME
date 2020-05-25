@@ -57,7 +57,7 @@ public class chatroom extends AppCompatActivity {
         //NavigationUI.setupWithNavController(navigationView, navController);
 
         initViews();
-        setListeners();
+//        setListeners();
     }
 
     @Override
