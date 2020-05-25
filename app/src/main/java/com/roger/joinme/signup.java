@@ -24,7 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 
 public class signup extends AppCompatActivity {
 
-//    private Button signupbtn = (Button)findViewById(R.id.signupbtn);
+    public Button signupbtn ;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -65,16 +65,17 @@ public class signup extends AppCompatActivity {
     {
     }
     private void initViews() {
-
+        signupbtn = (Button)findViewById(R.id.signupbtn);
     }
     private void setListeners() {
 
-//        signupbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        signupbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signupbtn.setText("已報名");
+                signupbtn.setEnabled(false);
+            }
+        });
     }
 
 }

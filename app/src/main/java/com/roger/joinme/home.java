@@ -191,7 +191,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //抓取使用者當下狀態--停止移動地圖後一段時間
     @Override
     public void onCameraIdle() {
-        float zoom = 0;
+//        float zoom = 0;
 
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
         Bitmap b = bitmapdraw.getBitmap();
@@ -416,13 +416,17 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mMap.setOnCameraMoveStartedListener(this);
         mMap.setOnCameraMoveListener(this);
         mMap.setOnCameraMoveCanceledListener(this);
-
-        final LatLng[] locate2 = new LatLng[100000];
-        LatLng test = new LatLng(120.277872,22.734315);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
+//        final LatLng[] locate2 = new LatLng[100000];
+//        LatLng test = new LatLng(120.277872,22.734315);
 
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+
+        setUpClusterer();
+        final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
 
         //讀取資料庫資料
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -449,8 +453,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                });
 
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
-        LatLng locate = new LatLng(22.734315,120.277872);
-        LatLng locatee = new LatLng(22.44065,120.285000);
+//        LatLng locate = new LatLng(22.734315,120.277872);
+//        LatLng locatee = new LatLng(22.44065,120.285000);
 
         //設定座標的標題以及詳細內容 之後從資料庫抓取
 //        mMap.setOnInfoWindowClickListener(this);
