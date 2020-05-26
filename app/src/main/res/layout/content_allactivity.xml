@@ -81,7 +81,7 @@
                 android:text="@string/ballsort" />
 
             <Button
-                android:id="@+id/eatbtn"
+                android:id="@+id/storebtn"
                 android:layout_width="66dp"
                 android:layout_height="43dp"
                 android:layout_marginStart="32dp"
@@ -91,7 +91,7 @@
                 android:text="@string/disaccount" />
 
             <Button
-                android:id="@+id/viewbtn"
+                android:id="@+id/ktvbtn"
                 android:layout_width="66dp"
                 android:layout_height="43dp"
                 android:layout_marginStart="32dp"
@@ -101,7 +101,7 @@
                 android:text="@string/information" />
 
             <Button
-                android:id="@+id/tripbtn"
+                android:id="@+id/informationbtn"
                 android:layout_width="66dp"
                 android:layout_height="43dp"
                 android:layout_marginStart="32dp"

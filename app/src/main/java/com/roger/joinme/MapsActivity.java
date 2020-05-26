@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +23,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -208,9 +205,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initViews() {
         ballbtn = (Button)findViewById(R.id.ballbtn);
-        eatbtn = (Button)findViewById(R.id.eatbtn);
-        viewbtn = (Button)findViewById(R.id.viewbtn);
-        tripbtn = (Button)findViewById(R.id.tripbtn);
+        eatbtn = (Button)findViewById(R.id.storebtn);
+        viewbtn = (Button)findViewById(R.id.ktvbtn);
+        tripbtn = (Button)findViewById(R.id.informationbtn);
     }
 
     //取得使用者當前位置 -1

@@ -56,7 +56,7 @@ public class jo extends AppCompatActivity {
         //NavigationUI.setupWithNavController(navigationView, navController);
 
         initViews();
-        setListeners();
+//        setListeners();
     }
 
     @Override
@@ -138,32 +138,32 @@ public class jo extends AppCompatActivity {
             }
         });
 
-        chatroom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, chatroom.class);
-                startActivity(intent);
-            }
-        });
+//        chatroom.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(jo.this, chatroom.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        friendpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, friend.class);
-                startActivity(intent);
-            }
-        });
+//        friendpage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(jo.this, friend.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, favorite.class);
-                startActivity(intent);
-            }
-        });
+//        favorite.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(jo.this, favorite.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
 

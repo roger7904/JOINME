@@ -30,7 +30,7 @@
             tools:layout_editor_absoluteY="55dp" />
 
         <Button
-            android:id="@+id/eatbtn"
+            android:id="@+id/storebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
@@ -42,7 +42,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/viewbtn"
+            android:id="@+id/ktvbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -50,11 +50,11 @@
             android:layout_marginTop="120dp"
             android:text="@string/singing"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/tripbtn"
+            app:layout_constraintStart_toEndOf="@+id/informationbtn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/tripbtn"
+            android:id="@+id/informationbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
