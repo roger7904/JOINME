@@ -36,36 +36,10 @@ public class MyRenderer extends DefaultClusterRenderer<MyItem> {
         super(context, map, clusterManager);
     }
 
-    @Override protected void onBeforeClusterRendered(Cluster<MyItem> cluster, MarkerOptions markerOptions) {
-//        final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        //抓集合
-//        db.collection( "activity" )
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                           @Override
-//                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                               if (task.isSuccessful()) {
-//                                                   for (QueryDocumentSnapshot document : task.getResult()) {
-//                                                       try {
-//                                                           URL url = new URL(document.getString("activityPhoto"));
-//                                                           System.out.println(document.getString("activityPhoto"));
-//                                                           HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                                                           connection.setDoInput(true);
-//                                                           connection.connect();
-//                                                           InputStream input = connection.getInputStream();
-//                                                           bitmap = BitmapFactory.decodeStream(input);
-////                                            BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.fromResource(bitmap);
-//                                                       } catch (MalformedURLException e) {
-//                                                           e.printStackTrace();
-//                                                       } catch (IOException e) {
-//                                                           e.printStackTrace();
-//                                                       }
-//                                                   }
-//                                               }
-//                                           }
-//                                       });
-//        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+    @Override
+    protected void onBeforeClusterRendered(Cluster<MyItem> cluster, final MarkerOptions markerOptions) {
+        final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+        markerOptions.icon(markerDescriptor);
     }
 
     @Override

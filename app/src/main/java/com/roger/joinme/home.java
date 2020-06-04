@@ -104,6 +104,9 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     double lng;
     public Bitmap bitmap;
     private ClusterManager<MyItem> mClusterManager;
+    public MyItem offsetItem;
+    public BitmapDescriptor markerDescriptor;
+    public static String activitytitle;
 
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
@@ -229,12 +232,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mClusterManager.setOnClusterItemInfoWindowClickListener(
                 new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
                     @Override public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
+                        activitytitle = stringClusterItem.getTitle();
                         Intent intent = new Intent();
                         intent.setClass(home.this, signup.class);
                         startActivity(intent);
                     }
                 });
-
         mMap.setOnInfoWindowClickListener(mClusterManager);
     }
 
@@ -250,32 +253,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 lat = document.getGeoPoint("geopoint").getLatitude();
                                 lng = document.getGeoPoint("geopoint").getLongitude();
-
+                                if(document.getString("activityType").equals("ball")){
+                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                                }else if(document.getString("activityType").equals("eat")){
+                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                                }else if(document.getString("activityType").equals("KTV")){
+                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+                                }else{
+                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                                }
                                 //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                 Date snnippet = document.getTimestamp("startTime").toDate();
                                 SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
-
+                                offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
                                 mClusterManager.addItem(offsetItem);
                                 mMap.setOnInfoWindowClickListener(mClusterManager);
-
                             }
                         }
                     }
                 });
-
-        // Set some lat/lng coordinates to start with.
-//        double lat = 51.5145160;
-//        double lng = -0.1270060;
-
-        // Add ten cluster items in close proximity, for purposes of this example.
-//        for (int i = 0; i < 10; i++) {
-//            double offset = i / 60d;
-//            lat = lat + offset;
-//            lng = lng + offset;
-//            MyItem offsetItem = new MyItem(lat, lng,"","");
-//            mClusterManager.addItem(offsetItem);
-//        }
 
     }
 
@@ -352,7 +348,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //使用者是否開啟定位
     private Boolean getDeviceLocation() {
 
-
         if (mLocationPermissionGranted) {
             if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return false;
@@ -425,9 +420,9 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //        final LatLng[] locate2 = new LatLng[100000];
 //        LatLng test = new LatLng(120.277872,22.734315);
 
-        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
-        Bitmap b = bitmapdraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+//        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
+//        Bitmap b = bitmapdraw.getBitmap();
+//        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
 
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
@@ -544,7 +539,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             }
         });
 
-        String data[];
         ballbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -585,7 +579,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                         Date snnippet = document.getTimestamp("startTime").toDate();
                                         SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
 
                                         mClusterManager.addItem(offsetItem);
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -608,8 +603,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 //抓集合
                 db.collection( "activity" )
                         .whereEqualTo("activityType", "eat")
-                        .orderBy("startTime")
-                        .limit(20)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -622,7 +615,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                         Date snnippet = document.getTimestamp("startTime").toDate();
                                         SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
+                                        markerDescriptor = markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
 
                                         mClusterManager.addItem(offsetItem);
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -657,7 +651,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                         Date snnippet = document.getTimestamp("startTime").toDate();
                                         SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
 
                                         mClusterManager.addItem(offsetItem);
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -692,7 +687,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                         Date snnippet = document.getTimestamp("startTime").toDate();
                                         SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet));
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
 
                                         mClusterManager.addItem(offsetItem);
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
