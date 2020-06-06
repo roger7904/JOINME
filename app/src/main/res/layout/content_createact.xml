@@ -10,8 +10,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="391dp"
+        android:layout_height="672dp"
         android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
                     android:textSize="24sp" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/activityType"
                     android:layout_width="237dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -94,15 +94,50 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10sp"
                     android:layout_weight="1"
+                    android:text="活動日期"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/dateBtn"
+                    android:layout_width="243dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="點我選擇" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="78dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
                     android:text="活動時間"
                     android:textSize="24sp" />
 
-                <Spinner
-                    android:id="@+id/spinner8"
-                    android:layout_width="253dp"
+                <Button
+                    android:id="@+id/startBtn"
+                    android:layout_width="104dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="起" />
+
+                <Button
+                    android:id="@+id/endBtn"
+                    android:layout_width="104dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="訖" />
 
             </LinearLayout>
 
@@ -208,7 +243,7 @@
                     android:layout_gravity="top"
                     android:layout_marginRight="10sp"
                     android:layout_weight="1"
-                    android:text="備註"
+                    android:text="貼文"
                     android:textSize="24sp" />
 
                 <EditText
@@ -219,20 +254,6 @@
                     android:ems="10"
                     android:inputType="textPersonName" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/button40"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="提交" />
             </LinearLayout>
 
         </LinearLayout>
@@ -248,4 +269,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
+    <Button
+        android:id="@+id/button40"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_weight="1"
+        android:text="提交"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
