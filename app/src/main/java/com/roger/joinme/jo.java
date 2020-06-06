@@ -11,7 +11,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +26,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class jo extends AppCompatActivity {
     private Button user;
@@ -37,9 +43,10 @@ public class jo extends AppCompatActivity {
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
     private Spinner spinner;
-    private Button startBtn, endBtn, dateBtn;
+    private Button startBtn, endBtn, dateBtn, submitbtn;
     private int year, month, day; //選擇日期變數
     private int sHour,sMin,eHour,eMin;  //起訖時間
+    public TextView activityTitle,activityLocation,peopleLimit,activityContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,11 @@ public class jo extends AppCompatActivity {
         dateBtn = (Button) findViewById(R.id.dateBtn);
         endBtn = (Button) findViewById(R.id.endBtn);
         startBtn = (Button) findViewById(R.id.startBtn);
+        activityTitle = (TextView)findViewById(R.id.editText6);
+        activityLocation = (TextView)findViewById(R.id.editText10);
+        peopleLimit = (TextView)findViewById(R.id.editText11);
+        activityContent = (TextView)findViewById(R.id.editText12);
+        submitbtn = (Button)findViewById(R.id.button40);
     }
 
     private void initData() {
@@ -265,6 +277,24 @@ public class jo extends AppCompatActivity {
             }
 
         });
+
+        submitbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(activityTitle.getText().equals("") || activityLocation.getText().equals("") || peopleLimit.getText().equals("")){
+                    Toast.makeText(jo.this,"資料未填寫完成",Toast.LENGTH_LONG).show();
+                }else{
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String,Object> book = new HashMap<>();
+                    book.put("activityType",activityTitle.getText());
+                    book.put("postContent",activityContent.getText());
+                    book.put("location",activityLocation.getText());
+                    book.put("numberOfPeople",peopleLimit);
+
+                }
+            }
+        });
+
     }
 
     private String setDateFormat(int year, int monthOfYear, int dayOfMonth) {
