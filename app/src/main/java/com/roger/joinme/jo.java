@@ -39,8 +39,7 @@ public class jo extends AppCompatActivity {
     private Spinner spinner;
     private Button startBtn, endBtn, dateBtn;
     private int year, month, day; //選擇日期變數
-    private int sHour,sMin,eHour,eMin;  //起訖時間變數
-
+    private int sHour,sMin,eHour,eMin;  //起訖時間
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
