@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -281,16 +282,24 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(activityTitle.getText().equals("") || activityLocation.getText().equals("") || peopleLimit.getText().equals("")){
+                if(activityTitle.getText().toString().equals("") || activityLocation.getText().toString().equals("") || peopleLimit.getText().toString().equals("")||setTimeFormat(sHour,sMin).equals("0:0")||setTimeFormat(eHour,eMin).equals("0:0")||setDateFormat(year,month,day).equals("0-1-0")){
                     Toast.makeText(jo.this,"資料未填寫完成",Toast.LENGTH_LONG).show();
                 }else{
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String,Object> book = new HashMap<>();
-                    book.put("activityType",activityTitle.getText());
-                    book.put("postContent",activityContent.getText());
-                    book.put("location",activityLocation.getText());
-                    book.put("numberOfPeople",peopleLimit);
-
+                    book.put("activityTitle",activityTitle.getText().toString());
+                    book.put("postContent",activityContent.getText().toString());
+                    book.put("activityType",spinner.getSelectedItem().toString());
+//                  book.put("location",activityLocation.getText().toString()); 先不上傳地址，轉成經緯度前會導致首頁報錯
+                    book.put("numberOfPeople",peopleLimit.getText().toString());
+                    book.put("startTime",setTimeFormat(sHour,sMin));
+                    book.put("endTime",setTimeFormat(eHour,eMin));
+                    book.put("date",setDateFormat(year,month,day));
+                    for (Object key : book.keySet()) {
+                        System.out.println(key + " : " + book.get(key));
+                    } //查看map內容
+                    db.collection("activity").add(book);
+                    Toast.makeText(jo.this,"活動建立成功",Toast.LENGTH_LONG).show();
                 }
             }
         });
