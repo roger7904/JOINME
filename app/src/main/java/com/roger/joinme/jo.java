@@ -23,8 +23,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.internal.PlatformServiceClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -321,14 +324,25 @@ public class jo extends AppCompatActivity {
                     book.put("activityType", spinner.getSelectedItem().toString());
 //                  book.put("location",activityLocation.getText().toString()); 先不上傳地址，轉成經緯度前會導致首頁報錯
                     book.put("numberOfPeople", peopleLimit.getText().toString());
-                    book.put("startTime", setTimeFormat(sHour, sMin));
+                    book.put("startTime", setTimeFormat(sHour, sMin));//之後討論下資料庫內的型別要直接用String還是時間戳記
                     book.put("endTime", setTimeFormat(eHour, eMin));
                     book.put("date", setDateFormat(year, month, day));
                     for (Object key : book.keySet()) {
                         System.out.println(key + " : " + book.get(key));
                     } //查看map內容
                     uploadImage();
-//                    db.collection("activity").add(book);
+                    db.collection("activity")
+                            .add(book)
+                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>(){
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentReference> task){
+                                    if(task.isSuccessful()){
+                                        Log.d("TAG","Book added");
+                                    }else{
+                                        Log.d("TAG","Book added failed");
+                                    }
+                                }
+                            });
                     Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
                 }
             }
