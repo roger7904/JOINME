@@ -24,10 +24,16 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.facebook.internal.PlatformServiceClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -45,6 +51,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,11 +102,33 @@ public class jo extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
 
+        initPlace();
         initViews();
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, new String[]{"商家優惠", "球類", "限時", "KTV", "其他"});
         setListeners();
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+
+    public void initPlace(){
+        Places.initialize(getApplicationContext(),"AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4");
+        PlacesClient placesClient = Places.createClient(jo.this);
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i("TAG", "An error occurred: " + status);
+            }
+        });
     }
 
     @Override
@@ -133,7 +162,7 @@ public class jo extends AppCompatActivity {
         endBtn = (Button) findViewById(R.id.endBtn);
         startBtn = (Button) findViewById(R.id.startBtn);
         activityTitle = (TextView) findViewById(R.id.editText6);
-        activityLocation = (TextView) findViewById(R.id.editText10);
+//        activityLocation = (TextView) findViewById(R.id.editText10);
         peopleLimit = (TextView) findViewById(R.id.editText11);
         activityContent = (TextView) findViewById(R.id.editText12);
         submitbtn = (Button) findViewById(R.id.button40);
@@ -317,6 +346,9 @@ public class jo extends AppCompatActivity {
                 if (activityTitle.getText().toString().equals("") || activityLocation.getText().toString().equals("") || peopleLimit.getText().toString().equals("") || setTimeFormat(sHour, sMin).equals("0:0") || setTimeFormat(eHour, eMin).equals("0:0") || setDateFormat(year, month, day).equals("0-1-0")) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
+                    //初始化Places API
+
+
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> book = new HashMap<>();
                     book.put("activityTitle", activityTitle.getText().toString());
@@ -350,26 +382,26 @@ public class jo extends AppCompatActivity {
 
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /* 當使用者按下確定後 */
-        if (resultCode == RESULT_OK) {
-            Uri uri = data.getData();                       //取得圖檔的路徑
-            Log.e("uri", uri.toString());                   //寫log
-            ContentResolver cr = this.getContentResolver(); //抽象資料的接口
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        /* 當使用者按下確定後 */
+//        if (resultCode == RESULT_OK) {
+//            Uri uri = data.getData();                       //取得圖檔的路徑
+////            Log.e("uri", uri.toString());                   //寫log
+//            ContentResolver cr = this.getContentResolver(); //抽象資料的接口
+//
+//            try {
+//                /* 由抽象資料接口轉換圖檔路徑為Bitmap */
+//                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+//
+//                imgtest.setImageBitmap(bitmap);
+//
+//            } catch (FileNotFoundException e) {
+//                Log.e("Exception", e.getMessage(), e);
+//            }
+//        }
 
-            try {
-                /* 由抽象資料接口轉換圖檔路徑為Bitmap */
-                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-
-                imgtest.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-                Log.e("Exception", e.getMessage(), e);
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     private String setDateFormat(int year, int monthOfYear, int dayOfMonth) {
         return String.valueOf(year) + "-"

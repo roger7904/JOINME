@@ -155,13 +155,12 @@
                     android:text="活動地址"
                     android:textSize="24sp" />
 
-                <EditText
-                    android:id="@+id/editText10"
-                    android:layout_width="237dp"
-                    android:layout_height="57dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+                <fragment
+                    android:id="@+id/autocomplete_fragment"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="262dp"
+                    android:layout_height="41dp"
+                    android:layout_marginTop="5dp" />
 
 
             </LinearLayout>
