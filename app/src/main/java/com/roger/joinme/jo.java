@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import com.facebook.internal.PlatformServiceClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,6 +39,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,6 +48,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -51,9 +56,11 @@ import androidx.navigation.ui.NavigationUI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class jo extends AppCompatActivity {
@@ -73,8 +80,10 @@ public class jo extends AppCompatActivity {
     private Button startBtn, endBtn, dateBtn, submitbtn;
     private int year, month, day; //選擇日期變數
     private int sHour, sMin, eHour, eMin;  //起訖時間
-    public TextView activityTitle, activityLocation, peopleLimit, activityContent;
+    public TextView activityTitle, peopleLimit, activityContent;
     private ImageView imgtest;
+    public String userSelectLocation;
+    public static final int ACTIVITY_FILE_CHOOSER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +130,7 @@ public class jo extends AppCompatActivity {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
+                userSelectLocation = place.getName();
             }
 
             @Override
@@ -343,7 +353,7 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (activityTitle.getText().toString().equals("") || activityLocation.getText().toString().equals("") || peopleLimit.getText().toString().equals("") || setTimeFormat(sHour, sMin).equals("0:0") || setTimeFormat(eHour, eMin).equals("0:0") || setDateFormat(year, month, day).equals("0-1-0")) {
+                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || peopleLimit.getText().toString().equals("") || setTimeFormat(sHour, sMin).equals("0:0") || setTimeFormat(eHour, eMin).equals("0:0") || setDateFormat(year, month, day).equals("0-1-0")) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
                     //初始化Places API
@@ -354,14 +364,16 @@ public class jo extends AppCompatActivity {
                     book.put("activityTitle", activityTitle.getText().toString());
                     book.put("postContent", activityContent.getText().toString());
                     book.put("activityType", spinner.getSelectedItem().toString());
-//                  book.put("location",activityLocation.getText().toString()); 先不上傳地址，轉成經緯度前會導致首頁報錯
+                    book.put("location",userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
+//                    book.put("geopoint", GeoPoint(getLocationFromAddress(userSelectLocation).getClass("Lat")));
                     book.put("numberOfPeople", peopleLimit.getText().toString());
                     book.put("startTime", setTimeFormat(sHour, sMin));//之後討論下資料庫內的型別要直接用String還是時間戳記
                     book.put("endTime", setTimeFormat(eHour, eMin));
                     book.put("date", setDateFormat(year, month, day));
                     for (Object key : book.keySet()) {
                         System.out.println(key + " : " + book.get(key));
-                    } //查看map內容
+                    }
+                    //查看map內容
                     uploadImage();
                     db.collection("activity")
                             .add(book)
@@ -382,26 +394,47 @@ public class jo extends AppCompatActivity {
 
     }
 
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        /* 當使用者按下確定後 */
-//        if (resultCode == RESULT_OK) {
-//            Uri uri = data.getData();                       //取得圖檔的路徑
-////            Log.e("uri", uri.toString());                   //寫log
-//            ContentResolver cr = this.getContentResolver(); //抽象資料的接口
-//
-//            try {
-//                /* 由抽象資料接口轉換圖檔路徑為Bitmap */
-//                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-//
-//                imgtest.setImageBitmap(bitmap);
-//
-//            } catch (FileNotFoundException e) {
-//                Log.e("Exception", e.getMessage(), e);
-//            }
-//        }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /* 當使用者按下確定後 */
+        //這個用法沒指定requestCode時會和place api牴觸(引用api時會用到這個方法)，檢查完後發現圖片抓取用的requestcode是1所以用變數存再判斷
+        if (requestCode == ACTIVITY_FILE_CHOOSER) {
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();                       //取得圖檔的路徑
+                Log.e("uri", uri.toString());                   //寫log
+                ContentResolver cr = this.getContentResolver(); //抽象資料的接口
 
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
+                try {
+                    /* 由抽象資料接口轉換圖檔路徑為Bitmap */
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    imgtest.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Log.e("Exception", e.getMessage(), e);
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //地址轉經緯度method(很容易讀不到資料)
+    public LatLng getLocationFromAddress(String address){
+        Geocoder geo = new Geocoder(this);
+        List<Address> adres;
+        LatLng point = null;
+        try{
+            adres = geo.getFromLocationName(address,5);
+            Thread.sleep(500);
+            while(adres.size() == 0){
+                adres = geo.getFromLocationName(address,5);
+                Thread.sleep(500);
+            }
+            Address location = adres.get(0);
+            point = new LatLng(location.getLatitude(),location.getLongitude());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return point;
+    }
 
     private String setDateFormat(int year, int monthOfYear, int dayOfMonth) {
         return String.valueOf(year) + "-"
