@@ -63,16 +63,6 @@ public class register extends AppCompatActivity {
         String passwd = editText_pwd.getText().toString();
         Log.d(email,"1");
 
-//        //連結資料庫
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        //欄位名
-//        DatabaseReference memberemail = database.getReference("member/"+email+"/emailinfo");
-//        //值
-//        memberemail.setValue(email);
-//
-//        DatabaseReference memberpasswd = database.getReference("member/"+email+"/passwd");
-//        memberpasswd.setValue(passwd);
-
         back_to_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

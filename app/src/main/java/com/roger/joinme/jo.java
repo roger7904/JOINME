@@ -357,15 +357,15 @@ public class jo extends AppCompatActivity {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
                     //初始化Places API
-
-
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> book = new HashMap<>();
                     book.put("activityTitle", activityTitle.getText().toString());
                     book.put("postContent", activityContent.getText().toString());
                     book.put("activityType", spinner.getSelectedItem().toString());
                     book.put("location",userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
-//                    book.put("geopoint", GeoPoint(getLocationFromAddress(userSelectLocation).getClass("Lat")));
+                    //先切割字串再轉成geopoint格式
+                    String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
+                    book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]),Double.parseDouble(tokens[2])));
                     book.put("numberOfPeople", peopleLimit.getText().toString());
                     book.put("startTime", setTimeFormat(sHour, sMin));//之後討論下資料庫內的型別要直接用String還是時間戳記
                     book.put("endTime", setTimeFormat(eHour, eMin));
@@ -388,6 +388,8 @@ public class jo extends AppCompatActivity {
                                 }
                             });
                     Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
+                    submitbtn.setEnabled(false);
+                    submitbtn.setText("報名成功");
                 }
             }
         });
@@ -416,7 +418,7 @@ public class jo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    //地址轉經緯度method(很容易讀不到資料)
+    //地址轉經緯度method(很容易讀不到資料 要想辦法解決次數問題)
     public LatLng getLocationFromAddress(String address){
         Geocoder geo = new Geocoder(this);
         List<Address> adres;
@@ -472,7 +474,3 @@ public class jo extends AppCompatActivity {
         });
     }
 }
-
-
-
-

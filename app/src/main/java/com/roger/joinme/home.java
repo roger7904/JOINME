@@ -9,6 +9,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -205,7 +208,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
 
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection ( "activity" )
+                .addSnapshotListener ( new EventListener< QuerySnapshot >() {
+                    @Override
+                    public void onEvent ( @Nullable QuerySnapshot value ,
+                                          @Nullable FirebaseFirestoreException e ) {
+                        if ( e != null ) {
+                            Log.w ( "TAG" , "Listen failed." , e );
+                            return ;
+                        }
+                        List < String > cities = new ArrayList <>();
+                        for ( QueryDocumentSnapshot doc : value ) {
+                            if ( doc . get ( "name" ) != null ) {
+                                cities . add ( doc . getString ( "name" ));
+                            }
+                        }
+                        Log . d ( "TAG" , "Current cites in CA: " + cities );
+                    }
+                });
 //        Toast.makeText(this, "數據加載中",
 //                Toast.LENGTH_SHORT).show();
 
