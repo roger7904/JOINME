@@ -1,7 +1,6 @@
 package com.roger.joinme;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,23 +8,28 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.facebook.internal.PlatformServiceClient;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,18 +41,19 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.zyyoona7.wheel.WheelView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -57,8 +62,11 @@ import androidx.navigation.ui.NavigationUI;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,13 +85,21 @@ public class jo extends AppCompatActivity {
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
     private Spinner spinner;
-    private Button startBtn, endBtn, dateBtn, submitbtn;
+    private Button submitbtn;
+    private EditText start, end;
     private int year, month, day; //選擇日期變數
     private int sHour, sMin, eHour, eMin;  //起訖時間
     public TextView activityTitle, peopleLimit, activityContent;
     private ImageView imgtest;
     public String userSelectLocation;
     public static final int ACTIVITY_FILE_CHOOSER = 1;
+    private LatLng placelocation;
+    private TimePickerView pTime;
+    private Date endTime = new Date();
+    private Date startTime = new Date();
+    private Timestamp sts,ets;
+    private WheelView<Integer> wheelView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,10 +133,20 @@ public class jo extends AppCompatActivity {
         setListeners();
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        initTimePicker();
+        wheelView = findViewById(R.id.wheelview);
+
+        List<Integer> list = new ArrayList<>(1);
+        for (int i = 0; i < 100; i++) {
+            list.add(i);
+        }
+        //设置数据
+        wheelView.setData(list);
+
     }
 
-    public void initPlace(){
-        Places.initialize(getApplicationContext(),"AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4");
+    public void initPlace() {
+        Places.initialize(getApplicationContext(), "AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4");
         PlacesClient placesClient = Places.createClient(jo.this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
@@ -131,6 +157,7 @@ public class jo extends AppCompatActivity {
                 // TODO: Get info about the selected place.
                 Log.i("TAG", "Place: " + place.getName() + ", " + place.getId());
                 userSelectLocation = place.getName();
+
             }
 
             @Override
@@ -168,12 +195,11 @@ public class jo extends AppCompatActivity {
         notice = (ImageButton) findViewById(R.id.imgbtn_notice);
         setting = (ImageButton) findViewById(R.id.imgbtn_setting);
         spinner = (Spinner) findViewById(R.id.activityType);
-        dateBtn = (Button) findViewById(R.id.dateBtn);
-        endBtn = (Button) findViewById(R.id.endBtn);
-        startBtn = (Button) findViewById(R.id.startBtn);
+        start = (EditText) findViewById(R.id.sTime);
+        end = (EditText) findViewById(R.id.eTime);
         activityTitle = (TextView) findViewById(R.id.editText6);
 //        activityLocation = (TextView) findViewById(R.id.editText10);
-        peopleLimit = (TextView) findViewById(R.id.editText11);
+//        peopleLimit = (TextView) findViewById(R.id.editText11);
         activityContent = (TextView) findViewById(R.id.editText12);
         submitbtn = (Button) findViewById(R.id.button40);
         imgtest = (ImageView) findViewById(R.id.imageView26);
@@ -284,61 +310,32 @@ public class jo extends AppCompatActivity {
 //            }
 //        });
 
-        dateBtn.setOnClickListener(new View.OnClickListener() {
+
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar c = Calendar.getInstance();
-                year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH);
-                day = c.get(Calendar.DAY_OF_MONTH);
-                new DatePickerDialog(jo.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        dateBtn.setText(setDateFormat(year, month, day));
-                    }
-
-                }, year, month, day).show();
+                if (pTime != null) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(startTime);
+                    pTime.setDate(calendar);
+                    pTime.show(view);
+                }
             }
-
         });
 
-        startBtn.setOnClickListener(new View.OnClickListener() {
+        end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Calendar c = Calendar.getInstance();
-                sHour = c.get(Calendar.HOUR_OF_DAY);
-                sMin = c.get(Calendar.MINUTE);
-                new TimePickerDialog(jo.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int Hour, int Min) {
-                        startBtn.setText(setTimeFormat(Hour, Min));
-                        sHour = Hour;
-                        sMin = Min;
-//                        System.out.println(Hour+":"+Min);
-                    }
-                }, sHour, sMin, false).show();
-
+                if (pTime != null) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(endTime);
+                    pTime.setDate(calendar);
+                    pTime.show(view);
+                }
             }
-
         });
 
-        endBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Calendar c = Calendar.getInstance();
-                eHour = c.get(Calendar.HOUR_OF_DAY);
-                eMin = c.get(Calendar.MINUTE);
-                new TimePickerDialog(jo.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int Hour, int Min) {
-                        endBtn.setText(setTimeFormat(Hour, Min));
-                        eHour = Hour;
-                        eMin = Min;
-                    }
-                }, eHour, eMin, false).show();
-            }
 
-        });
 
         imgtest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,43 +350,47 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || peopleLimit.getText().toString().equals("") || setTimeFormat(sHour, sMin).equals("0:0") || setTimeFormat(eHour, eMin).equals("0:0") || setDateFormat(year, month, day).equals("0-1-0")) {
+                System.out.print(wheelView.getSelectedItemData());
+                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") ) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
-                    //初始化Places API
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    Map<String, Object> book = new HashMap<>();
-                    book.put("activityTitle", activityTitle.getText().toString());
-                    book.put("postContent", activityContent.getText().toString());
-                    book.put("activityType", spinner.getSelectedItem().toString());
-                    book.put("location",userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
-                    //先切割字串再轉成geopoint格式
-                    String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
-                    book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]),Double.parseDouble(tokens[2])));
-                    book.put("numberOfPeople", peopleLimit.getText().toString());
-                    book.put("startTime", setTimeFormat(sHour, sMin));//之後討論下資料庫內的型別要直接用String還是時間戳記
-                    book.put("endTime", setTimeFormat(eHour, eMin));
-                    book.put("date", setDateFormat(year, month, day));
-                    for (Object key : book.keySet()) {
-                        System.out.println(key + " : " + book.get(key));
-                    }
-                    //查看map內容
-                    uploadImage();
-                    db.collection("activity")
-                            .add(book)
-                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>(){
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentReference> task){
-                                    if(task.isSuccessful()){
-                                        Log.d("TAG","Book added");
-                                    }else{
-                                        Log.d("TAG","Book added failed");
+                    if (sts.compareTo(ets) < 0) {
+                        //初始化Places API
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        Map<String, Object> book = new HashMap<>();
+                        book.put("activityTitle", activityTitle.getText().toString());
+                        book.put("postContent", activityContent.getText().toString());
+                        book.put("activityType", spinner.getSelectedItem().toString());
+                        book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
+                        //先切割字串再轉成geopoint格式
+                        String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
+                        book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
+                        book.put("numberOfPeople", wheelView.getSelectedItemData());
+                        book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
+                        book.put("endTime", ets);
+                        for (Object key : book.keySet()) {
+                            System.out.println(key + " : " + book.get(key));
+                        }
+                        //查看map內容
+                        uploadImage();
+                        db.collection("activity")
+                                .add(book)
+                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("TAG", "Book added");
+                                        } else {
+                                            Log.d("TAG", "Book added failed");
+                                        }
                                     }
-                                }
-                            });
-                    Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
-                    submitbtn.setEnabled(false);
-                    submitbtn.setText("報名成功");
+                                });
+                        Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
+                        submitbtn.setEnabled(false);
+                        submitbtn.setText("報名成功");
+                    }else{
+                        Toast.makeText(jo.this, "活動起訖時間填寫錯誤", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -419,19 +420,19 @@ public class jo extends AppCompatActivity {
     }
 
     //地址轉經緯度method(很容易讀不到資料 要想辦法解決次數問題)
-    public LatLng getLocationFromAddress(String address){
+    public LatLng getLocationFromAddress(String address) {
         Geocoder geo = new Geocoder(this);
         List<Address> adres;
         LatLng point = null;
-        try{
-            adres = geo.getFromLocationName(address,5);
+        try {
+            adres = geo.getFromLocationName(address, 5);
             Thread.sleep(500);
-            while(adres.size() == 0){
-                adres = geo.getFromLocationName(address,5);
+            while (adres.size() == 0) {
+                adres = geo.getFromLocationName(address, 5);
                 Thread.sleep(500);
             }
             Address location = adres.get(0);
-            point = new LatLng(location.getLatitude(),location.getLongitude());
+            point = new LatLng(location.getLatitude(), location.getLongitude());
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -472,5 +473,62 @@ public class jo extends AppCompatActivity {
                 // ...
             }
         });
+    }
+
+    private void initTimePicker() {
+
+        pTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                System.out.println(date);
+                //如果是開始時間的EditText
+                if (v.getId() == R.id.eTime) {
+                    endTime = date;
+                    ets= new Timestamp(date);
+                } else {
+                    startTime = date;
+                    sts= new Timestamp(date);
+                }
+                EditText editText = (EditText) v;
+                editText.setText(getTime(date));
+            }
+        })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+
+                    }
+                })
+                .setType(new boolean[]{true, true, true, true, true, false})
+                .isDialog(true)
+                .build();
+
+
+        Dialog mDialog = pTime.getDialog();
+        if (mDialog != null) {
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pTime.getDialogContainerLayout().setLayoutParams(params);
+
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改動畫樣式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部顯示
+            }
+        }
+    }
+
+
+
+    private String getTime(Date date) {//可根據需要自行擷取資料顯示
+        Log.d("getTime()", "choice date millis: " + date.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return format.format(date);
     }
 }

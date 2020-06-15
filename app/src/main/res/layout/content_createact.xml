@@ -89,15 +89,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10sp"
                     android:layout_weight="1"
-                    android:text="活動日期"
+                    android:text="活動起訖時間"
                     android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/dateBtn"
-                    android:layout_width="243dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="點我選擇" />
 
             </LinearLayout>
 
@@ -110,31 +103,31 @@
                 android:paddingRight="15sp"
                 android:paddingBottom="10sp">
 
+                <EditText
+                    android:id="@+id/sTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
                 <TextView
                     android:id="@+id/textView9"
-                    android:layout_width="78dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="10sp"
-                    android:layout_weight="1"
-                    android:text="活動時間"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/startBtn"
-                    android:layout_width="104dp"
+                    android:layout_width="54dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="起" />
+                    android:text="至"
+                    android:textSize="20sp" />
 
-                <Button
-                    android:id="@+id/endBtn"
-                    android:layout_width="104dp"
+                <EditText
+                    android:id="@+id/eTime"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="訖" />
-
+                    android:ems="10"
+                    android:inputType="textPersonName" />
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -184,13 +177,12 @@
                     android:text="人數限制"
                     android:textSize="24sp" />
 
-                <EditText
-                    android:id="@+id/editText11"
-                    android:layout_width="237dp"
-                    android:layout_height="57dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+
+                <com.zyyoona7.wheel.WheelView
+                    android:id="@+id/wheelview"
+                    android:layout_width="251dp"
+                    android:layout_height="52dp" />
+
 
             </LinearLayout>
 
