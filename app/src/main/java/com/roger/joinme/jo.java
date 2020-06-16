@@ -42,15 +42,21 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.zyyoona7.wheel.WheelView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -142,7 +148,6 @@ public class jo extends AppCompatActivity {
         }
         //设置数据
         wheelView.setData(list);
-
     }
 
     public void initPlace() {
@@ -358,7 +363,7 @@ public class jo extends AppCompatActivity {
                         //初始化Places API
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         Map<String, Object> book = new HashMap<>();
-                        book.put("activityTitle", activityTitle.getText().toString());
+                        book.put("title", activityTitle.getText().toString());
                         book.put("postContent", activityContent.getText().toString());
                         book.put("activityType", spinner.getSelectedItem().toString());
                         book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
@@ -369,7 +374,7 @@ public class jo extends AppCompatActivity {
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
                         for (Object key : book.keySet()) {
-                            System.out.println(key + " : " + book.get(key));
+//                            System.out.println(key + " : " + book.get(key));
                         }
                         //查看map內容
                         uploadImage();
@@ -480,7 +485,7 @@ public class jo extends AppCompatActivity {
         pTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                System.out.println(date);
+//                System.out.println(date);
                 //如果是開始時間的EditText
                 if (v.getId() == R.id.eTime) {
                     endTime = date;
@@ -523,8 +528,6 @@ public class jo extends AppCompatActivity {
             }
         }
     }
-
-
 
     private String getTime(Date date) {//可根據需要自行擷取資料顯示
         Log.d("getTime()", "choice date millis: " + date.getTime());

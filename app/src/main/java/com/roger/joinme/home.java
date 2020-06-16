@@ -31,6 +31,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -110,6 +114,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public MyItem offsetItem;
     public BitmapDescriptor markerDescriptor;
     public static String activitytitle;
+    public int maplistener = 0;
 
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
@@ -150,7 +155,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
         initViews();
         setListeners();
-
+        maplistener = 0;
+        getDBlistener();
     }
 
     @Override
@@ -165,6 +171,40 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void getDBlistener(){
+        //監聽資料庫
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference docRef = db.collection("activity");
+        docRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("TAG", "Listen failed.");
+                    return;
+                }
+                for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                    switch (doc.getType()) {
+                        case ADDED:
+                            System.out.println("1");
+                            mClusterManager.clearItems();
+                            mClusterManager.cluster();
+                            maplistener = 1;
+                            break;
+                        case REMOVED:
+                            System.out.println("2");
+                            mClusterManager.clearItems();
+                            mClusterManager.cluster();
+                            maplistener = 1;
+                            break;
+                    }
+                }
+                if (maplistener == 1) {
+                    addItems();
+                }
+            }
+        });
     }
 
     //監聽攝影機(使用者)是否開始移動
@@ -202,37 +242,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //抓取使用者當下狀態--停止移動地圖後一段時間
     @Override
     public void onCameraIdle() {
-//        float zoom = 0;
-
-        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
-        Bitmap b = bitmapdraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection ( "activity" )
-                .addSnapshotListener ( new EventListener< QuerySnapshot >() {
-                    @Override
-                    public void onEvent ( @Nullable QuerySnapshot value ,
-                                          @Nullable FirebaseFirestoreException e ) {
-                        if ( e != null ) {
-                            Log.w ( "TAG" , "Listen failed." , e );
-                            return ;
-                        }
-                        List < String > cities = new ArrayList <>();
-                        for ( QueryDocumentSnapshot doc : value ) {
-                            if ( doc . get ( "name" ) != null ) {
-                                cities . add ( doc . getString ( "name" ));
-                            }
-                        }
-                        Log . d ( "TAG" , "Current cites in CA: " + cities );
-                    }
-                });
 //        Toast.makeText(this, "數據加載中",
 //                Toast.LENGTH_SHORT).show();
-
-//        setUpClusterer();
-//        final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
-//        mClusterManager.setRenderer(renderer);
     }
 
     private void setUpClusterer() {
@@ -265,11 +276,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private void addItems() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection( "activity" )
+        db.collection("activity")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                    public void onComplete (@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 lat = document.getGeoPoint("geopoint").getLatitude();
@@ -293,7 +304,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         }
                     }
                 });
-
     }
 
     private void initViews() {
@@ -433,21 +443,15 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.setOnCameraIdleListener(this);
-        mMap.setOnCameraMoveStartedListener(this);
-        mMap.setOnCameraMoveListener(this);
-        mMap.setOnCameraMoveCanceledListener(this);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
-//        final LatLng[] locate2 = new LatLng[100000];
-//        LatLng test = new LatLng(120.277872,22.734315);
-
-//        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.head);
-//        Bitmap b = bitmapdraw.getBitmap();
-//        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
+
+//        mMap.setOnCameraIdleListener(this);
+//        mMap.setOnCameraMoveStartedListener(this);
+//        mMap.setOnCameraMoveListener(this);
+//        mMap.setOnCameraMoveCanceledListener(this);
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
 
         //讀取資料庫資料
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -476,18 +480,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
 //        LatLng locate = new LatLng(22.734315,120.277872);
 //        LatLng locatee = new LatLng(22.44065,120.285000);
-
-        //設定座標的標題以及詳細內容 之後從資料庫抓取
-//        mMap.setOnInfoWindowClickListener(this);
-//        marker = mMap.addMarker(new MarkerOptions().position(locate).title("鬥牛啦").snippet("起：2020/3/11 15:00"+"\n"+"迄：2020/3/11 17:00").icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
-//        getInfowWindow(mMap);
-//        mMap.addMarker(new MarkerOptions().position(locatee).title("kaohsiung").snippet("Testt"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locate,14));
-//        marker1 = mMap.addMarker(new MarkerOptions().position(test).title("鬥牛啦").snippet("起：2020/5/12 14:00" + "\n" + "迄：2020/5/12 17:00"));
-//.icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-//        marker1.setVisible(false);
-//        getInfowWindow(mMap);
-//        mMap.setOnInfoWindowClickListener(this);
 
     }
 
