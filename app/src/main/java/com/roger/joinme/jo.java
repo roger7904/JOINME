@@ -49,6 +49,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -105,6 +106,7 @@ public class jo extends AppCompatActivity {
     private Date startTime = new Date();
     private Timestamp sts,ets;
     private WheelView<Integer> wheelView;
+    public static String username;
 
 
     @Override
@@ -361,8 +363,8 @@ public class jo extends AppCompatActivity {
                 } else {
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        Map<String, Object> book = new HashMap<>();
+                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        final Map<String, Object> book = new HashMap<>();
                         book.put("title", activityTitle.getText().toString());
                         book.put("postContent", activityContent.getText().toString());
                         book.put("activityType", spinner.getSelectedItem().toString());
@@ -373,9 +375,26 @@ public class jo extends AppCompatActivity {
                         book.put("numberOfPeople", wheelView.getSelectedItemData());
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
-                        for (Object key : book.keySet()) {
+
+                        //將主辦人放入揪團資料
+                        db.collection("user")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                if(document.getString("email").equals(MainActivity.useraccount)){
+                                                    book.put("organizerID",document.getString("name"));
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+
+//                        for (Object key : book.keySet()) {
 //                            System.out.println(key + " : " + book.get(key));
-                        }
+//                        }
                         //查看map內容
                         uploadImage();
                         db.collection("activity")

@@ -1,5 +1,6 @@
 package com.roger.joinme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
@@ -12,6 +13,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -21,6 +25,8 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.firestore.*;
@@ -36,6 +42,8 @@ import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 public class MainActivity extends FragmentActivity {
@@ -43,6 +51,9 @@ public class MainActivity extends FragmentActivity {
     private Button login;
     private Button register;
     private Button forgetpwd;
+    public EditText account;
+    public EditText passwd;
+    public static String useraccount;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
@@ -138,6 +149,8 @@ public class MainActivity extends FragmentActivity {
         register=(Button)findViewById(R.id.register);
         forgetpwd=(Button)findViewById(R.id.forgetpassword);
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        account = (EditText)findViewById(R.id.account);
+        passwd = (EditText)findViewById(R.id.passwd);
     }
 
     private void initData()
@@ -149,9 +162,26 @@ public class MainActivity extends FragmentActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this,home.class);
-                startActivity(intent);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection( "user" )
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if(document.getString("email").equals(account.getText().toString()) && document.getString("password").equals(passwd.getText().toString())) {
+                                            useraccount = account.getText().toString();
+                                            Intent intent = new Intent();
+                                            intent.setClass(MainActivity.this,home.class);
+                                            startActivity(intent);
+                                        }else{
+                                            Toast.makeText(MainActivity.this, "帳號或密碼錯誤", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            }
+                        });
             }
         });
         register.setOnClickListener(new View.OnClickListener() {

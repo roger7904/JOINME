@@ -72,7 +72,7 @@ public class signup extends AppCompatActivity {
                                     Date snnippet = document.getTimestamp("startTime").toDate();
                                     SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
                                     title.setText(home.activitytitle);
-                                    activityContent.setText("時間："+ft.format(snnippet)+"\n"+"地點："+document.getString("location")+"\n"+"備註："+document.getString("postContent"));
+                                    activityContent.setText("時間："+ft.format(snnippet)+"\n"+"地點："+document.getString("location")+"\n"+"備註："+document.getString("postContent")+"\n"+"發起人："+document.getString("organizerID"));
                                 }
                             }
                         }

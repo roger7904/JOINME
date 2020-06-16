@@ -557,6 +557,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             public void onClick(View v) {
 //                Toast.makeText(this, "數據加載中",Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                mClusterManager.cluster();
                 FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                 FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                         .setTimestampsInSnapshotsEnabled(true)
@@ -611,6 +612,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                Toast.makeText(this, "數據加載中",
 //                        Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                mClusterManager.cluster();
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
@@ -647,6 +649,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                Toast.makeText(this, "數據加載中",
 //                        Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                mClusterManager.cluster();
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
@@ -683,6 +686,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                Toast.makeText(this, "數據加載中",
 //                        Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                mClusterManager.cluster();
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
