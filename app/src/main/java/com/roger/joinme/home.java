@@ -260,7 +260,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         // Add cluster items (markers) to the cluster manager.
-        addItems();
+//        addItems();
         mClusterManager.setOnClusterItemInfoWindowClickListener(
                 new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
                     @Override public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
