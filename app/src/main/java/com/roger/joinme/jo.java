@@ -74,6 +74,8 @@ import androidx.navigation.ui.NavigationUI;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.net.*;
 import java.util.ArrayList;
@@ -108,13 +110,13 @@ public class jo extends AppCompatActivity {
     public static final int ACTIVITY_FILE_CHOOSER = 1;
     private LatLng placelocation;
     private TimePickerView pTime;
-    private Date endTime = new Date();
-    private Date startTime = new Date();
     private Timestamp sts,ets;
     public static String username;
     List<String> list;
     private Button limitBtn;
     private String picUrl;
+    private Button button5;
+    private Button sbtn,ebtn;
 
 
     @Override
@@ -149,7 +151,7 @@ public class jo extends AppCompatActivity {
         setListeners();
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        initTimePicker();
+
 
         list = new ArrayList<>(1);
         for (int i = 0; i < 100; i++) {
@@ -208,8 +210,7 @@ public class jo extends AppCompatActivity {
         notice = (ImageButton) findViewById(R.id.imgbtn_notice);
         setting = (ImageButton) findViewById(R.id.imgbtn_setting);
         spinner = (Spinner) findViewById(R.id.activityType);
-        start = (EditText) findViewById(R.id.sTime);
-        end = (EditText) findViewById(R.id.eTime);
+
         activityTitle = (TextView) findViewById(R.id.editText6);
 //        activityLocation = (TextView) findViewById(R.id.editText10);
 //        peopleLimit = (TextView) findViewById(R.id.editText11);
@@ -325,29 +326,9 @@ public class jo extends AppCompatActivity {
 //        });
 
 
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (pTime != null) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(startTime);
-                    pTime.setDate(calendar);
-                    pTime.show(view);
-                }
-            }
-        });
 
-        end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (pTime != null) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(endTime);
-                    pTime.setDate(calendar);
-                    pTime.show(view);
-                }
-            }
-        });
+
+
 
 
 
@@ -364,6 +345,17 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    sts= new Timestamp(stringToDate(true));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ets=new Timestamp(stringToDate(false));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") ) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
@@ -518,55 +510,6 @@ public class jo extends AppCompatActivity {
 
     }
 
-    private void initTimePicker() {
-
-        pTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-//                System.out.println(date);
-                //如果是開始時間的EditText
-                if (v.getId() == R.id.eTime) {
-                    endTime = date;
-                    ets= new Timestamp(date);
-                } else {
-                    startTime = date;
-                    sts= new Timestamp(date);
-                }
-                EditText editText = (EditText) v;
-                editText.setText(getTime(date));
-            }
-        })
-                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
-                    @Override
-                    public void onTimeSelectChanged(Date date) {
-
-                    }
-                })
-                .setType(new boolean[]{true, true, true, true, true, false})
-                .isDialog(true)
-                .setLabel("年","月","日","時","分","秒")
-                .build();
-
-
-        Dialog mDialog = pTime.getDialog();
-        if (mDialog != null) {
-
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    Gravity.BOTTOM);
-
-            params.leftMargin = 0;
-            params.rightMargin = 0;
-            pTime.getDialogContainerLayout().setLayoutParams(params);
-
-            Window dialogWindow = mDialog.getWindow();
-            if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改動畫樣式
-                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部顯示
-            }
-        }
-    }
 
     private String getTime(Date date) {//可根據需要自行擷取資料顯示
         Log.d("getTime()", "choice date millis: " + date.getTime());
@@ -591,6 +534,67 @@ public class jo extends AppCompatActivity {
         pvOptions.setPicker(options1Items,null,null);
         pvOptions.show();
 
+    }
+
+    public void showTimeDialog(final View view) {
+        final List<String> optionsHour=new ArrayList<>();
+        final List<String> optionsMin=new ArrayList<>();
+
+        for(int i=0;i<24;i++){
+            optionsHour.add(Integer.toString(i));
+        }
+
+        for(int i=0;i<60;i+=10){
+            optionsMin.add(Integer.toString(i));
+        }
+
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(jo.this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+                if(view.getId()==R.id.sTime){
+                    sbtn=(Button)findViewById(R.id.sTime);
+                    sbtn.setText(optionsHour.get(options1)+":"+optionsMin.get(option2));
+                }
+                else{
+                    ebtn=(Button)findViewById(R.id.eTime);
+                    ebtn.setText(optionsHour.get(options1)+":"+optionsMin.get(option2));
+                }
+            }
+        }).build();
+        pvOptions.setNPicker(optionsHour,optionsMin,null);
+        pvOptions.setTitleText("選擇時間");
+        pvOptions.show();
+
+    }
+
+    public void showDayDialog(final View view) {
+        TimePickerView pvTime = new TimePickerBuilder(jo.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String var=Integer.toString(cal.get(Calendar.YEAR))+"/"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+                button5=(Button)findViewById(R.id.button5);
+                button5.setText(var);
+            }
+        }).build();
+        pvTime.show();
+    }
+
+    public Date stringToDate(boolean a) throws ParseException {
+        Date date = new Date();
+        String dateStr;
+        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        if(a==true){
+            dateStr=(String)button5.getText()+" "+(String)sbtn.getText()+":00";
+            date = sdf.parse(dateStr);
+            System.out.println(date.toString());
+        }else {
+            dateStr=(String)button5.getText()+" "+(String)ebtn.getText()+":00";
+            date = sdf.parse(dateStr);
+            System.out.println(date.toString());
+        }
+        return date;
     }
 
 

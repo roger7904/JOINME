@@ -84,13 +84,21 @@
 
                 <TextView
                     android:id="@+id/textView31"
-                    android:layout_width="wrap_content"
+                    android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10sp"
                     android:layout_weight="1"
-                    android:text="活動起訖時間"
+                    android:text="活動日期"
                     android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/button5"
+                    android:layout_width="174dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="showDayDialog"
+                    android:text="選擇" />
 
             </LinearLayout>
 
@@ -103,29 +111,40 @@
                 android:paddingRight="15sp"
                 android:paddingBottom="10sp">
 
-                <EditText
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="182dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動時間"
+                    android:textSize="24sp" />
+
+                <Button
                     android:id="@+id/sTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:onClick="showTimeDialog"
+                    android:text="選擇" />
 
                 <TextView
                     android:id="@+id/textView9"
-                    android:layout_width="54dp"
+                    android:layout_width="84dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="至"
                     android:textSize="20sp" />
 
-                <EditText
+                <Button
                     android:id="@+id/eTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="174dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:onClick="showTimeDialog"
+                    android:text="選擇" />
+
             </LinearLayout>
 
 
