@@ -177,11 +177,13 @@
                     android:text="人數限制"
                     android:textSize="24sp" />
 
-
-                <com.zyyoona7.wheel.WheelView
-                    android:id="@+id/wheelview"
-                    android:layout_width="251dp"
-                    android:layout_height="52dp" />
+                <Button
+                    android:id="@+id/peopleLimit"
+                    android:layout_width="245dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="showDialog"
+                    android:text="選擇" />
 
 
             </LinearLayout>

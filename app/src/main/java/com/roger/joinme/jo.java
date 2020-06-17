@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -26,9 +27,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -54,7 +58,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.zyyoona7.wheel.WheelView;
+import com.wx.wheelview.widget.WheelView;
+import com.wx.wheelview.widget.WheelViewDialog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,6 +75,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -105,8 +111,10 @@ public class jo extends AppCompatActivity {
     private Date endTime = new Date();
     private Date startTime = new Date();
     private Timestamp sts,ets;
-    private WheelView<Integer> wheelView;
     public static String username;
+    List<String> list;
+    private Button limitBtn;
+    private String picUrl;
 
 
     @Override
@@ -142,14 +150,12 @@ public class jo extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         initTimePicker();
-        wheelView = findViewById(R.id.wheelview);
 
-        List<Integer> list = new ArrayList<>(1);
+        list = new ArrayList<>(1);
         for (int i = 0; i < 100; i++) {
-            list.add(i);
+            list.add(Integer.toString(i));
         }
         //设置数据
-        wheelView.setData(list);
     }
 
     public void initPlace() {
@@ -211,6 +217,7 @@ public class jo extends AppCompatActivity {
         submitbtn = (Button) findViewById(R.id.button40);
         imgtest = (ImageView) findViewById(R.id.imageView26);
         imgtest.setClickable(true);
+        limitBtn=(Button)findViewById(R.id.peopleLimit);
     }
 
     private void initData() {
@@ -357,7 +364,6 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.print(wheelView.getSelectedItemData());
                 if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") ) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
@@ -372,7 +378,7 @@ public class jo extends AppCompatActivity {
                         //先切割字串再轉成geopoint格式
                         String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
                         book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
-                        book.put("numberOfPeople", wheelView.getSelectedItemData());
+                        book.put("numberOfPeople", limitBtn.getText());
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
 
@@ -476,7 +482,7 @@ public class jo extends AppCompatActivity {
     private void uploadImage() {
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
         StorageReference StorageRef = storage.getReference();
-        StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
+        final StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
         imgtest.setDrawingCacheEnabled(true);
         imgtest.buildDrawingCache();
         Bitmap bitmap = ((BitmapDrawable) imgtest.getDrawable()).getBitmap();
@@ -485,6 +491,8 @@ public class jo extends AppCompatActivity {
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = pRef.putBytes(data);
+
+
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -495,8 +503,19 @@ public class jo extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
+                pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });;
             }
         });
+
     }
 
     private void initTimePicker() {
@@ -525,6 +544,7 @@ public class jo extends AppCompatActivity {
                 })
                 .setType(new boolean[]{true, true, true, true, true, false})
                 .isDialog(true)
+                .setLabel("年","月","日","時","分","秒")
                 .build();
 
 
@@ -553,4 +573,25 @@ public class jo extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return format.format(date);
     }
+
+    public void showDialog(View view) {
+        final List<String> options1Items=new ArrayList<>();
+
+        for(int i=1;i<=99;i++){
+            options1Items.add(Integer.toString(i));
+        }
+
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(jo.this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+                //返回的分别是三个级别的选中位置
+                limitBtn.setText(options1Items.get(options1));
+            }
+        }).build();
+        pvOptions.setPicker(options1Items,null,null);
+        pvOptions.show();
+
+    }
+
+
 }
