@@ -172,6 +172,7 @@ public class MainActivity extends FragmentActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if(document.getString("email").equals(account.getText().toString()) && document.getString("password").equals(passwd.getText().toString())) {
                                             useraccount = account.getText().toString();
+                                            Toast.makeText(MainActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent();
                                             intent.setClass(MainActivity.this,home.class);
                                             startActivity(intent);

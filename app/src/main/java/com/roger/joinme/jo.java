@@ -117,6 +117,7 @@ public class jo extends AppCompatActivity {
     private String picUrl;
     private Button button5;
     private Button sbtn,ebtn;
+    public String organizerID;
 
 
     @Override
@@ -158,6 +159,27 @@ public class jo extends AppCompatActivity {
             list.add(Integer.toString(i));
         }
         //设置数据
+
+        //將主辦人放入揪團資料
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("user")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                System.out.println(MainActivity.useraccount);
+                                if(document.getString("email").equals(MainActivity.useraccount)){
+                                    System.out.println(document.getString("name"));
+                                    organizerID = document.getString("name");
+                                    System.out.println("one:"+organizerID);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     public void initPlace() {
@@ -325,13 +347,6 @@ public class jo extends AppCompatActivity {
 //            }
 //        });
 
-
-
-
-
-
-
-
         imgtest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -345,6 +360,7 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 try {
                     sts= new Timestamp(stringToDate(true));
                 } catch (ParseException e) {
@@ -361,8 +377,9 @@ public class jo extends AppCompatActivity {
                 } else {
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
-                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
                         final Map<String, Object> book = new HashMap<>();
+                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
                         book.put("title", activityTitle.getText().toString());
                         book.put("postContent", activityContent.getText().toString());
                         book.put("activityType", spinner.getSelectedItem().toString());
@@ -373,26 +390,8 @@ public class jo extends AppCompatActivity {
                         book.put("numberOfPeople", limitBtn.getText());
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
+                        book.put("organizerID",organizerID);
 
-                        //將主辦人放入揪團資料
-                        db.collection("user")
-                                .get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                if(document.getString("email").equals(MainActivity.useraccount)){
-                                                    book.put("organizerID",document.getString("name"));
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-
-//                        for (Object key : book.keySet()) {
-//                            System.out.println(key + " : " + book.get(key));
-//                        }
                         //查看map內容
                         uploadImage();
                         db.collection("activity")
@@ -407,6 +406,7 @@ public class jo extends AppCompatActivity {
                                         }
                                     }
                                 });
+
                         Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
                         submitbtn.setEnabled(false);
                         submitbtn.setText("報名成功");

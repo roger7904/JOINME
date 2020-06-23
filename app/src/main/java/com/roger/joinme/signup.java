@@ -11,12 +11,16 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,10 +104,72 @@ public class signup extends AppCompatActivity {
     }
 
     private void setListeners() {
-
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final Map<String, Object> book = new HashMap<>();
+                final Map<String, Object> actbook = new HashMap<>();
+                //MainActivity.useraccount;
+                db.collection("user")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task){
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot document : task.getResult()) {
+                                        if(document.getString("email").equals(MainActivity.useraccount)){
+                                            book.put("organizerID",document.getString("name"));
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                db.collection("activity")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task){
+                                if(task.isSuccessful()){
+                                    for(QueryDocumentSnapshot document : task.getResult()) {
+                                        if(document.getString("title").equals(home.activitytitle)){
+                                            actbook.put("account",MainActivity.useraccount);
+                                            db.collection("activity")
+                                                    .document()
+                                                    .collection("participant")
+                                                    .add(actbook)
+                                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Log.d("TAG", "Book added");
+                                                            } else {
+                                                                Log.d("TAG", "Book added failed");
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                db.collection("activity")
+                        .add(book)
+                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("TAG", "Book added");
+                                } else {
+                                    Log.d("TAG", "Book added failed");
+                                }
+                            }
+                        });
+
+
+
                 signupbtn.setText("已報名");
                 signupbtn.setEnabled(false);
             }
