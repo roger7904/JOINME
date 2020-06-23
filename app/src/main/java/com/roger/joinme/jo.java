@@ -171,9 +171,9 @@ public class jo extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 System.out.println(MainActivity.useraccount);
                                 if(document.getString("email").equals(MainActivity.useraccount)){
-                                    System.out.println(document.getString("name"));
-                                    organizerID = document.getString("name");
-                                    System.out.println("one:"+organizerID);
+//                                    System.out.println(document.getString("name"));
+                                    organizerID = document.getString("email");
+//                                    System.out.println("one:"+organizerID);
                                     break;
                                 }
                             }
@@ -596,6 +596,5 @@ public class jo extends AppCompatActivity {
         }
         return date;
     }
-
 
 }

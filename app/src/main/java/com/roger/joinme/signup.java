@@ -119,7 +119,7 @@ public class signup extends AppCompatActivity {
                                 if(task.isSuccessful()){
                                     for(QueryDocumentSnapshot document : task.getResult()) {
                                         if(document.getString("email").equals(MainActivity.useraccount)){
-                                            book.put("organizerID",document.getString("name"));
+                                            book.put("organizerID",document.getString("email"));
                                         }
                                     }
                                 }
@@ -167,8 +167,6 @@ public class signup extends AppCompatActivity {
                                 }
                             }
                         });
-
-
 
                 signupbtn.setText("已報名");
                 signupbtn.setEnabled(false);

@@ -78,7 +78,7 @@
                                 android:background="@drawable/photo" />
 
                             <TextView
-                                android:id="@+id/textView58"
+                                android:id="@+id/userAccount"
                                 android:layout_width="175dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -89,7 +89,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/textView63"
+                            android:id="@+id/userName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -98,7 +98,7 @@
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/textView64"
+                            android:id="@+id/userSex"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -107,7 +107,7 @@
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/textView65"
+                            android:id="@+id/userAge"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -116,7 +116,7 @@
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/textView66"
+                            android:id="@+id/userPhone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"

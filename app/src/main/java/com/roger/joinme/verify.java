@@ -6,7 +6,15 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -28,6 +36,7 @@ public class verify extends AppCompatActivity {
     private ImageButton notice;
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
+    public TextView userAccount,userName,userSex,userAge,userPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,33 @@ public class verify extends AppCompatActivity {
 
         initViews();
         setListeners();
+        //頁面顯示使申請者資訊
+//        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("activity")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                if(document.getString("organizerID").equals(MainActivity.useraccount)){
+//                                    db.collection("user")
+//                                            .get()
+//                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                                @Override
+//                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                    if (task.isSuccessful()) {
+//                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+//
+//                                                        }
+//                                                    }
+//                                                }
+//                                            });
+//                                }
+//                            }
+//                        }
+//                    }
+//                });
     }
 
     @Override
@@ -88,6 +124,11 @@ public class verify extends AppCompatActivity {
         jo=(ImageButton)findViewById(R.id.imgbtn_jo);
         notice=(ImageButton)findViewById(R.id.imgbtn_notice);
         setting=(ImageButton)findViewById(R.id.imgbtn_setting);
+        userAccount=(TextView)findViewById(R.id.userAccount);
+        userName=(TextView)findViewById(R.id.userName);
+        userAge=(TextView)findViewById(R.id.userAge);
+        userPhone=(TextView)findViewById(R.id.userPhone);
+        userSex=(TextView)findViewById(R.id.userSex);
     }
 
     private void initData()
