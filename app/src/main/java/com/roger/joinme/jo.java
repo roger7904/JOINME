@@ -395,18 +395,20 @@ public class jo extends AppCompatActivity {
                         //查看map內容
                         uploadImage();
                         db.collection("activity")
-                                .add(book)
-                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                .document(activityTitle.getText().toString())
+                                .set(book)
+                                .addOnSuccessListener(new OnSuccessListener < Void >() {
                                     @Override
-                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d("TAG", "Book added");
-                                        } else {
-                                            Log.d("TAG", "Book added failed");
-                                        }
+                                    public void onSuccess(Void aVoid){
+                                        Log.d ("TAG", "DocumentSnapshot successfully written!" );
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener(){
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e );
                                     }
                                 });
-
                         Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
                         submitbtn.setEnabled(false);
                         submitbtn.setText("報名成功");

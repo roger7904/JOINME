@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +39,8 @@ public class signup extends AppCompatActivity {
     public TextView title;
     public ImageView activityPhoto;
     public TextView activityContent;
+    final Map<String, Object> actbook = new HashMap<>();
+    public String account;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -83,6 +87,23 @@ public class signup extends AppCompatActivity {
                     }
                 });
 
+        //MainActivity.useraccount;
+        db.collection("user")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task){
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getString("email").equals(MainActivity.useraccount)){
+                                    account = document.getString("email");
+                                    actbook.put("account",document.getString("email"));
+                                }
+                            }
+                        }
+                    }
+                });
+
     }
 
     @Override
@@ -108,70 +129,26 @@ public class signup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                final Map<String, Object> book = new HashMap<>();
-                final Map<String, Object> actbook = new HashMap<>();
-                //MainActivity.useraccount;
-                db.collection("user")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task){
-                                if(task.isSuccessful()){
-                                    for(QueryDocumentSnapshot document : task.getResult()) {
-                                        if(document.getString("email").equals(MainActivity.useraccount)){
-                                            book.put("organizerID",document.getString("email"));
-                                        }
-                                    }
-                                }
-                            }
-                        });
-
                 db.collection("activity")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                        .document(home.activitytitle)
+                        .collection("participant")
+                        .document(account)
+                        .set(actbook)
+                        .addOnSuccessListener(new OnSuccessListener< Void >() {
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task){
-                                if(task.isSuccessful()){
-                                    for(QueryDocumentSnapshot document : task.getResult()) {
-                                        if(document.getString("title").equals(home.activitytitle)){
-                                            actbook.put("account",MainActivity.useraccount);
-                                            db.collection("activity")
-                                                    .document()
-                                                    .collection("participant")
-                                                    .add(actbook)
-                                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                            if (task.isSuccessful()) {
-                                                                Log.d("TAG", "Book added");
-                                                            } else {
-                                                                Log.d("TAG", "Book added failed");
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                }
+                            public void onSuccess(Void aVoid){
+                                Log.d ("TAG", "DocumentSnapshot successfully written!" );
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener(){
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("TAG", "Error writing document", e );
                             }
                         });
-
-                db.collection("activity")
-                        .add(book)
-                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d("TAG", "Book added");
-                                } else {
-                                    Log.d("TAG", "Book added failed");
-                                }
-                            }
-                        });
-
                 signupbtn.setText("已報名");
                 signupbtn.setEnabled(false);
             }
         });
     }
-
 }
