@@ -116,9 +116,9 @@ public class jo extends AppCompatActivity {
     private Button limitBtn;
     private String picUrl;
     private Button button5;
-    private Button sbtn,ebtn;
+    private Button sbtn,ebtn,submitimg;
     public String organizerID;
-
+    public String uriString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,6 +232,7 @@ public class jo extends AppCompatActivity {
         notice = (ImageButton) findViewById(R.id.imgbtn_notice);
         setting = (ImageButton) findViewById(R.id.imgbtn_setting);
         spinner = (Spinner) findViewById(R.id.activityType);
+        submitimg=(Button)findViewById(R.id.submitimg);
 
         activityTitle = (TextView) findViewById(R.id.editText6);
 //        activityLocation = (TextView) findViewById(R.id.editText10);
@@ -349,12 +350,33 @@ public class jo extends AppCompatActivity {
 
         imgtest.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");      //開啟Pictures畫面Type設定為image
-                intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
-                startActivityForResult(intent, 1);      //取得相片後, 返回
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");      //開啟Pictures畫面Type設定為image
+                    intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
+                    startActivityForResult(intent, 1);      //取得相片後, 返回
+
+                    submitimg.setEnabled(true);
             }
+        });
+
+        submitimg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(activityTitle.getText().toString().equals("")) {
+                        Toast.makeText(jo.this, "請先填寫標題", Toast.LENGTH_SHORT).show();
+                    }else{
+                        uploadimg t1 = new uploadimg();
+                        t1.start();
+                        try {
+                            t1.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(jo.this, "封面上傳成功", Toast.LENGTH_SHORT).show();
+                        submitimg.setEnabled(false);
+                    }
+                }
         });
 
         submitbtn.setOnClickListener(new View.OnClickListener() {
@@ -377,6 +399,7 @@ public class jo extends AppCompatActivity {
                 } else {
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
+
                         final Map<String, Object> book = new HashMap<>();
                         final Map<String, Object> ubook = new HashMap<>();
                         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -392,10 +415,11 @@ public class jo extends AppCompatActivity {
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
                         book.put("organizerID",organizerID);
+                        book.put("imguri",uriString);
                         ubook.put("account","null");
 
                         //查看map內容
-                        uploadImage();
+
                         db.collection("activity")
                                 .document(activityTitle.getText().toString())
                                 .set(book)
@@ -491,45 +515,50 @@ public class jo extends AppCompatActivity {
     private String setTimeFormat(int hr, int min) {
         return String.valueOf(hr) + ":" + String.valueOf(min);
     }
+    class uploadimg extends Thread{
+        public void run() {
+            FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
+            StorageReference StorageRef = storage.getReference();
+            final StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
+            imgtest.setDrawingCacheEnabled(true);
+            imgtest.buildDrawingCache();
+            Bitmap bitmap = ((BitmapDrawable) imgtest.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
-    private void uploadImage() {
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
-        StorageReference StorageRef = storage.getReference();
-        final StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
-        imgtest.setDrawingCacheEnabled(true);
-        imgtest.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) imgtest.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = pRef.putBytes(data);
+            UploadTask uploadTask = pRef.putBytes(data);
 
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });;
-            }
-        });
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                    pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            uriString=uri.toString();
+                            System.out.println(uriString);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                        }
+                    });;
+                }
+            });
+
+        }
 
     }
+
 
 
     private String getTime(Date date) {//可根據需要自行擷取資料顯示
