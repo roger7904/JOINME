@@ -378,6 +378,7 @@ public class jo extends AppCompatActivity {
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
                         final Map<String, Object> book = new HashMap<>();
+                        final Map<String, Object> ubook = new HashMap<>();
                         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                         book.put("title", activityTitle.getText().toString());
@@ -391,12 +392,30 @@ public class jo extends AppCompatActivity {
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
                         book.put("organizerID",organizerID);
+                        ubook.put("account","null");
 
                         //查看map內容
                         uploadImage();
                         db.collection("activity")
                                 .document(activityTitle.getText().toString())
                                 .set(book)
+                                .addOnSuccessListener(new OnSuccessListener < Void >() {
+                                    @Override
+                                    public void onSuccess(Void aVoid){
+                                        Log.d ("TAG", "DocumentSnapshot successfully written!" );
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener(){
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e );
+                                    }
+                                });
+                        db.collection("activity")
+                                .document(activityTitle.getText().toString())
+                                .collection("participant")
+                                .document("null")
+                                .set(ubook)
                                 .addOnSuccessListener(new OnSuccessListener < Void >() {
                                     @Override
                                     public void onSuccess(Void aVoid){

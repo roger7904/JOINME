@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView38"
+            android:id="@+id/activityTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10sp"
@@ -141,7 +141,7 @@
                                 android:textColor="#FFFFFF" />
 
                             <Button
-                                android:id="@+id/button32"
+                                android:id="@+id/reject"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -246,7 +246,7 @@
                                 android:textColor="#FFFFFF" />
 
                             <Button
-                                android:id="@+id/button35"
+                                android:id="@+id/rejection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"

@@ -2,6 +2,7 @@ package com.roger.joinme;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -10,11 +11,16 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,7 +42,12 @@ public class verify extends AppCompatActivity {
     private ImageButton notice;
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
-    public TextView userAccount,userName,userSex,userAge,userPhone;
+    public TextView userAccount,userName,userSex,userAge,userPhone,activityTitle;
+    public CollectionReference[] docRef = new CollectionReference[1000000];
+
+    public verify(){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,33 +78,102 @@ public class verify extends AppCompatActivity {
 
         initViews();
         setListeners();
-        //頁面顯示使申請者資訊
-//        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("activity")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                if(document.getString("organizerID").equals(MainActivity.useraccount)){
-//                                    db.collection("user")
-//                                            .get()
-//                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                    if (task.isSuccessful()) {
-//                                                        for (QueryDocumentSnapshot document : task.getResult()) {
-//
+        displayPage();
+        getDBlistener();
+    }
+
+    public void displayPage(){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("activity")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getString("organizerID").equals(MainActivity.useraccount)){
+//                                    System.out.println("333");
+                                    db.collection("activity")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            if(db.collection("activity").document().collection("participant") != null){
+                                                                activityTitle.setText(document.getString("title"));
+                                                                db.collection("user")
+                                                                        .get()
+                                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                                        userAccount.setText(document.getString("name"));
+                                                                                        userName.setText(document.getString("name"));
+                                                                                        userPhone.setText(document.getString("cellphone"));
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    //監聽資料庫
+    public void getDBlistener(){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        for(int j=0;j<MainActivity.count;j++){
+//            db.collection("activity").document(docString[j]).collection("participant").document().getId();
+//            System.out.println(MainActivity.count);
+//            System.out.println(MainActivity.docString[j]);
+            docRef[j] = db.collection("activity").document(MainActivity.docString[j]).collection("participant");
+            docRef[j].addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w("TAG", "Listen failed.");
+                        return;
+                    }
+                    for (final DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                        switch(doc.getType()){
+                            case ADDED:
+//                                System.out.println("3");
+                                db.collection("user")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                        for(int x=0;x<MainActivity.count;x++){
+                                                        System.out.println("test "+doc.getDocument().getString("account"));
+//                                                            if(doc.getDocument().getString("account").equals(document.getString("email"))){
+//                                                                userAccount.setText(document.getString("name"));
+//                                                                userName.setText(document.getString("name"));
+//                                                                userPhone.setText(document.getString("cellphone"));
+//                                                            }
 //                                                        }
-//                                                    }
-//                                                }
-//                                            });
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
+                                                    }
+                                                }
+                                            }
+                                        });
+                                activityTitle.setText("");
+//                            userAccount.setText();
+                                break;
+                        }
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -112,7 +192,6 @@ public class verify extends AppCompatActivity {
 
     private void initViews()
     {
-
         user=(Button)findViewById(R.id.btn_user);
         homepage=(Button)findViewById(R.id.btn_to_homepage);
         selfpage=(Button)findViewById(R.id.btn_to_selfpage);
@@ -129,6 +208,7 @@ public class verify extends AppCompatActivity {
         userAge=(TextView)findViewById(R.id.userAge);
         userPhone=(TextView)findViewById(R.id.userPhone);
         userSex=(TextView)findViewById(R.id.userSex);
+        activityTitle=(TextView)findViewById(R.id.activityTitle);
     }
 
     private void initData()

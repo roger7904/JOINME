@@ -56,6 +56,8 @@ public class MainActivity extends FragmentActivity {
     public static String useraccount;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    public static String[] docString = new String[1000000];
+    public static int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class MainActivity extends FragmentActivity {
         initViews();
         initData();
         setListeners();
+        count = 0;
 
 
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -97,7 +100,6 @@ public class MainActivity extends FragmentActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try{
                                     String email = object.getString("email");
-                                    System.out.println(email);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -119,6 +121,23 @@ public class MainActivity extends FragmentActivity {
                 System.out.println("onError"+error.toString());
             }
         });
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("activity")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                docString[count] = document.getId();
+                                System.out.println(count);
+                                System.out.println(docString[count]);
+                                count++;
+                            }
+                        }
+                    }
+                });
 
 
         //取得fb金鑰
@@ -176,6 +195,7 @@ public class MainActivity extends FragmentActivity {
                                             Intent intent = new Intent();
                                             intent.setClass(MainActivity.this,home.class);
                                             startActivity(intent);
+                                            break;
                                         }else{
                                             Toast.makeText(MainActivity.this, "帳號或密碼錯誤", Toast.LENGTH_SHORT).show();
                                         }

@@ -33,8 +33,6 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -317,6 +315,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         favoritebtn = (Button)findViewById(R.id.btn_to_favorite);
         settingbtn = (Button)findViewById(R.id.btn_to_setting);
         messagebtn = (Button)findViewById(R.id.btn_to_messagepage);
+        noticebtn = (Button)findViewById(R.id.btn_to_notice);
     }
 
     //取得使用者當前位置 -1
@@ -551,7 +550,14 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
-
+        noticebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, verify.class);
+                startActivity(intent);
+            }
+        });
         ballbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
