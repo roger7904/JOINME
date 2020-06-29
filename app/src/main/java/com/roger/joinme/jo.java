@@ -416,7 +416,7 @@ public class jo extends AppCompatActivity {
                         book.put("endTime", ets);
                         book.put("organizerID",organizerID);
                         book.put("imguri",uriString);
-                        ubook.put("account","null");
+                        ubook.put("account","0");
 
                         //查看map內容
 
@@ -438,7 +438,7 @@ public class jo extends AppCompatActivity {
                         db.collection("activity")
                                 .document(activityTitle.getText().toString())
                                 .collection("participant")
-                                .document("null")
+                                .document("0")
                                 .set(ubook)
                                 .addOnSuccessListener(new OnSuccessListener < Void >() {
                                     @Override

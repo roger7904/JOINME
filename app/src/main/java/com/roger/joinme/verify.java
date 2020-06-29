@@ -129,12 +129,9 @@ public class verify extends AppCompatActivity {
     }
 
     //監聽資料庫
-    public void getDBlistener(){
+    public void getDBlistener() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        for(int j=0;j<MainActivity.count;j++){
-//            db.collection("activity").document(docString[j]).collection("participant").document().getId();
-//            System.out.println(MainActivity.count);
-//            System.out.println(MainActivity.docString[j]);
+        for (int j = 0; j < MainActivity.count; j++) {
             docRef[j] = db.collection("activity").document(MainActivity.docString[j]).collection("participant");
             docRef[j].addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
@@ -144,9 +141,8 @@ public class verify extends AppCompatActivity {
                         return;
                     }
                     for (final DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
-                        switch(doc.getType()){
+                        switch (doc.getType()) {
                             case ADDED:
-//                                System.out.println("3");
                                 db.collection("user")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -155,20 +151,19 @@ public class verify extends AppCompatActivity {
                                                 if (task.isSuccessful()) {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                                                        for(int x=0;x<MainActivity.count;x++){
-                                                        System.out.println("test "+doc.getDocument().getString("account"));
-//                                                            if(doc.getDocument().getString("account").equals(document.getString("email"))){
-//                                                                userAccount.setText(document.getString("name"));
-//                                                                userName.setText(document.getString("name"));
-//                                                                userPhone.setText(document.getString("cellphone"));
-//                                                            }
-//                                                        }
+//                                                        System.out.println("test "+doc.getDocument().getString("account"));
+//                                                        System.out.println(document.getString("email"));
+                                                        if ((doc.getDocument().getString("account")).equals(document.getString("email"))) {
+                                                            userAccount.setText(document.getString("name"));
+                                                            userName.setText(document.getString("name"));
+                                                            userPhone.setText(document.getString("cellphone"));
+                                                        }
                                                     }
                                                 }
                                             }
                                         });
                                 activityTitle.setText("");
 //                            userAccount.setText();
-                                break;
                         }
                     }
                 }

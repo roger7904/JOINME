@@ -189,20 +189,19 @@ public class MainActivity extends FragmentActivity {
                             public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if(document.getString("email").equals(account.getText().toString()) && document.getString("password").equals(passwd.getText().toString())) {
+                                        if (document.getString("email").equals(account.getText().toString()) && document.getString("password").equals(passwd.getText().toString())) {
                                             useraccount = account.getText().toString();
                                             Toast.makeText(MainActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent();
-                                            intent.setClass(MainActivity.this,home.class);
+                                            intent.setClass(MainActivity.this, home.class);
                                             startActivity(intent);
                                             break;
-                                        }else{
-                                            Toast.makeText(MainActivity.this, "帳號或密碼錯誤", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
                             }
                         });
+
             }
         });
         register.setOnClickListener(new View.OnClickListener() {

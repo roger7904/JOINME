@@ -27,43 +27,75 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MapsActivity"
-            tools:layout_editor_absoluteY="55dp" />
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <Button
             android:id="@+id/storebtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/disaccount"
+            android:layout_width="45dp"
+            android:layout_height="74dp"
+            android:layout_marginTop="124dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginRight="28dp"
+            android:background="@drawable/discount"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/ballbtn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/ktvbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="120dp"
-            android:text="@string/singing"
+            android:layout_width="45dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="124dp"
+            android:background="@drawable/ktv"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/informationbtn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/informationbtn"
+            android:layout_width="45dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="124dp"
+            android:background="@drawable/timelimit"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/ballbtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/ballbtn"
+            android:layout_width="45dp"
+            android:layout_height="74dp"
+            android:layout_marginTop="124dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            android:background="@drawable/ball"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/otherbtn"
+            android:layout_width="45dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginLeft="112dp"
+            android:layout_marginTop="124dp"
+            android:background="@drawable/others"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/informationbtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="120dp"
-            android:text="@string/information"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="207dp" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -82,25 +114,6 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="206dp" />
-
-        <Button
-            android:id="@+id/ballbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/ballsort"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editsuffer"
