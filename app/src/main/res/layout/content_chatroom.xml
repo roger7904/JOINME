@@ -90,6 +90,7 @@
                     android:fillViewport="false">
 
                     <LinearLayout
+                        android:id="@+id/linear_addactivitychat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -310,6 +311,8 @@
                                 android:textSize="24sp" />
 
                         </LinearLayout>
+
+
 
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>

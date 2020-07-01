@@ -7,5 +7,6 @@
     <color name="colorDrawer">#fbfb25</color>
     <color name="colorButton">#5b73d5</color>
     <color name="colorButtonText">#496176</color>
+    <color name="colorChatButton">#FFFFFF</color>
 
 </resources>

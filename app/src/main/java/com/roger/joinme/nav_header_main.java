@@ -89,7 +89,7 @@ public class nav_header_main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(nav_header_main.this, MainActivity.class);
+                intent.setClass(nav_header_main.this, chatroom.class);
                 startActivity(intent);
             }
         });
