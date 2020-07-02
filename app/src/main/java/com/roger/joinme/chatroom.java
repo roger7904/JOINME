@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -19,6 +20,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class chatroom extends AppCompatActivity {
     private Button chatwith2;
@@ -80,72 +87,104 @@ public class chatroom extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void initchat(){
-        LinearLayout linear=(LinearLayout) findViewById(R.id.linear_addactivitychat);
+    public void initchat() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("chat")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String activityname= document.getString("activity");
+                                db.collection("chat").document(document.getId()).collection("participant").get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        System.out.println(document.getString("useraccount"));
+                                                        System.out.println(MainActivity.useraccount);
+                                                        if (document.getString("useraccount").equals(MainActivity.useraccount)) {
+                                                            System.out.println("執行到這");
+                                                            LinearLayout linear=(LinearLayout) findViewById(R.id.linear_addactivitychat);
+                                                            LinearLayout l1 = new LinearLayout(getApplication());
+                                                            l1.setOrientation(LinearLayout.HORIZONTAL);
+                                                            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(
+                                                                    LinearLayout.LayoutParams.MATCH_PARENT, (int)getResources().getDimension(R.dimen.sixty));
+                                                            layoutParams1.setMargins(0, 0, 0, 10);
+                                                            //l1.setLayoutParams(layoutParams1);
 
-        LinearLayout l1 = new LinearLayout(this);
-        l1.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, (int)getResources().getDimension(R.dimen.sixty));
-        layoutParams1.setMargins(0, 0, 0, 10);
-        //l1.setLayoutParams(layoutParams1);
+                                                            ImageView imageView = new ImageView(getApplication());
+                                                            //setting image resource
+                                                            imageView.setImageResource(R.drawable.photo);
+                                                            //setting image position
+                                                            LinearLayout.LayoutParams layoutParamsimg = new LinearLayout.LayoutParams(
+                                                                    (int)getResources().getDimension(R.dimen.twenty_six), LinearLayout.LayoutParams.MATCH_PARENT);
+                                                            layoutParamsimg.weight=1;
+                                                            layoutParamsimg.setMargins(0, 0, 10, 00);
+                                                            imageView.setLayoutParams(layoutParamsimg);
+                                                            //adding view to layout
+                                                            l1.addView(imageView);
 
-        ImageView imageView = new ImageView(this);
-        //setting image resource
-        imageView.setImageResource(R.drawable.photo);
-        //setting image position
-        LinearLayout.LayoutParams layoutParamsimg = new LinearLayout.LayoutParams(
-                (int)getResources().getDimension(R.dimen.twenty_six), LinearLayout.LayoutParams.MATCH_PARENT);
-        layoutParamsimg.weight=1;
-        layoutParamsimg.setMargins(0, 0, 10, 00);
-        imageView.setLayoutParams(layoutParamsimg);
-        //adding view to layout
-        l1.addView(imageView);
-
-        LinearLayout l2 = new LinearLayout(this);
-        l2.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
-                (int)getResources().getDimension(R.dimen.two_hundred_twenty_three), LinearLayout.LayoutParams.MATCH_PARENT);
-        layoutParams2.weight=1;
-        //l2.setLayoutParams(layoutParams2);
+                                                            LinearLayout l2 = new LinearLayout(getApplication());
+                                                            l2.setOrientation(LinearLayout.VERTICAL);
+                                                            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
+                                                                    (int)getResources().getDimension(R.dimen.two_hundred_twenty_three), LinearLayout.LayoutParams.MATCH_PARENT);
+                                                            layoutParams2.weight=1;
+                                                            //l2.setLayoutParams(layoutParams2);
 //        layoutParams2.setMargins(0, 0, 0, 10);
 
-        LinearLayout.LayoutParams layoutParamsText1 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsText1.setMargins(0, 0, 150, 0);
-        layoutParamsText1.gravity= Gravity.CENTER_VERTICAL;
-        layoutParamsText1.weight=1;
+                                                            LinearLayout.LayoutParams layoutParamsText1 = new LinearLayout.LayoutParams(
+                                                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                                            layoutParamsText1.setMargins(0, 0, 150, 0);
+                                                            layoutParamsText1.gravity= Gravity.CENTER_VERTICAL;
+                                                            layoutParamsText1.weight=1;
 
-        TextView t1=new TextView(this);
-        t1.setText("周君臨");
-        t1.setTextSize(18);
-        //t1.setLayoutParams(layoutParamsText1);
+                                                            TextView t1=new TextView(getApplication());
+                                                            t1.setText(activityname);
+                                                            t1.setTextSize(18);
+                                                            //t1.setLayoutParams(layoutParamsText1);
 
-        LinearLayout.LayoutParams layoutParamsText2 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsText2.weight=1;
+                                                            LinearLayout.LayoutParams layoutParamsText2 = new LinearLayout.LayoutParams(
+                                                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                                            layoutParamsText2.weight=1;
 
-        TextView t2=new TextView(this);
-        t2.setText("測試一下");
-        t2.setTextSize(18);
-        //t2.setLayoutParams(layoutParamsText2);
+                                                            TextView t2=new TextView(getApplication());
+                                                            t2.setText("測試一下");
+                                                            t2.setTextSize(18);
+                                                            //t2.setLayoutParams(layoutParamsText2);
 
-        l2.addView(t1,layoutParamsText1);
-        l2.addView(t2,layoutParamsText2);
+                                                            l2.addView(t1,layoutParamsText1);
+                                                            l2.addView(t2,layoutParamsText2);
 
-        Button b=new Button(this);
-        LinearLayout.LayoutParams layoutParamsbutton = new LinearLayout.LayoutParams(
-                (int)getResources().getDimension(R.dimen.seventeen), LinearLayout.LayoutParams.MATCH_PARENT);
-        layoutParamsbutton.gravity= Gravity.RIGHT;
-        layoutParamsbutton.weight=1;
-        b.setBackgroundResource(R.drawable.chat);
-        b.setText("5");
-        b.setTextColor(Color.parseColor("#FFFFFF"));
-        b.setTextSize(24);
-        //b.setLayoutParams(layoutParamsbutton);
-        l1.addView(l2,layoutParams2);
-        l1.addView(b,layoutParamsbutton);
-        linear.addView(l1,layoutParams1);
+                                                            Button b=new Button(getApplication());
+                                                            LinearLayout.LayoutParams layoutParamsbutton = new LinearLayout.LayoutParams(
+                                                                    (int)getResources().getDimension(R.dimen.seventeen), LinearLayout.LayoutParams.MATCH_PARENT);
+                                                            layoutParamsbutton.gravity= Gravity.RIGHT;
+                                                            layoutParamsbutton.weight=1;
+                                                            b.setBackgroundResource(R.drawable.chat);
+                                                            b.setText("5");
+                                                            b.setTextColor(Color.parseColor("#FFFFFF"));
+                                                            b.setTextSize(24);
+                                                            //b.setLayoutParams(layoutParamsbutton);
+                                                            l1.addView(l2,layoutParams2);
+                                                            l1.addView(b,layoutParamsbutton);
+                                                            linear.addView(l1,layoutParams1);
+                                                        }
+
+                                                    }
+                                                }
+
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
+
+
     }
 
     private void initViews()
