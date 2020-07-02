@@ -6,4 +6,11 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sixty">60dp</dimen>
+    <dimen name="twenty_six">26dp</dimen>
+    <dimen name="two_hundred_twenty_three">223dp</dimen>
+    <dimen name="seventeen">17dp</dimen>
+    <dimen name="ten">10dp</dimen>
+    <dimen name="one_hundred_fifty">150dp</dimen>
+    <dimen name="eighteen">18dp</dimen>
+    <dimen name="twenty_four">24dp</dimen>
 </resources>

@@ -95,7 +95,7 @@ public class chatroom extends AppCompatActivity {
         imageView.setImageResource(R.drawable.photo);
         //setting image position
         LinearLayout.LayoutParams layoutParamsimg = new LinearLayout.LayoutParams(
-                26, LinearLayout.LayoutParams.MATCH_PARENT);
+                (int)getResources().getDimension(R.dimen.twenty_six), LinearLayout.LayoutParams.MATCH_PARENT);
         layoutParamsimg.weight=1;
         layoutParamsimg.setMargins(0, 0, 10, 00);
         imageView.setLayoutParams(layoutParamsimg);
@@ -105,7 +105,7 @@ public class chatroom extends AppCompatActivity {
         LinearLayout l2 = new LinearLayout(this);
         l2.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
-                223, LinearLayout.LayoutParams.MATCH_PARENT);
+                (int)getResources().getDimension(R.dimen.two_hundred_twenty_three), LinearLayout.LayoutParams.MATCH_PARENT);
         layoutParams2.weight=1;
         //l2.setLayoutParams(layoutParams2);
 //        layoutParams2.setMargins(0, 0, 0, 10);
@@ -135,8 +135,7 @@ public class chatroom extends AppCompatActivity {
 
         Button b=new Button(this);
         LinearLayout.LayoutParams layoutParamsbutton = new LinearLayout.LayoutParams(
-                17, LinearLayout.LayoutParams.MATCH_PARENT);
-        layoutParamsbutton.setMargins(0, 0, 150, 0);
+                (int)getResources().getDimension(R.dimen.seventeen), LinearLayout.LayoutParams.MATCH_PARENT);
         layoutParamsbutton.gravity= Gravity.RIGHT;
         layoutParamsbutton.weight=1;
         b.setBackgroundResource(R.drawable.chat);
