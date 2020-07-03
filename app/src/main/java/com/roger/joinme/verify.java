@@ -150,9 +150,6 @@ public class verify extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
-//                                                        for(int x=0;x<MainActivity.count;x++){
-//                                                        System.out.println("test "+doc.getDocument().getString("account"));
-//                                                        System.out.println(document.getString("email"));
                                                         if ((doc.getDocument().getString("account")).equals(document.getString("email"))) {
                                                             userAccount.setText(document.getString("name"));
                                                             userName.setText(document.getString("name"));
@@ -198,7 +195,7 @@ public class verify extends AppCompatActivity {
         jo=(ImageButton)findViewById(R.id.imgbtn_jo);
         notice=(ImageButton)findViewById(R.id.imgbtn_notice);
         setting=(ImageButton)findViewById(R.id.imgbtn_setting);
-        userAccount=(TextView)findViewById(R.id.userAccount);
+        userAccount=(TextView)findViewById(R.id.useraccount);
         userName=(TextView)findViewById(R.id.userName);
         userAge=(TextView)findViewById(R.id.userAge);
         userPhone=(TextView)findViewById(R.id.userPhone);

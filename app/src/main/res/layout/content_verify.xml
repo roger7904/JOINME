@@ -78,7 +78,7 @@
                                 android:background="@drawable/photo" />
 
                             <TextView
-                                android:id="@+id/userAccount"
+                                android:id="@+id/useraccount"
                                 android:layout_width="175dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -365,17 +365,5 @@
         </ScrollView>
 
     </LinearLayout>
-
-    <include
-        layout="@layout/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nav_host_fragment"
-        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

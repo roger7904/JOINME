@@ -139,7 +139,6 @@ public class MainActivity extends FragmentActivity {
                     }
                 });
 
-
         //取得fb金鑰
 //        try{
 //            PackageInfo info = getPackageManager().getPackageInfo("com.roger.joinme", PackageManager.GET_SIGNATURES);
@@ -201,7 +200,6 @@ public class MainActivity extends FragmentActivity {
                                 }
                             }
                         });
-
             }
         });
         register.setOnClickListener(new View.OnClickListener() {
