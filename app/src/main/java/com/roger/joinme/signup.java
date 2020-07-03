@@ -1,6 +1,8 @@
 package com.roger.joinme;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +21,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,12 +42,14 @@ import androidx.navigation.ui.NavigationUI;
 
 public class signup extends AppCompatActivity {
 
-    public Button signupbtn ;
+    public Button signupbtn;
     public TextView title;
     public ImageView activityPhoto;
     public TextView activityContent;
     final Map<String, Object> actbook = new HashMap<>();
     public String account;
+    public Bitmap actImg;
+    String imageUrl;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -69,18 +78,30 @@ public class signup extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //抓集合
-        db.collection( "activity" )
+        db.collection("activity")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.getString("title").equals(home.activitytitle)){
+                                if (document.getString("title").equals(home.activitytitle)) {
                                     Date snnippet = document.getTimestamp("startTime").toDate();
-                                    SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
+                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
                                     title.setText(home.activitytitle);
-                                    activityContent.setText("時間："+ft.format(snnippet)+"\n"+"地點："+document.getString("location")+"\n"+"備註："+document.getString("postContent")+"\n"+"發起人："+document.getString("organizerID"));
+                                    imageUrl=document.getString("imgUri");
+                                    if(!imageUrl.equals("")){ //目前大部分活動的imguri為留空，故沒有的話就不替換了
+                                        getBitmapFromUrl thread=new getBitmapFromUrl();
+                                        thread.start();
+                                        try {
+                                            thread.join();
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        activityPhoto.setImageBitmap(actImg);
+                                    }
+
+                                    activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
                                 }
                             }
                         }
@@ -90,14 +111,14 @@ public class signup extends AppCompatActivity {
         //MainActivity.useraccount;
         db.collection("user")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task){
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.getString("email").equals(MainActivity.useraccount)){
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getString("email").equals(MainActivity.useraccount)) {
                                     account = document.getString("email");
-                                    actbook.put("account",document.getString("email"));
+                                    actbook.put("account", document.getString("email"));
                                 }
                             }
                         }
@@ -113,15 +134,14 @@ public class signup extends AppCompatActivity {
         return true;
     }
 
-    private void initData()
-    {
+    private void initData() {
     }
 
     private void initViews() {
-        signupbtn = (Button)findViewById(R.id.signupbtn);
-        title = (TextView)findViewById(R.id.title);
-        activityPhoto = (ImageView)findViewById(R.id.activityphoto);
-        activityContent = (TextView)findViewById(R.id.activityContent);
+        signupbtn = (Button) findViewById(R.id.signupbtn);
+        title = (TextView) findViewById(R.id.title);
+        activityPhoto = (ImageView) findViewById(R.id.activityphoto);
+        activityContent = (TextView) findViewById(R.id.activityContent);
     }
 
     private void setListeners() {
@@ -134,16 +154,16 @@ public class signup extends AppCompatActivity {
                         .collection("participant")
                         .document(account)
                         .set(actbook)
-                        .addOnSuccessListener(new OnSuccessListener< Void >() {
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(Void aVoid){
-                                Log.d ("TAG", "DocumentSnapshot successfully written!" );
+                            public void onSuccess(Void aVoid) {
+                                Log.d("TAG", "DocumentSnapshot successfully written!");
                             }
                         })
-                        .addOnFailureListener(new OnFailureListener(){
+                        .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w("TAG", "Error writing document", e );
+                                Log.w("TAG", "Error writing document", e);
                             }
                         });
                 signupbtn.setText("已報名");
@@ -151,4 +171,24 @@ public class signup extends AppCompatActivity {
             }
         });
     }
+
+
+    public class getBitmapFromUrl extends Thread{
+        public void run(){
+            try
+            {
+                URL url = new URL(imageUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                actImg = BitmapFactory.decodeStream(input);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

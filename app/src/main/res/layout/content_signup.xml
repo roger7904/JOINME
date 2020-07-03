@@ -10,39 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="103dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/title"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="50dp"
                         android:gravity="center_horizontal|center"
-                        android:text="@string/acttitle"
-                        android:textSize="36sp"
-                        android:scrollbars="vertical"/>
+                        android:scrollbars="vertical"
+                        android:text="活動標題"
+                        android:textSize="36sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="635dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <ImageView
@@ -50,29 +51,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
-                        android:paddingLeft="15dp"
                         app:srcCompat="@drawable/head" />
 
                     <TextView
                         android:id="@+id/activityContent"
-                        android:layout_width="354dp"
-                        android:layout_height="241dp"
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:scrollbars="vertical"
-                        android:text="@string/actdetail"
-                        android:textSize="30sp" />
-
-                    <Button
-                        android:id="@+id/signupbtn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sigin"
-                        android:textSize="24sp" />
+                        android:layout_height="275dp"
+                        android:scrollbars="vertical"
+                        android:text="活動內容"
+                        android:textSize="20sp" />
+
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
+
+        <Button
+            android:id="@+id/signupbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/sigin"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
