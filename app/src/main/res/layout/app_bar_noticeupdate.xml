@@ -7,6 +7,7 @@
     tools:context=".homepage">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -26,8 +27,9 @@
         layout="@layout/content_noticeupdate"
         android:layout_width="414dp"
         android:layout_height="672dp"
-        tools:layout_editor_absoluteX="-3dp"
-        tools:layout_editor_absoluteY="59dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"

@@ -1,6 +1,7 @@
 package com.roger.joinme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +22,22 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
 
     @Override
     public itemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.content_noticeupdate, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(itemAdapter.ViewHolder holder, int position) {
         item item = itemList.get(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
+//        holder.
+        holder.activity.setText(item.getContent());
+        holder.activity.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                System.out.println("222");
+//                Intent intent = new Intent();
+//                intent.setClass(context.this,verify.class);
+//                startActivity(intent);
+                System.out.println("1");
             }
         });
     }

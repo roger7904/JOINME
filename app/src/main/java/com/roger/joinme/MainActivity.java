@@ -51,6 +51,7 @@ public class MainActivity extends FragmentActivity {
     private Button login;
     private Button register;
     private Button forgetpwd;
+    public Button test;
     public EditText account;
     public EditText passwd;
     public static String useraccount;
@@ -163,6 +164,7 @@ public class MainActivity extends FragmentActivity {
 
     private void initViews()
     {
+        test=(Button)findViewById(R.id.test);
         login=(Button)findViewById(R.id.login);
         register=(Button)findViewById(R.id.register);
         forgetpwd=(Button)findViewById(R.id.forgetpassword);
@@ -177,6 +179,15 @@ public class MainActivity extends FragmentActivity {
 
     private void setListeners()
     {
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,noticeupdate.class);
+                startActivity(intent);
+            }
+        });
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

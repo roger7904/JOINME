@@ -105,6 +105,9 @@
         <activity
             android:name=".verify"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".noticeupdate"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
