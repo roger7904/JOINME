@@ -119,6 +119,7 @@ public class jo extends AppCompatActivity {
     private Button sbtn,ebtn,submitimg;
     public String organizerID;
     public String uriString;
+    public boolean imguploaded=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,6 +243,11 @@ public class jo extends AppCompatActivity {
         imgtest = (ImageView) findViewById(R.id.imageView26);
         imgtest.setClickable(true);
         limitBtn=(Button)findViewById(R.id.peopleLimit);
+        sbtn=(Button)findViewById(R.id.sTime);
+        ebtn=(Button)findViewById(R.id.eTime);
+        button5=(Button)findViewById(R.id.button5);
+
+
     }
 
     private void initData() {
@@ -355,7 +361,7 @@ public class jo extends AppCompatActivity {
                     intent.setType("image/*");      //開啟Pictures畫面Type設定為image
                     intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
                     startActivityForResult(intent, 1);      //取得相片後, 返回
-
+                    imguploaded=true;
                     submitimg.setEnabled(true);
             }
         });
@@ -363,19 +369,24 @@ public class jo extends AppCompatActivity {
         submitimg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(activityTitle.getText().toString().equals("")) {
-                        Toast.makeText(jo.this, "請先填寫標題", Toast.LENGTH_SHORT).show();
-                    }else{
-                        uploadimg t1 = new uploadimg();
-                        t1.start();
-                        try {
-                            t1.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                    if(imguploaded){
+                        if(activityTitle.getText().toString().equals("")) {
+                            Toast.makeText(jo.this, "請先填寫標題", Toast.LENGTH_SHORT).show();
+                        }else{
+                            uploadimg t1 = new uploadimg();
+                            t1.start();
+                            try {
+                                t1.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(jo.this, "封面上傳成功", Toast.LENGTH_SHORT).show();
+                            submitimg.setEnabled(false);
                         }
-                        Toast.makeText(jo.this, "封面上傳成功", Toast.LENGTH_SHORT).show();
-                        submitimg.setEnabled(false);
+                    }else{
+                        Toast.makeText(jo.this, "請先選擇圖片", Toast.LENGTH_SHORT).show();
                     }
+
                 }
         });
 
@@ -383,20 +394,21 @@ public class jo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                try {
-                    sts= new Timestamp(stringToDate(true));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    ets=new Timestamp(stringToDate(false));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
 
-                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") ) {
+
+                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("")|| button5.getText().toString().equals("")||sbtn.getText().toString().equals("")||ebtn.getText().toString().equals("")||limitBtn.getText().toString().equals("")) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
+                    try {
+                        sts= new Timestamp(stringToDate(true));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        ets=new Timestamp(stringToDate(false));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
 
@@ -415,7 +427,7 @@ public class jo extends AppCompatActivity {
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
                         book.put("organizerID",organizerID);
-                        book.put("imguri",uriString);
+                        book.put("imgUri",uriString);
                         ubook.put("account","0");
 
                         //查看map內容
@@ -602,11 +614,11 @@ public class jo extends AppCompatActivity {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
                 if(view.getId()==R.id.sTime){
-                    sbtn=(Button)findViewById(R.id.sTime);
+//                    sbtn=(Button)findViewById(R.id.sTime);
                     sbtn.setText(optionsHour.get(options1)+":"+optionsMin.get(option2));
                 }
                 else{
-                    ebtn=(Button)findViewById(R.id.eTime);
+//                    ebtn=(Button)findViewById(R.id.eTime);
                     ebtn.setText(optionsHour.get(options1)+":"+optionsMin.get(option2));
                 }
             }
@@ -624,7 +636,7 @@ public class jo extends AppCompatActivity {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
                 String var=Integer.toString(cal.get(Calendar.YEAR))+"/"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
-                button5=(Button)findViewById(R.id.button5);
+//                button5=(Button)findViewById(R.id.button5);
                 button5.setText(var);
             }
         }).build();
