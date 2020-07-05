@@ -3,6 +3,7 @@ package com.roger.joinme;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -23,7 +24,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -41,6 +44,8 @@ public class chatroom extends AppCompatActivity {
     private ImageButton notice;
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
+    private String newestcontent;
+    private String activityname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +73,9 @@ public class chatroom extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
 
-        initViews();
+
         initchat();
+        initViews();
 //        setListeners();
     }
 
@@ -96,17 +102,27 @@ public class chatroom extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String activityname= document.getString("activity");
+                                activityname= document.getString("activity");
+                                db.collection("chat").document(document.getId()).collection("content").get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        newestcontent =document.getString("content");
+                                                        System.out.println(newestcontent);
+                                                    }
+
+                                                }
+                                            }
+                                        });
                                 db.collection("chat").document(document.getId()).collection("participant").get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        System.out.println(document.getString("useraccount"));
-                                                        System.out.println(MainActivity.useraccount);
                                                         if (document.getString("useraccount").equals(MainActivity.useraccount)) {
-                                                            System.out.println("執行到這");
                                                             LinearLayout linear=(LinearLayout) findViewById(R.id.linear_addactivitychat);
                                                             LinearLayout l1 = new LinearLayout(getApplication());
                                                             l1.setOrientation(LinearLayout.HORIZONTAL);
@@ -133,7 +149,7 @@ public class chatroom extends AppCompatActivity {
                                                                     (int)getResources().getDimension(R.dimen.two_hundred_twenty_three), LinearLayout.LayoutParams.MATCH_PARENT);
                                                             layoutParams2.weight=1;
                                                             //l2.setLayoutParams(layoutParams2);
-//        layoutParams2.setMargins(0, 0, 0, 10);
+                                                            //        layoutParams2.setMargins(0, 0, 0, 10);
 
                                                             LinearLayout.LayoutParams layoutParamsText1 = new LinearLayout.LayoutParams(
                                                                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -151,7 +167,8 @@ public class chatroom extends AppCompatActivity {
                                                             layoutParamsText2.weight=1;
 
                                                             TextView t2=new TextView(getApplication());
-                                                            t2.setText("測試一下");
+
+                                                            t2.setText(newestcontent);
                                                             t2.setTextSize(18);
                                                             //t2.setLayoutParams(layoutParamsText2);
 
@@ -167,6 +184,16 @@ public class chatroom extends AppCompatActivity {
                                                             b.setText("5");
                                                             b.setTextColor(Color.parseColor("#FFFFFF"));
                                                             b.setTextSize(24);
+                                                            b.setTag(activityname);
+                                                            b.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    Intent intent = new Intent();
+                                                                    intent.setClass(chatroom.this, chatting.class);
+                                                                    intent.putExtra("activityname", activityname);
+                                                                    startActivity(intent);
+                                                                }
+                                                            });
                                                             //b.setLayoutParams(layoutParamsbutton);
                                                             l1.addView(l2,layoutParams2);
                                                             l1.addView(b,layoutParamsbutton);

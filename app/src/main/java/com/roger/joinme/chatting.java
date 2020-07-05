@@ -28,6 +28,7 @@ public class chatting extends AppCompatActivity {
     private ImageButton notice;
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
+    private String activityname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class chatting extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
 
+        activityname = getIntent().getStringExtra("activityname");
         initViews();
         setListeners();
     }
