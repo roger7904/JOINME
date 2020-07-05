@@ -8,6 +8,15 @@
     tools:showIn="@layout/app_bar_createact">
 
 
+    <Button
+        android:id="@+id/button14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -258,7 +267,7 @@
                     android:layout_gravity="top"
                     android:layout_marginRight="10sp"
                     android:layout_weight="1"
-                    android:text="貼文"
+                    android:text="活動說明"
                     android:textSize="24sp" />
 
                 <EditText
@@ -270,6 +279,40 @@
                     android:inputType="textPersonName" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="15sp"
+                android:paddingTop="10sp"
+                android:paddingRight="15sp"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:text="活動限制"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/chooseRestriction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="選擇" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/restriction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="目前活動限制：" />
 
             <Button
                 android:id="@+id/button40"

@@ -1,7 +1,9 @@
 package com.roger.joinme;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +61,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 import com.wx.wheelview.widget.WheelViewDialog;
 
@@ -93,7 +97,7 @@ public class jo extends AppCompatActivity {
     private Button activitypage;
     private Button friendpage;
     private Button logout;
-    private ImageButton chatroom;
+    private Button chatroom;
     private ImageButton favorite;
     private ImageButton jo;
     private ImageButton notice;
@@ -110,16 +114,18 @@ public class jo extends AppCompatActivity {
     public static final int ACTIVITY_FILE_CHOOSER = 1;
     private LatLng placelocation;
     private TimePickerView pTime;
-    private Timestamp sts,ets;
+    private Timestamp sts, ets;
     public static String username;
     List<String> list;
     private Button limitBtn;
     private String picUrl;
     private Button button5;
-    private Button sbtn,ebtn,submitimg;
+    private Button sbtn, ebtn, submitimg,chooseRes;
     public String organizerID;
     public String uriString;
-    public boolean imguploaded=false;
+    public boolean imguploaded = false;
+    public TextView nowRestriction;
+    boolean[] flag_list= {false, false, false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +177,7 @@ public class jo extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 System.out.println(MainActivity.useraccount);
-                                if(document.getString("email").equals(MainActivity.useraccount)){
+                                if (document.getString("email").equals(MainActivity.useraccount)) {
 //                                    System.out.println(document.getString("name"));
                                     organizerID = document.getString("email");
 //                                    System.out.println("one:"+organizerID);
@@ -227,13 +233,13 @@ public class jo extends AppCompatActivity {
         activitypage = (Button) findViewById(R.id.btn_to_jo);
         friendpage = (Button) findViewById(R.id.btn_to_notice);
         logout = (Button) findViewById(R.id.btn_logout);
-        chatroom = (ImageButton) findViewById(R.id.imgbtn_chatroom);
+        chatroom = (Button) findViewById(R.id.button14);
         favorite = (ImageButton) findViewById(R.id.imgbtn_favorite);
         jo = (ImageButton) findViewById(R.id.imgbtn_jo);
         notice = (ImageButton) findViewById(R.id.imgbtn_notice);
         setting = (ImageButton) findViewById(R.id.imgbtn_setting);
         spinner = (Spinner) findViewById(R.id.activityType);
-        submitimg=(Button)findViewById(R.id.submitimg);
+        submitimg = (Button) findViewById(R.id.submitimg);
 
         activityTitle = (TextView) findViewById(R.id.editText6);
 //        activityLocation = (TextView) findViewById(R.id.editText10);
@@ -242,10 +248,12 @@ public class jo extends AppCompatActivity {
         submitbtn = (Button) findViewById(R.id.button40);
         imgtest = (ImageView) findViewById(R.id.imageView26);
         imgtest.setClickable(true);
-        limitBtn=(Button)findViewById(R.id.peopleLimit);
-        sbtn=(Button)findViewById(R.id.sTime);
-        ebtn=(Button)findViewById(R.id.eTime);
-        button5=(Button)findViewById(R.id.button5);
+        limitBtn = (Button) findViewById(R.id.peopleLimit);
+        sbtn = (Button) findViewById(R.id.sTime);
+        ebtn = (Button) findViewById(R.id.eTime);
+        button5 = (Button) findViewById(R.id.button5);
+        nowRestriction=(TextView)findViewById(R.id.restriction);
+        chooseRes=(Button)findViewById(R.id.chooseRestriction);
 
 
     }
@@ -299,14 +307,12 @@ public class jo extends AppCompatActivity {
             }
         });
 
-//        chatroom.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(jo.this, chatroom.class);
-//                startActivity(intent);
-//            }
-//        });
+        chatroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(1);
+            }
+        });
 
 //        friendpage.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -356,38 +362,39 @@ public class jo extends AppCompatActivity {
 
         imgtest.setOnClickListener(new View.OnClickListener() {
             @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");      //開啟Pictures畫面Type設定為image
-                    intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
-                    startActivityForResult(intent, 1);      //取得相片後, 返回
-                    imguploaded=true;
-                    submitimg.setEnabled(true);
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");      //開啟Pictures畫面Type設定為image
+                intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
+                startActivityForResult(intent, 1);      //取得相片後, 返回
+                imguploaded = true;
+                submitimg.setEnabled(true);
+
             }
         });
 
         submitimg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(imguploaded){
-                        if(activityTitle.getText().toString().equals("")) {
-                            Toast.makeText(jo.this, "請先填寫標題", Toast.LENGTH_SHORT).show();
-                        }else{
-                            uploadimg t1 = new uploadimg();
-                            t1.start();
-                            try {
-                                t1.join();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(jo.this, "封面上傳成功", Toast.LENGTH_SHORT).show();
-                            submitimg.setEnabled(false);
+            @Override
+            public void onClick(View view) {
+                if (imguploaded) {
+                    if (activityTitle.getText().toString().equals("")) {
+                        Toast.makeText(jo.this, "請先填寫標題", Toast.LENGTH_SHORT).show();
+                    } else {
+                        uploadimg t1 = new uploadimg();
+                        t1.start();
+                        try {
+                            t1.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    }else{
-                        Toast.makeText(jo.this, "請先選擇圖片", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(jo.this, "封面上傳成功", Toast.LENGTH_SHORT).show();
+                        submitimg.setEnabled(false);
                     }
-
+                } else {
+                    Toast.makeText(jo.this, "請先選擇圖片", Toast.LENGTH_SHORT).show();
                 }
+
+            }
         });
 
         submitbtn.setOnClickListener(new View.OnClickListener() {
@@ -395,17 +402,16 @@ public class jo extends AppCompatActivity {
             public void onClick(View view) {
 
 
-
-                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("")|| button5.getText().toString().equals("")||sbtn.getText().toString().equals("")||ebtn.getText().toString().equals("")||limitBtn.getText().toString().equals("")) {
+                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || button5.getText().toString().equals("") || sbtn.getText().toString().equals("") || ebtn.getText().toString().equals("") || limitBtn.getText().toString().equals("")) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
                     try {
-                        sts= new Timestamp(stringToDate(true));
+                        sts = new Timestamp(stringToDate(true));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     try {
-                        ets=new Timestamp(stringToDate(false));
+                        ets = new Timestamp(stringToDate(false));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -426,25 +432,28 @@ public class jo extends AppCompatActivity {
                         book.put("numberOfPeople", limitBtn.getText());
                         book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
                         book.put("endTime", ets);
-                        book.put("organizerID",organizerID);
-                        book.put("imgUri",uriString);
-                        ubook.put("account","0");
+                        book.put("organizerID", organizerID);
+                        book.put("imgUri", uriString);
+                        book.put("onlyMale",flag_list[0]);
+                        book.put("onlyFemale",flag_list[1]);
+                        book.put("Ontime",flag_list[2]);
+                        ubook.put("account", "0");
 
                         //查看map內容
 
                         db.collection("activity")
                                 .document(activityTitle.getText().toString())
                                 .set(book)
-                                .addOnSuccessListener(new OnSuccessListener < Void >() {
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(Void aVoid){
-                                        Log.d ("TAG", "DocumentSnapshot successfully written!" );
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
                                     }
                                 })
-                                .addOnFailureListener(new OnFailureListener(){
+                                .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e );
+                                        Log.w("TAG", "Error writing document", e);
                                     }
                                 });
                         db.collection("activity")
@@ -452,28 +461,36 @@ public class jo extends AppCompatActivity {
                                 .collection("participant")
                                 .document("0")
                                 .set(ubook)
-                                .addOnSuccessListener(new OnSuccessListener < Void >() {
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(Void aVoid){
-                                        Log.d ("TAG", "DocumentSnapshot successfully written!" );
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
                                     }
                                 })
-                                .addOnFailureListener(new OnFailureListener(){
+                                .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e );
+                                        Log.w("TAG", "Error writing document", e);
                                     }
                                 });
                         Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
                         submitbtn.setEnabled(false);
                         submitbtn.setText("報名成功");
-                    }else{
+                    } else {
                         Toast.makeText(jo.this, "活動起訖時間填寫錯誤", Toast.LENGTH_LONG).show();
                     }
                 }
             }
+
+
         });
 
+        chooseRes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(2);
+            }
+        });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -527,7 +544,8 @@ public class jo extends AppCompatActivity {
     private String setTimeFormat(int hr, int min) {
         return String.valueOf(hr) + ":" + String.valueOf(min);
     }
-    class uploadimg extends Thread{
+
+    class uploadimg extends Thread {
         public void run() {
             FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
             StorageReference StorageRef = storage.getReference();
@@ -555,7 +573,7 @@ public class jo extends AppCompatActivity {
                     pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            uriString=uri.toString();
+                            uriString = uri.toString();
                             System.out.println(uriString);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -563,14 +581,14 @@ public class jo extends AppCompatActivity {
                         public void onFailure(@NonNull Exception exception) {
                             // Handle any errors
                         }
-                    });;
+                    });
+                    ;
                 }
             });
 
         }
 
     }
-
 
 
     private String getTime(Date date) {//可根據需要自行擷取資料顯示
@@ -580,50 +598,50 @@ public class jo extends AppCompatActivity {
     }
 
     public void showDialog(View view) {
-        final List<String> options1Items=new ArrayList<>();
+        final List<String> options1Items = new ArrayList<>();
 
-        for(int i=1;i<=99;i++){
+        for (int i = 1; i <= 99; i++) {
             options1Items.add(Integer.toString(i));
         }
 
         OptionsPickerView pvOptions = new OptionsPickerBuilder(jo.this, new OnOptionsSelectListener() {
             @Override
-            public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
                 limitBtn.setText(options1Items.get(options1));
             }
         }).build();
-        pvOptions.setPicker(options1Items,null,null);
+        pvOptions.setPicker(options1Items, null, null);
         pvOptions.show();
 
     }
 
     public void showTimeDialog(final View view) {
-        final List<String> optionsHour=new ArrayList<>();
-        final List<String> optionsMin=new ArrayList<>();
+        final List<String> optionsHour = new ArrayList<>();
+        final List<String> optionsMin = new ArrayList<>();
 
-        for(int i=0;i<24;i++){
+        for (int i = 0; i < 24; i++) {
             optionsHour.add(Integer.toString(i));
         }
 
-        for(int i=0;i<60;i+=10){
+        optionsMin.add("00");
+        for (int i = 10; i < 60; i += 10) {
             optionsMin.add(Integer.toString(i));
         }
 
         OptionsPickerView pvOptions = new OptionsPickerBuilder(jo.this, new OnOptionsSelectListener() {
             @Override
-            public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
-                if(view.getId()==R.id.sTime){
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                if (view.getId() == R.id.sTime) {
 //                    sbtn=(Button)findViewById(R.id.sTime);
-                    sbtn.setText(optionsHour.get(options1)+":"+optionsMin.get(option2));
-                }
-                else{
+                    sbtn.setText(optionsHour.get(options1) + ":" + optionsMin.get(option2));
+                } else {
 //                    ebtn=(Button)findViewById(R.id.eTime);
-                    ebtn.setText(optionsHour.get(options1)+":"+optionsMin.get(option2));
+                    ebtn.setText(optionsHour.get(options1) + ":" + optionsMin.get(option2));
                 }
             }
         }).build();
-        pvOptions.setNPicker(optionsHour,optionsMin,null);
+        pvOptions.setNPicker(optionsHour, optionsMin, null);
         pvOptions.setTitleText("選擇時間");
         pvOptions.show();
 
@@ -635,7 +653,7 @@ public class jo extends AppCompatActivity {
             public void onTimeSelect(Date date, View v) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
-                String var=Integer.toString(cal.get(Calendar.YEAR))+"/"+Integer.toString(cal.get(Calendar.MONTH)+1)+"/"+Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+                String var = Integer.toString(cal.get(Calendar.YEAR)) + "/" + Integer.toString(cal.get(Calendar.MONTH) + 1) + "/" + Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
 //                button5=(Button)findViewById(R.id.button5);
                 button5.setText(var);
             }
@@ -647,16 +665,76 @@ public class jo extends AppCompatActivity {
         Date date = new Date();
         String dateStr;
         DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        if(a==true){
-            dateStr=(String)button5.getText()+" "+(String)sbtn.getText()+":00";
+        if (a == true) {
+            dateStr = (String) button5.getText() + " " + (String) sbtn.getText() + ":00";
             date = sdf.parse(dateStr);
             System.out.println(date.toString());
-        }else {
-            dateStr=(String)button5.getText()+" "+(String)ebtn.getText()+":00";
+        } else {
+            dateStr = (String) button5.getText() + " " + (String) ebtn.getText() + ":00";
             date = sdf.parse(dateStr);
             System.out.println(date.toString());
         }
         return date;
     }
 
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog = null;
+
+        switch (id) //判斷所傳入的ID，啟動相應的對話方塊
+        {
+            case 1:
+                //自訂一個名稱為 content_layout 的介面資源檔
+                final View content_layout = LayoutInflater.from(jo.this).inflate(R.layout.dialog_timepicker, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("選擇時間") //設定標題文字
+                        .setView(content_layout) //設定內容外觀
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() { //設定確定按鈕
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //取得 content_layout 介面資源檔中的元件
+                                
+                            }
+                        });
+                dialog = builder.create(); //建立對話方塊並存成 dialog
+                break;
+            case 2:
+                String[] str_list={"限男","限女","逾時不候"};
+
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+                builder2.setTitle("請勾選") //設定標題文字
+                        .setMultiChoiceItems(str_list, flag_list, new DialogInterface.OnMultiChoiceClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked)
+                            {
+                                // TODO Auto-generated method stub
+                                flag_list[which]=true;
+                            }
+                        })
+                        .setPositiveButton("確認", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // TODO Auto-generated method stub
+                                String temp="";
+                                for(int i=0; i<flag_list.length; i++)
+                                {
+                                    if(flag_list[i])
+                                        temp = temp + str_list[i]+" ";
+                                }
+                                System.out.println(temp);
+                                nowRestriction.setText("目前活動限制："+temp);
+                            }
+                        });
+                dialog = builder2.create(); //建立對話方塊並存成 dialog
+                break;
+            default:
+                break;
+        }
+        return dialog;
+    }
+
+
 }
+
