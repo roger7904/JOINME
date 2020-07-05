@@ -7,25 +7,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +30,6 @@ import android.widget.Toast;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -49,24 +45,15 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.wx.wheelview.adapter.ArrayWheelAdapter;
-import com.wx.wheelview.widget.WheelView;
-import com.wx.wheelview.widget.WheelViewDialog;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -78,10 +65,10 @@ import androidx.navigation.ui.NavigationUI;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -97,7 +84,6 @@ public class jo extends AppCompatActivity {
     private Button activitypage;
     private Button friendpage;
     private Button logout;
-    private Button chatroom;
     private ImageButton favorite;
     private ImageButton jo;
     private ImageButton notice;
@@ -119,13 +105,16 @@ public class jo extends AppCompatActivity {
     List<String> list;
     private Button limitBtn;
     private String picUrl;
-    private Button button5;
+    private Button button5,eDate;
     private Button sbtn, ebtn, submitimg,chooseRes;
     public String organizerID;
     public String uriString;
     public boolean imguploaded = false;
     public TextView nowRestriction;
     boolean[] flag_list= {false, false, false};
+    LinearLayout t1,t2;
+    Button timebtn,timebtn2,aftertimebtn;
+    boolean ifSpecifyTime=false,ifTimeSelected=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,13 +222,13 @@ public class jo extends AppCompatActivity {
         activitypage = (Button) findViewById(R.id.btn_to_jo);
         friendpage = (Button) findViewById(R.id.btn_to_notice);
         logout = (Button) findViewById(R.id.btn_logout);
-        chatroom = (Button) findViewById(R.id.button14);
         favorite = (ImageButton) findViewById(R.id.imgbtn_favorite);
         jo = (ImageButton) findViewById(R.id.imgbtn_jo);
         notice = (ImageButton) findViewById(R.id.imgbtn_notice);
         setting = (ImageButton) findViewById(R.id.imgbtn_setting);
         spinner = (Spinner) findViewById(R.id.activityType);
         submitimg = (Button) findViewById(R.id.submitimg);
+
 
         activityTitle = (TextView) findViewById(R.id.editText6);
 //        activityLocation = (TextView) findViewById(R.id.editText10);
@@ -251,9 +240,17 @@ public class jo extends AppCompatActivity {
         limitBtn = (Button) findViewById(R.id.peopleLimit);
         sbtn = (Button) findViewById(R.id.sTime);
         ebtn = (Button) findViewById(R.id.eTime);
-        button5 = (Button) findViewById(R.id.button5);
+        button5 = (Button) findViewById(R.id.sDate);
+        eDate = (Button) findViewById(R.id.eDate);
         nowRestriction=(TextView)findViewById(R.id.restriction);
         chooseRes=(Button)findViewById(R.id.chooseRestriction);
+        t1=(LinearLayout)findViewById(R.id.t1);
+        t2=(LinearLayout)findViewById(R.id.t2);
+        t1.setVisibility(View.GONE);
+        t2.setVisibility(View.GONE);
+        timebtn=(Button)findViewById(R.id.timebtn1);
+        timebtn2=(Button)findViewById(R.id.timebtn2);
+        aftertimebtn=(Button)findViewById(R.id.aftertimebtn);
 
 
     }
@@ -307,12 +304,7 @@ public class jo extends AppCompatActivity {
             }
         });
 
-        chatroom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(1);
-            }
-        });
+
 
 //        friendpage.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -369,6 +361,8 @@ public class jo extends AppCompatActivity {
                 startActivityForResult(intent, 1);      //取得相片後, 返回
                 imguploaded = true;
                 submitimg.setEnabled(true);
+                Toast.makeText(jo.this, "請點選上傳鈕才成功上傳", Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -401,10 +395,7 @@ public class jo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || button5.getText().toString().equals("") || sbtn.getText().toString().equals("") || ebtn.getText().toString().equals("") || limitBtn.getText().toString().equals("")) {
-                    Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
-                } else {
+                if(ifSpecifyTime){
                     try {
                         sts = new Timestamp(stringToDate(true));
                     } catch (ParseException e) {
@@ -415,6 +406,14 @@ public class jo extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    ifTimeSelected=true;
+                }
+
+                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || limitBtn.getText().toString().equals("")||!ifTimeSelected) {
+                    Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
+                } else {
+
+
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
 
@@ -489,6 +488,24 @@ public class jo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDialog(2);
+            }
+        });
+
+        timebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                t1.setVisibility(View.GONE);
+                t2.setVisibility(View.VISIBLE);
+                ifSpecifyTime=false;
+            }
+        });
+
+        timebtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                t1.setVisibility(View.VISIBLE);
+                t2.setVisibility(View.GONE);
+                ifSpecifyTime=true;
             }
         });
     }
@@ -616,6 +633,40 @@ public class jo extends AppCompatActivity {
 
     }
 
+    public void showAfterTimeDialog(final View view) {
+        final List<String> optionsHour = new ArrayList<>();
+        final List<String> optionsMin = new ArrayList<>();
+
+        for (int i = 0; i < 24; i++) {
+            optionsHour.add(Integer.toString(i));
+        }
+
+        optionsMin.add("00");
+        for (int i = 10; i < 60; i += 10) {
+            optionsMin.add(Integer.toString(i));
+        }
+
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(jo.this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                aftertimebtn.setText(optionsHour.get(options1) + "小時" + optionsMin.get(option2)+"分鐘");
+
+                Calendar c=Calendar.getInstance();
+                Calendar c2=Calendar.getInstance();
+                c2.add(Calendar.HOUR_OF_DAY,Integer.parseInt(optionsHour.get(options1)));
+                c2.add(Calendar.MINUTE,Integer.parseInt(optionsMin.get(option2)));
+                sts=new Timestamp(c.getTime());
+                ets=new Timestamp(c2.getTime());
+                ifTimeSelected=true;
+
+            }
+        }).build();
+        pvOptions.setNPicker(optionsHour, optionsMin, null);
+        pvOptions.setTitleText("選擇時間");
+        pvOptions.show();
+
+    }
+
     public void showTimeDialog(final View view) {
         final List<String> optionsHour = new ArrayList<>();
         final List<String> optionsMin = new ArrayList<>();
@@ -654,8 +705,12 @@ public class jo extends AppCompatActivity {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
                 String var = Integer.toString(cal.get(Calendar.YEAR)) + "/" + Integer.toString(cal.get(Calendar.MONTH) + 1) + "/" + Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+                if(view.getId()==R.id.sDate){
+                    button5.setText(var);
+                }else{
+                    eDate.setText(var);
+                }
 //                button5=(Button)findViewById(R.id.button5);
-                button5.setText(var);
             }
         }).build();
         pvTime.show();
@@ -663,16 +718,16 @@ public class jo extends AppCompatActivity {
 
     public Date stringToDate(boolean a) throws ParseException {
         Date date = new Date();
-        String dateStr;
-        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        if (a == true) {
-            dateStr = (String) button5.getText() + " " + (String) sbtn.getText() + ":00";
-            date = sdf.parse(dateStr);
-            System.out.println(date.toString());
-        } else {
-            dateStr = (String) button5.getText() + " " + (String) ebtn.getText() + ":00";
-            date = sdf.parse(dateStr);
-            System.out.println(date.toString());
+            String dateStr;
+            DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            if (a == true) {
+                dateStr = (String) button5.getText() + " " + (String) sbtn.getText() + ":00";
+                date = sdf.parse(dateStr);
+                System.out.println(date.toString());
+            } else {
+                dateStr = (String) eDate.getText() + " " + (String) ebtn.getText() + ":00";
+                date = sdf.parse(dateStr);
+                System.out.println(date.toString());
         }
         return date;
     }
