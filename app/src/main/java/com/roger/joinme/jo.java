@@ -419,6 +419,9 @@ public class jo extends AppCompatActivity {
 
                         final Map<String, Object> book = new HashMap<>();
                         final Map<String, Object> ubook = new HashMap<>();
+                        final Map<String, Object> chat = new HashMap<>();
+                        final Map<String, Object> content = new HashMap<>();
+                        final Map<String, Object> participant = new HashMap<>();
                         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                         book.put("title", activityTitle.getText().toString());
@@ -437,6 +440,13 @@ public class jo extends AppCompatActivity {
                         book.put("onlyFemale",flag_list[1]);
                         book.put("Ontime",flag_list[2]);
                         ubook.put("account", "0");
+                        chat.put("activity", activityTitle.getText().toString());
+                        chat.put("newestcontent", organizerID+"創建了此活動");
+                        chat.put("organizer", organizerID);
+                        content.put("author", organizerID);
+                        content.put("content", organizerID+"創建了此活動");
+                        content.put("time", Calendar.getInstance().getTime());
+                        participant.put("useraccount", organizerID);
 
                         //查看map內容
 
@@ -460,6 +470,55 @@ public class jo extends AppCompatActivity {
                                 .collection("participant")
                                 .document("0")
                                 .set(ubook)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e);
+                                    }
+                                });
+                        db.collection("chat")
+                                .document(activityTitle.getText().toString())
+                                .set(chat)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e);
+                                    }
+                                });
+                        db.collection("chat")
+                                .document(activityTitle.getText().toString())
+                                .collection("content")
+                                .document("1")
+                                .set(content)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e);
+                                    }
+                                });
+                        db.collection("chat")
+                                .document(activityTitle.getText().toString())
+                                .collection("participant")
+                                .document("1")
+                                .set(participant)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

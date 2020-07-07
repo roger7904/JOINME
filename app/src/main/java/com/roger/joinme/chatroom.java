@@ -44,8 +44,7 @@ public class chatroom extends AppCompatActivity {
     private ImageButton notice;
     private ImageButton setting;
     private AppBarConfiguration mAppBarConfiguration;
-    private String newestcontent;
-    private String activityname;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,22 +100,10 @@ public class chatroom extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                activityname= document.getString("activity");
-                                db.collection("chat").document(document.getId()).collection("content").get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        newestcontent =document.getString("content");
-                                                        System.out.println(newestcontent);
-                                                    }
-
-                                                }
-                                            }
-                                        });
-                                db.collection("chat").document(document.getId()).collection("participant").get()
+                            for (QueryDocumentSnapshot documentt : task.getResult()) {
+                                String activityname= documentt.getString("activity");
+                                String newestcontent= documentt.getString("newestcontent");
+                                db.collection("chat").document(documentt.getId()).collection("participant").get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -130,7 +117,6 @@ public class chatroom extends AppCompatActivity {
                                                                     LinearLayout.LayoutParams.MATCH_PARENT, (int)getResources().getDimension(R.dimen.sixty));
                                                             layoutParams1.setMargins(0, 0, 0, 10);
                                                             //l1.setLayoutParams(layoutParams1);
-
                                                             ImageView imageView = new ImageView(getApplication());
                                                             //setting image resource
                                                             imageView.setImageResource(R.drawable.photo);
@@ -142,7 +128,6 @@ public class chatroom extends AppCompatActivity {
                                                             imageView.setLayoutParams(layoutParamsimg);
                                                             //adding view to layout
                                                             l1.addView(imageView);
-
                                                             LinearLayout l2 = new LinearLayout(getApplication());
                                                             l2.setOrientation(LinearLayout.VERTICAL);
                                                             LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(
@@ -150,31 +135,24 @@ public class chatroom extends AppCompatActivity {
                                                             layoutParams2.weight=1;
                                                             //l2.setLayoutParams(layoutParams2);
                                                             //        layoutParams2.setMargins(0, 0, 0, 10);
-
                                                             LinearLayout.LayoutParams layoutParamsText1 = new LinearLayout.LayoutParams(
                                                                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                                             layoutParamsText1.setMargins(0, 0, 150, 0);
                                                             layoutParamsText1.gravity= Gravity.CENTER_VERTICAL;
                                                             layoutParamsText1.weight=1;
-
                                                             TextView t1=new TextView(getApplication());
-                                                            t1.setText(activityname);
+                                                            t1.setText(documentt.getId().toString());
                                                             t1.setTextSize(18);
                                                             //t1.setLayoutParams(layoutParamsText1);
-
                                                             LinearLayout.LayoutParams layoutParamsText2 = new LinearLayout.LayoutParams(
                                                                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                                             layoutParamsText2.weight=1;
-
                                                             TextView t2=new TextView(getApplication());
-
                                                             t2.setText(newestcontent);
-                                                            t2.setTextSize(18);
+                                                            t2.setTextSize(13);
                                                             //t2.setLayoutParams(layoutParamsText2);
-
                                                             l2.addView(t1,layoutParamsText1);
                                                             l2.addView(t2,layoutParamsText2);
-
                                                             Button b=new Button(getApplication());
                                                             LinearLayout.LayoutParams layoutParamsbutton = new LinearLayout.LayoutParams(
                                                                     (int)getResources().getDimension(R.dimen.seventeen), LinearLayout.LayoutParams.MATCH_PARENT);
@@ -199,19 +177,14 @@ public class chatroom extends AppCompatActivity {
                                                             l1.addView(b,layoutParamsbutton);
                                                             linear.addView(l1,layoutParams1);
                                                         }
-
                                                     }
                                                 }
-
                                             }
                                         });
                             }
                         }
                     }
                 });
-
-
-
     }
 
     private void initViews()
