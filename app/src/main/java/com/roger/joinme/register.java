@@ -115,8 +115,8 @@ public class register extends AppCompatActivity {
         }
         else
         {
-            loadingBar.setTitle("Creating New Account");
-            loadingBar.setMessage("Please wait, while we wre creating new account for you...");
+            loadingBar.setTitle("正在新建帳號");
+            loadingBar.setMessage("正在新建帳號請稍後...");
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();
 
@@ -132,6 +132,7 @@ public class register extends AppCompatActivity {
                                 final Map<String, Object> registerdata = new HashMap<>();
                                 registerdata.put("currentUserID",currentUserID);
                                 registerdata.put("device_token",deviceToken);
+                                registerdata.put("email",UserEmail.getText().toString());
                                 db.collection("user")
                                         .document(currentUserID)
                                         .set(registerdata)
@@ -149,7 +150,7 @@ public class register extends AppCompatActivity {
                                         });
 
                                 SendUserToMainActivity();
-                                Toast.makeText(register.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(register.this, "帳號創立成功...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
                             else
@@ -166,7 +167,7 @@ public class register extends AppCompatActivity {
 
     private void SendUserToMainActivity()
     {
-        Intent mainIntent = new Intent(register.this, MainActivity.class);
+        Intent mainIntent = new Intent(register.this, home.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
