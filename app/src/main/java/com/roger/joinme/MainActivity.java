@@ -49,6 +49,7 @@ import java.util.Map;
 public class MainActivity extends FragmentActivity {
 
     private Button login;
+    private Button home;
     private Button register;
     private Button forgetpwd;
     public Button test;
@@ -164,6 +165,7 @@ public class MainActivity extends FragmentActivity {
 
     private void initViews()
     {
+        home = (Button)findViewById(R.id.home);
         test=(Button)findViewById(R.id.test);
         login=(Button)findViewById(R.id.login);
         register=(Button)findViewById(R.id.register);
@@ -179,6 +181,15 @@ public class MainActivity extends FragmentActivity {
 
     private void setListeners()
     {
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,home.class);
+                startActivity(intent);
+            }
+        });
+
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
