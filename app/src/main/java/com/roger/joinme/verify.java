@@ -254,14 +254,14 @@ public class verify extends AppCompatActivity {
             }
         });
 
-        chatroom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(verify.this, chatroom.class);
-                startActivity(intent);
-            }
-        });
+//        chatroom.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(verify.this, chatroom.class);
+//                startActivity(intent);
+//            }
+//        });
 
         friendpage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,43 +272,43 @@ public class verify extends AppCompatActivity {
             }
         });
 
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(verify.this, favorite.class);
-                startActivity(intent);
-            }
-        });
+//        favorite.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(verify.this, favorite.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
 
-        jo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(verify.this, jo.class);
-                startActivity(intent);
-            }
-        });
+//        jo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(verify.this, jo.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        notice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(verify.this, notice.class);
-                startActivity(intent);
-            }
-        });
-
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(verify.this, setting.class);
-                startActivity(intent);
-            }
-        });
+//        notice.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(verify.this, notice.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        setting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(verify.this, setting.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 }

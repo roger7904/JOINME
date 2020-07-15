@@ -35,9 +35,9 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
             @Override
             public void onClick(View v){
 //                Intent intent = new Intent();
-//                intent.setClass(context.this,verify.class);
+//                intent.setClass(itemAdapter.this,verify.class);
 //                startActivity(intent);
-                System.out.println("1");
+                System.out.println("123");
             }
         });
     }

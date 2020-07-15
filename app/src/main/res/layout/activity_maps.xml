@@ -27,8 +27,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MapsActivity"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteX="47dp"
+            tools:layout_editor_absoluteY="-57dp" />
+
+        <ImageView
+            android:id="@+id/imageView25"
+            android:layout_width="462dp"
+            android:layout_height="162dp"
+            android:layout_marginTop="56dp"
+            android:background="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/storebtn"
@@ -90,6 +101,61 @@
             app:layout_constraintStart_toEndOf="@+id/informationbtn"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:id="@+id/settingBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="652dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/setting"
+            app:layout_constraintEnd_toStartOf="@+id/messageBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/messageBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="652dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/message"
+            app:layout_constraintEnd_toStartOf="@+id/joBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/joBtn"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="164dp"
+            android:layout_marginLeft="164dp"
+            android:layout_marginTop="632dp"
+            android:background="@drawable/jo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/noticeBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="652dp"
+            android:background="@drawable/notice"
+            app:layout_constraintStart_toEndOf="@+id/joBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/collectBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="652dp"
+            android:background="@drawable/collection"
+            app:layout_constraintStart_toEndOf="@+id/noticeBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -122,7 +188,7 @@
             android:layout_marginTop="76dp"
             android:layout_marginEnd="108dp"
             android:layout_marginRight="108dp"
-            android:background="@drawable/outside"
+            android:background="@drawable/shape_textview"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

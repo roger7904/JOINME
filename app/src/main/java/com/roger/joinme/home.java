@@ -132,16 +132,16 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        //NavigationView navigationView = findViewById(R.id.nav_view);
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+//                .setDrawerLayout(drawer)
+//                .build();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
         if (chechPermission()) {
             init();
@@ -309,13 +309,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         storebtn = (Button)findViewById(R.id.storebtn);
         ktvbtn = (Button)findViewById(R.id.ktvbtn);
         informationbtn = (Button)findViewById(R.id.informationbtn);
-        selfpage = (Button)findViewById(R.id.btn_to_selfpage);
-        homebtn = (Button)findViewById(R.id.btn_to_homepage);
-        jobtn = (Button)findViewById(R.id.btn_to_jo);
-        favoritebtn = (Button)findViewById(R.id.btn_to_favorite);
-        settingbtn = (Button)findViewById(R.id.btn_to_setting);
-        messagebtn = (Button)findViewById(R.id.btn_to_messagepage);
-        noticebtn = (Button)findViewById(R.id.btn_to_notice);
+        jobtn = (Button)findViewById(R.id.joBtn);
+        favoritebtn = (Button)findViewById(R.id.collectBtn);
+        settingbtn = (Button)findViewById(R.id.settingBtn);
+        messagebtn = (Button)findViewById(R.id.messageBtn);
+        noticebtn = (Button)findViewById(R.id.noticeBtn);
     }
 
     //取得使用者當前位置 -1
