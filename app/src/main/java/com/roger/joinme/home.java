@@ -516,22 +516,22 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     private void setListeners() {
-        selfpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(home.this, selfpage.class);
-                startActivity(intent);
-            }
-        });
-        homebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(home.this, home.class);
-                startActivity(intent);
-            }
-        });
+//        selfpage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(home.this, selfpage.class);
+//                startActivity(intent);
+//            }
+//        });
+//        homebtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(home.this, home.class);
+//                startActivity(intent);
+//            }
+//        });
         jobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
