@@ -2,6 +2,7 @@ package com.roger.joinme;
 
 
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -145,6 +147,31 @@ public class GroupChatActivity extends AppCompatActivity
                         DisplayMessages(value);
                     }
                 });
+        db.collection("chat").document(currentGroupName).collection("content")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("TAG", "listen:error", e);
+                            return;
+                        }
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                                    break;
+                                case MODIFIED:
+                                    Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                                    break;
+                                case REMOVED:
+                                    Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                                    break;
+                            }
+                        }
+
+                    }
+                });
     }
 
 
@@ -237,18 +264,40 @@ public class GroupChatActivity extends AppCompatActivity
 
     private void DisplayMessages(QuerySnapshot querySnapshot)
     {
-        for (QueryDocumentSnapshot doc : querySnapshot) {
-            if (doc.getId()!= null) {
-                String chatDate = doc.getString("date");
-                String chatMessage = doc.getString("message");
-                String chatName = doc.getString("name");
-                String chatTime = doc.getString("time");
+        for (DocumentChange dc : querySnapshot.getDocumentChanges()) {
+            switch (dc.getType()) {
+                case ADDED:
+                    String chatDate = dc.getDocument().getString("date");
+                    String chatMessage = dc.getDocument().getString("message");
+                    String chatName = dc.getDocument().getString("name");
+                    String chatTime = dc.getDocument().getString("time");
 
-                displayTextMessages.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
-
-                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    displayTextMessages.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
+                    mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                    break;
+                case MODIFIED:
+                    Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
+                    break;
+                case REMOVED:
+                    Log.d("TAG", "Removed Msg: " + dc.getDocument().toObject(Message.class));
+                    break;
             }
         }
+
+//        for (QueryDocumentSnapshot doc : querySnapshot) {
+//            if (doc.getId()!= null) {
+//                String chatDate = doc.getString("date");
+//                String chatMessage = doc.getString("message");
+//                String chatName = doc.getString("name");
+//                String chatTime = doc.getString("time");
+//
+//                displayTextMessages.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
+//
+//                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+//            }
+//        }
+
 //        Iterator iterator = dataSnapshot.getChildren().iterator();
 //
 //        while(iterator.hasNext())
