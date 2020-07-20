@@ -54,6 +54,7 @@
 
         </activity>
         <activity android:name=".register" />
+        <activity android:name=".testmain" />
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
         <activity
@@ -68,6 +69,10 @@
         </activity>
         <activity
             android:name=".allactivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".GroupChatActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity

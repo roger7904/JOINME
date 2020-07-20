@@ -544,7 +544,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(home.this, chatroom.class);
+                intent.setClass(home.this, testmain.class);
                 startActivity(intent);
             }
         });
