@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 public class GroupChatActivity extends AppCompatActivity
@@ -77,26 +78,26 @@ public class GroupChatActivity extends AppCompatActivity
         GetUserInfo();
 
 
-//        SendMessageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                SaveMessageInfoToDatabase();
-//
-//                userMessageInput.setText("");
-//
-//                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-//            }
-//        });
+        SendMessageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                SaveMessageInfoToDatabase();
+
+                userMessageInput.setText("");
+
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
     }
 
 
 
-//    @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
 //        GroupNameRef.addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String s)
@@ -131,7 +132,20 @@ public class GroupChatActivity extends AppCompatActivity
 //
 //            }
 //        });
-//    }
+        db.collection("chat").document(currentGroupName).collection("content")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("TAG", "Listen failed.", e);
+                            return;
+                        }
+
+                        DisplayMessages(value);
+                    }
+                });
+    }
 
 
     private void InitializeFields()
@@ -187,44 +201,54 @@ public class GroupChatActivity extends AppCompatActivity
 
 
 
-//    private void SaveMessageInfoToDatabase()
-//    {
-//        String message = userMessageInput.getText().toString();
-//        String messagekEY = GroupNameRef.push().getKey();
-//
-//        if (TextUtils.isEmpty(message))
-//        {
-//            Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show();
-//        }
-//        else
-//        {
-//            Calendar calForDate = Calendar.getInstance();
-//            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-//            currentDate = currentDateFormat.format(calForDate.getTime());
-//
-//            Calendar calForTime = Calendar.getInstance();
-//            SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
-//            currentTime = currentTimeFormat.format(calForTime.getTime());
-//
-//
+    private void SaveMessageInfoToDatabase()
+    {
+        String message = userMessageInput.getText().toString();
+
+        if (TextUtils.isEmpty(message))
+        {
+            Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Calendar calForDate = Calendar.getInstance();
+            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+            currentDate = currentDateFormat.format(calForDate.getTime());
+
+            Calendar calForTime = Calendar.getInstance();
+            SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
+            currentTime = currentTimeFormat.format(calForTime.getTime());
+
+
 //            HashMap<String, Object> groupMessageKey = new HashMap<>();
 //            GroupNameRef.updateChildren(groupMessageKey);
-//
+
 //            GroupMessageKeyRef = GroupNameRef.child(messagekEY);
-//
-//            HashMap<String, Object> messageInfoMap = new HashMap<>();
-//            messageInfoMap.put("name", currentUserName);
-//            messageInfoMap.put("message", message);
-//            messageInfoMap.put("date", currentDate);
-//            messageInfoMap.put("time", currentTime);
-//            GroupMessageKeyRef.updateChildren(messageInfoMap);
-//        }
-//    }
-//
-//
-//
-//    private void DisplayMessages(DataSnapshot dataSnapshot)
-//    {
+
+            HashMap<String, Object> messageInfoMap = new HashMap<>();
+            messageInfoMap.put("name", currentUserName);
+            messageInfoMap.put("message", message);
+            messageInfoMap.put("date", currentDate);
+            messageInfoMap.put("time", currentTime);
+            db.collection("chat").document(currentGroupName).collection("content").document().set(messageInfoMap);
+        }
+    }
+
+
+    private void DisplayMessages(QuerySnapshot querySnapshot)
+    {
+        for (QueryDocumentSnapshot doc : querySnapshot) {
+            if (doc.getId()!= null) {
+                String chatDate = doc.getString("date");
+                String chatMessage = doc.getString("message");
+                String chatName = doc.getString("name");
+                String chatTime = doc.getString("time");
+
+                displayTextMessages.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
+
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        }
 //        Iterator iterator = dataSnapshot.getChildren().iterator();
 //
 //        while(iterator.hasNext())
@@ -238,5 +262,5 @@ public class GroupChatActivity extends AppCompatActivity
 //
 //            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
 //        }
-//    }
+    }
 }

@@ -31,8 +31,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -48,8 +52,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,7 +122,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public BitmapDescriptor markerDescriptor;
     public static String activitytitle;
     public int maplistener = 0;
-
+    public static String useraccount;
+    private String currentUserID, currentUserName;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseUser currentUser;
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
 
@@ -150,12 +163,125 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        db=FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        DocumentReference docRef = db.collection("user").document(currentUserID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        useraccount=document.getString("email");
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
         initViews();
         setListeners();
         maplistener = 0;
         getDBlistener();
     }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        if (currentUser == null)
+        {
+            SendUserToLoginActivity();
+        }
+        else
+        {
+            updateUserStatus("online");
+
+            VerifyUserExistance();
+        }
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+
+        if (currentUser != null)
+        {
+            updateUserStatus("offline");
+        }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        if (currentUser != null)
+        {
+            updateUserStatus("offline");
+        }
+    }
+
+    private void VerifyUserExistance()
+    {
+        String currentUserID = mAuth.getCurrentUser().getUid();
+        db.collection("user").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("TAG", "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    //這邊要驗證有沒有設定名字
+                    Toast.makeText(home.this, "歡迎", Toast.LENGTH_SHORT).show();
+                } else {
+//                    SendUserToSettingsActivity();
+                    Log.d("TAG", "Current data: null");
+                }
+            }
+        });
+
+    }
+
+    private void SendUserToLoginActivity()
+    {
+        Intent loginIntent = new Intent(home.this, MainActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
+
+    }
+
+    private void updateUserStatus(String state)
+    {
+        String saveCurrentTime, saveCurrentDate;
+
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+        saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+        saveCurrentTime = currentTime.format(calendar.getTime());
+
+        HashMap<String, Object> onlineStateMap = new HashMap<>();
+        onlineStateMap.put("time", saveCurrentTime);
+        onlineStateMap.put("date", saveCurrentDate);
+        onlineStateMap.put("state", state);
+        db.collection("user").document(currentUserID).update(onlineStateMap);
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

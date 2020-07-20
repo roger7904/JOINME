@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity {
     private Button register;
     private Button ForgetPasswordLink;
 
-    public static String useraccount;
+
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     public static String[] docString = new String[1000000];
@@ -257,7 +257,7 @@ public class MainActivity extends FragmentActivity {
                         {
                             if (task.isSuccessful())
                             {
-                                useraccount=UserEmail.getText().toString();
+//                                useraccount=UserEmail.getText().toString();
                                 String currentUserId = mAuth.getCurrentUser().getUid();
                                 String deviceToken = FirebaseInstanceId.getInstance().getToken();
                                 final Map<String, Object> logindata = new HashMap<>();

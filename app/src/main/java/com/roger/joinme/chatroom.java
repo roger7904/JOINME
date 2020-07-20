@@ -109,7 +109,7 @@ public class chatroom extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        if (document.getString("useraccount").equals(MainActivity.useraccount)) {
+                                                        if (document.getString("useraccount").equals(home.useraccount)) {
                                                             LinearLayout linear=(LinearLayout) findViewById(R.id.linear_addactivitychat);
                                                             LinearLayout l1 = new LinearLayout(getApplication());
                                                             l1.setOrientation(LinearLayout.HORIZONTAL);

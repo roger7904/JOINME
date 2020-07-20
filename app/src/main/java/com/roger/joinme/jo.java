@@ -45,6 +45,10 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -115,6 +119,10 @@ public class jo extends AppCompatActivity {
     LinearLayout t1,t2;
     Button timebtn,timebtn2,aftertimebtn;
     boolean ifSpecifyTime=false,ifTimeSelected=false;
+    private String currentUserID, currentUserName, currentDate, currentTime;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +149,27 @@ public class jo extends AppCompatActivity {
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
-
+        db=FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        DocumentReference docRef = db.collection("user").document(currentUserID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        currentUserName=document.getString("name");
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
         initPlace();
         initViews();
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, new String[]{"商家優惠", "球類", "限時", "KTV", "其他"});
@@ -165,8 +193,8 @@ public class jo extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                System.out.println(MainActivity.useraccount);
-                                if (document.getString("email").equals(MainActivity.useraccount)) {
+                                System.out.println(home.useraccount);
+                                if (document.getString("email").equals(home.useraccount)) {
 //                                    System.out.println(document.getString("name"));
                                     organizerID = document.getString("email");
 //                                    System.out.println("one:"+organizerID);
@@ -441,12 +469,21 @@ public class jo extends AppCompatActivity {
                         book.put("Ontime",flag_list[2]);
                         ubook.put("account", "0");
                         chat.put("activity", activityTitle.getText().toString());
-                        chat.put("newestcontent", organizerID+"創建了此活動");
-                        chat.put("organizer", organizerID);
-                        content.put("author", organizerID);
-                        content.put("content", organizerID+"創建了此活動");
-                        content.put("time", Calendar.getInstance().getTime());
-                        participant.put("useraccount", organizerID);
+                        chat.put("newestcontent", currentUserName+"創建了此活動");
+                        chat.put("organizer", currentUserName);
+                        Calendar calForDate = Calendar.getInstance();
+                        SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+                        currentDate = currentDateFormat.format(calForDate.getTime());
+
+                        Calendar calForTime = Calendar.getInstance();
+                        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
+                        currentTime = currentTimeFormat.format(calForTime.getTime());
+
+//                        content.put("date", currentDate);
+//                        content.put("name", currentUserName);
+//                        content.put("message", "創建了此活動");
+//                        content.put("time", currentTime);
+                        participant.put("userID", currentUserID);
 
                         //查看map內容
 
@@ -482,55 +519,11 @@ public class jo extends AppCompatActivity {
                                         Log.w("TAG", "Error writing document", e);
                                     }
                                 });
-                        db.collection("chat")
-                                .document(activityTitle.getText().toString())
-                                .set(chat)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e);
-                                    }
-                                });
-                        db.collection("chat")
-                                .document(activityTitle.getText().toString())
-                                .collection("content")
-                                .document("1")
-                                .set(content)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e);
-                                    }
-                                });
-                        db.collection("chat")
-                                .document(activityTitle.getText().toString())
-                                .collection("participant")
-                                .document("1")
-                                .set(participant)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e);
-                                    }
-                                });
+                        db.collection("chat").document(activityTitle.getText().toString()).set(chat);
+//                        db.collection("chat").document(activityTitle.getText().toString()).collection("content")
+//                                .document().set(content);
+                        db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
+                                .document().set(participant);
                         Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
                         submitbtn.setEnabled(false);
                         submitbtn.setText("報名成功");

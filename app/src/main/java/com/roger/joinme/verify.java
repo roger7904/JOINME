@@ -91,7 +91,7 @@ public class verify extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.getString("organizerID").equals(MainActivity.useraccount)){
+                                if(document.getString("organizerID").equals(home.useraccount)){
 //                                    System.out.println("333");
                                     db.collection("activity")
                                             .get()

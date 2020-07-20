@@ -52,74 +52,6 @@ public class testmain extends AppCompatActivity
     }
 
 
-//    @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//
-//        if (currentUser == null)
-//        {
-//            SendUserToLoginActivity();
-//        }
-//        else
-//        {
-//            updateUserStatus("online");
-//
-//            VerifyUserExistance();
-//        }
-//    }
-//
-//
-//    @Override
-//    protected void onStop()
-//    {
-//        super.onStop();
-//
-//        if (currentUser != null)
-//        {
-//            updateUserStatus("offline");
-//        }
-//    }
-//
-//
-//
-//    @Override
-//    protected void onDestroy()
-//    {
-//        super.onDestroy();
-//
-//        if (currentUser != null)
-//        {
-//            updateUserStatus("offline");
-//        }
-//    }
-//
-//
-//
-//    private void VerifyUserExistance()
-//    {
-//        String currentUserID = mAuth.getCurrentUser().getUid();
-//
-//        RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot)
-//            {
-//                if ((dataSnapshot.child("name").exists()))
-//                {
-//                    Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-//                }
-//                else
-//                {
-//                    SendUserToSettingsActivity();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 //
 //
 //
@@ -217,14 +149,7 @@ public class testmain extends AppCompatActivity
 //    }
 //
 //
-//
-//    private void SendUserToLoginActivity()
-//    {
-//        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-//        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        startActivity(loginIntent);
-//
-//    }
+
 //
 //    private void SendUserToSettingsActivity()
 //    {
@@ -241,25 +166,5 @@ public class testmain extends AppCompatActivity
 //
 //
 //
-//    private void updateUserStatus(String state)
-//    {
-//        String saveCurrentTime, saveCurrentDate;
-//
-//        Calendar calendar = Calendar.getInstance();
-//
-//        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-//        saveCurrentDate = currentDate.format(calendar.getTime());
-//
-//        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
-//        saveCurrentTime = currentTime.format(calendar.getTime());
-//
-//        HashMap<String, Object> onlineStateMap = new HashMap<>();
-//        onlineStateMap.put("time", saveCurrentTime);
-//        onlineStateMap.put("date", saveCurrentDate);
-//        onlineStateMap.put("state", state);
-//
-//        RootRef.child("Users").child(currentUserID).child("userState")
-//                .updateChildren(onlineStateMap);
-//
-//    }
+
 }

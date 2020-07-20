@@ -116,7 +116,7 @@ public class signup extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getString("email").equals(MainActivity.useraccount)) {
+                                if (document.getString("email").equals(home.useraccount)) {
                                     account = document.getString("email");
                                     actbook.put("account", document.getString("email"));
                                 }
