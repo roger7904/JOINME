@@ -1,8 +1,11 @@
 package com.roger.joinme;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,12 +14,17 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +66,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -80,6 +89,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.facebook.internal.CallbackManagerImpl.RequestCodeOffset.Message;
 
 public class jo extends AppCompatActivity {
     private Button user;
@@ -110,7 +121,7 @@ public class jo extends AppCompatActivity {
     private Button limitBtn;
     private String picUrl;
     private Button button5,eDate;
-    private Button sbtn, ebtn, submitimg,chooseRes;
+    private Button sbtn, ebtn,chooseRes;
     public String organizerID;
     public String uriString;
     public boolean imguploaded = false;
@@ -123,6 +134,9 @@ public class jo extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
+    private ProgressDialog mloadingDialog;
+    Handler mLoadhandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +144,7 @@ public class jo extends AppCompatActivity {
         setContentView(R.layout.activity_createact);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -255,7 +270,6 @@ public class jo extends AppCompatActivity {
         notice = (ImageButton) findViewById(R.id.imgbtn_notice);
         setting = (ImageButton) findViewById(R.id.imgbtn_setting);
         spinner = (Spinner) findViewById(R.id.activityType);
-        submitimg = (Button) findViewById(R.id.submitimg);
 
 
         activityTitle = (TextView) findViewById(R.id.editText6);
@@ -388,36 +402,13 @@ public class jo extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
                 startActivityForResult(intent, 1);      //取得相片後, 返回
                 imguploaded = true;
-                submitimg.setEnabled(true);
                 Toast.makeText(jo.this, "請點選上傳鈕才成功上傳", Toast.LENGTH_SHORT).show();
 
 
             }
         });
 
-        submitimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imguploaded) {
-                    if (activityTitle.getText().toString().equals("")) {
-                        Toast.makeText(jo.this, "請先填寫標題", Toast.LENGTH_SHORT).show();
-                    } else {
-                        uploadimg t1 = new uploadimg();
-                        t1.start();
-                        try {
-                            t1.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(jo.this, "封面上傳成功", Toast.LENGTH_SHORT).show();
-                        submitimg.setEnabled(false);
-                    }
-                } else {
-                    Toast.makeText(jo.this, "請先選擇圖片", Toast.LENGTH_SHORT).show();
-                }
 
-            }
-        });
 
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -442,89 +433,113 @@ public class jo extends AppCompatActivity {
                 } else {
 
 
+
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
+                        mLoadhandler=new Handler(){
+                            @Override
+                            public void handleMessage(Message msg)
+                            {
+                                mloadingDialog.dismiss();
+                            }
+                        };
+                        mloadingDialog = ProgressDialog.show(jo.this , "" , "Uploading. Please wait...." , true);
+                        Thread t1=new Thread(uploadcover);
+                        Thread t2=new Thread(uploadtoDB);
+                        t1.start();
+                        try {
+                            t2.sleep(2000);
+                            t2.start();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-                        final Map<String, Object> book = new HashMap<>();
-                        final Map<String, Object> ubook = new HashMap<>();
-                        final Map<String, Object> chat = new HashMap<>();
-                        final Map<String, Object> content = new HashMap<>();
-                        final Map<String, Object> participant = new HashMap<>();
-                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                        book.put("title", activityTitle.getText().toString());
-                        book.put("postContent", activityContent.getText().toString());
-                        book.put("activityType", spinner.getSelectedItem().toString());
-                        book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
-                        //先切割字串再轉成geopoint格式
-                        String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
-                        book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
-                        book.put("numberOfPeople", limitBtn.getText());
-                        book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
-                        book.put("endTime", ets);
-                        book.put("organizerID", organizerID);
-                        book.put("imgUri", uriString);
-                        book.put("onlyMale",flag_list[0]);
-                        book.put("onlyFemale",flag_list[1]);
-                        book.put("Ontime",flag_list[2]);
-                        ubook.put("account", "0");
-                        chat.put("activity", activityTitle.getText().toString());
-                        chat.put("newestcontent", currentUserName+"創建了此活動");
-                        chat.put("organizer", currentUserName);
-                        Calendar calForDate = Calendar.getInstance();
-                        SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-                        currentDate = currentDateFormat.format(calForDate.getTime());
+                        System.out.print(uriString);
+//                        final Map<String, Object> book = new HashMap<>();
+//                        final Map<String, Object> ubook = new HashMap<>();
+//                        final Map<String, Object> chat = new HashMap<>();
+//                        final Map<String, Object> content = new HashMap<>();
+//                        final Map<String, Object> participant = new HashMap<>();
+//                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//                        book.put("title", activityTitle.getText().toString());
+//                        book.put("postContent", activityContent.getText().toString());
+//                        book.put("activityType", spinner.getSelectedItem().toString());
+//                        book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
+//                        //先切割字串再轉成geopoint格式
+//                        String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
+//                        book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
+//                        book.put("numberOfPeople", limitBtn.getText());
+//                        book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
+//                        book.put("endTime", ets);
+//                        book.put("organizerID", organizerID);
+//                        book.put("imgUri", uriString);
+//                        book.put("onlyMale",flag_list[0]);
+//                        book.put("onlyFemale",flag_list[1]);
+//                        book.put("Ontime",flag_list[2]);
+//                        ubook.put("account", "0");
+//                        chat.put("activity", activityTitle.getText().toString());
+//                        chat.put("newestcontent", currentUserName+"創建了此活動");
+//                        chat.put("organizer", currentUserName);
+//                        Calendar calForDate = Calendar.getInstance();
+//                        SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+//                        currentDate = currentDateFormat.format(calForDate.getTime());
+//
+//                        Calendar calForTime = Calendar.getInstance();
+//                        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
+//                        currentTime = currentTimeFormat.format(calForTime.getTime());
+//
+////                        content.put("date", currentDate);
+////                        content.put("name", currentUserName);
+////                        content.put("message", "創建了此活動");
+////                        content.put("time", currentTime);
+//                        participant.put("userID", currentUserID);
+//
+//                        //查看map內容
+//
+//                        db.collection("activity")
+//                                .document(activityTitle.getText().toString())
+//                                .set(book)
+//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Log.w("TAG", "Error writing document", e);
+//                                    }
+//                                });
+//                        db.collection("activity")
+//                                .document(activityTitle.getText().toString())
+//                                .collection("participant")
+//                                .document("0")
+//                                .set(ubook)
+//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                        Log.w("TAG", "Error writing document", e);
+//                                    }
+//                                });
+//                        db.collection("chat").document(activityTitle.getText().toString()).set(chat);
+////                        db.collection("chat").document(activityTitle.getText().toString()).collection("content")
+////                                .document().set(content);
+//                        db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
+//                                .document().set(participant);
+//                        Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
+//                        submitbtn.setEnabled(false);
+//                        submitbtn.setText("報名成功");
+                        //上傳DB改用thread實現
 
-                        Calendar calForTime = Calendar.getInstance();
-                        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
-                        currentTime = currentTimeFormat.format(calForTime.getTime());
-
-//                        content.put("date", currentDate);
-//                        content.put("name", currentUserName);
-//                        content.put("message", "創建了此活動");
-//                        content.put("time", currentTime);
-                        participant.put("userID", currentUserID);
-
-                        //查看map內容
-
-                        db.collection("activity")
-                                .document(activityTitle.getText().toString())
-                                .set(book)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e);
-                                    }
-                                });
-                        db.collection("activity")
-                                .document(activityTitle.getText().toString())
-                                .collection("participant")
-                                .document("0")
-                                .set(ubook)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("TAG", "Error writing document", e);
-                                    }
-                                });
-                        db.collection("chat").document(activityTitle.getText().toString()).set(chat);
-//                        db.collection("chat").document(activityTitle.getText().toString()).collection("content")
-//                                .document().set(content);
-                        db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
-                                .document().set(participant);
-                        Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
                         submitbtn.setEnabled(false);
                         submitbtn.setText("報名成功");
                     } else {
@@ -666,7 +681,13 @@ public class jo extends AppCompatActivity {
         return format.format(date);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void showDialog(View view) {
+        View view2 = this.getCurrentFocus();
+        if (view2 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+        }
         final List<String> options1Items = new ArrayList<>();
 
         for (int i = 1; i <= 99; i++) {
@@ -686,6 +707,11 @@ public class jo extends AppCompatActivity {
     }
 
     public void showAfterTimeDialog(final View view) {
+        View view2 = this.getCurrentFocus();
+        if (view2 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+        }
         final List<String> optionsHour = new ArrayList<>();
         final List<String> optionsMin = new ArrayList<>();
 
@@ -700,6 +726,7 @@ public class jo extends AppCompatActivity {
 
         OptionsPickerView pvOptions = new OptionsPickerBuilder(jo.this, new OnOptionsSelectListener() {
             @Override
+
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 aftertimebtn.setText(optionsHour.get(options1) + "小時" + optionsMin.get(option2)+"分鐘");
 
@@ -720,6 +747,11 @@ public class jo extends AppCompatActivity {
     }
 
     public void showTimeDialog(final View view) {
+        View view2 = this.getCurrentFocus();
+        if (view2 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+        }
         final List<String> optionsHour = new ArrayList<>();
         final List<String> optionsMin = new ArrayList<>();
 
@@ -751,6 +783,11 @@ public class jo extends AppCompatActivity {
     }
 
     public void showDayDialog(final View view) {
+        View view2 = this.getCurrentFocus();
+        if (view2 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+        }
         TimePickerView pvTime = new TimePickerBuilder(jo.this, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
@@ -799,7 +836,7 @@ public class jo extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //取得 content_layout 介面資源檔中的元件
-                                
+
                             }
                         });
                 dialog = builder.create(); //建立對話方塊並存成 dialog
@@ -842,6 +879,138 @@ public class jo extends AppCompatActivity {
         return dialog;
     }
 
+    Runnable uploadcover = new Runnable() {
+        @Override
+        public void run() {
+            FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
+            StorageReference StorageRef = storage.getReference();
+            final StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
+            imgtest.setDrawingCacheEnabled(true);
+            imgtest.buildDrawingCache();
+            Bitmap bitmap = ((BitmapDrawable) imgtest.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
+            UploadTask uploadTask = pRef.putBytes(data);
+
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                    pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            uriString = uri.toString();
+                            System.out.println(uriString);
+                            mLoadhandler.sendEmptyMessage(0);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                        }
+                    });
+                    ;
+                }
+            });
+
+        }
+
+    };
+
+    Runnable uploadtoDB = new Runnable() {
+        @Override
+        public void run() {
+
+            final Map<String, Object> book = new HashMap<>();
+            final Map<String, Object> ubook = new HashMap<>();
+            final Map<String, Object> chat = new HashMap<>();
+            final Map<String, Object> content = new HashMap<>();
+            final Map<String, Object> participant = new HashMap<>();
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            book.put("title", activityTitle.getText().toString());
+            book.put("postContent", activityContent.getText().toString());
+            book.put("activityType", spinner.getSelectedItem().toString());
+            book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
+            //先切割字串再轉成geopoint格式
+            String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
+            book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
+            book.put("numberOfPeople", limitBtn.getText());
+            book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
+            book.put("endTime", ets);
+            book.put("organizerID", organizerID);
+            book.put("imgUri", uriString);
+            book.put("onlyMale",flag_list[0]);
+            book.put("onlyFemale",flag_list[1]);
+            book.put("Ontime",flag_list[2]);
+            ubook.put("account", "0");
+            chat.put("activity", activityTitle.getText().toString());
+            chat.put("newestcontent", currentUserName+"創建了此活動");
+            chat.put("organizer", currentUserName);
+            Calendar calForDate = Calendar.getInstance();
+            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+            currentDate = currentDateFormat.format(calForDate.getTime());
+
+            Calendar calForTime = Calendar.getInstance();
+            SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
+            currentTime = currentTimeFormat.format(calForTime.getTime());
+
+//                        content.put("date", currentDate);
+//                        content.put("name", currentUserName);
+//                        content.put("message", "創建了此活動");
+//                        content.put("time", currentTime);
+            participant.put("userID", currentUserID);
+
+            //查看map內容
+
+            db.collection("activity")
+                    .document(activityTitle.getText().toString())
+                    .set(book)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("TAG", "Error writing document", e);
+                        }
+                    });
+            db.collection("activity")
+                    .document(activityTitle.getText().toString())
+                    .collection("participant")
+                    .document("0")
+                    .set(ubook)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("TAG", "Error writing document", e);
+                        }
+                    });
+            db.collection("chat").document(activityTitle.getText().toString()).set(chat);
+//                        db.collection("chat").document(activityTitle.getText().toString()).collection("content")
+//                                .document().set(content);
+            db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
+                    .document().set(participant);
+
+        }
+    };
 }
 
