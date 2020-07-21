@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -33,8 +34,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 //import com.google.firebase.database.DatabaseError;
 //import com.google.firebase.database.DatabaseReference;
@@ -50,6 +55,7 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,11 +72,15 @@ public class MainActivity extends FragmentActivity {
     public static String[] docString = new String[1000000];
     public static int count = 0;
     private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private String currentUserID;
     private ProgressDialog loadingBar;
 
     private EditText UserEmail, UserPassword;
     private TextView NeedNewAccountLink ;
+
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
 
     @Override
@@ -78,7 +88,9 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+//        currentUser = firebaseAuth.getCurrentUser();
+//        currentUserID = firebaseAuth.getCurrentUser().getUid();
 
 
         initViews();
@@ -87,75 +99,195 @@ public class MainActivity extends FragmentActivity {
         count = 0;
 
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
         callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().logOut();
-        loginButton.setReadPermissions("email");
 
-        // If using in a fragment
-//        loginButton.setFragment(this);
+        loginButton.setReadPermissions(Arrays.asList("email"));
 
-        // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-//                loginButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(MainActivity.this,MapsActivity.class);
-//                        startActivity(intent);
-//                    }
-//                });
-
-                // App code
-                System.out.println("onSuccess:"+loginResult.toString());
-                GraphRequest request = GraphRequest.newMeRequest(
-                        loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                try{
-                                    String email = object.getString("email");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields","id,name,email,gender");
-                request.setParameters(parameters);
-                request.executeAsync();
+                handleFacebookAccessToken(loginResult.getAccessToken());
+                System.out.println("Onsuccess");
             }
 
             @Override
             public void onCancel() {
-                System.out.println("onCancel");
+                Toast.makeText(getApplicationContext(), "R.string.cancel_login", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                System.out.println("onError"+error.toString());
+                Toast.makeText(getApplicationContext(), "R.string.error_login", Toast.LENGTH_SHORT).show();
             }
         });
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("activity")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                docString[count] = document.getId();
-                                System.out.println(count);
-                                System.out.println(docString[count]);
-                                count++;
+            firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) {
+                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                        String currentUserID = user.getUid();
+                        final Map<String, Object> registerdata = new HashMap<>();
+                        registerdata.put("currentUserID",currentUserID);
+                        registerdata.put("device_token",deviceToken);
+                        registerdata.put("email",user.getEmail());
+                        db.collection("user")
+                                .document(currentUserID)
+                                .set(registerdata)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error writing document", e);
+                                    }
+                                });
+
+                        SendUserToMainActivity();
+                        Toast.makeText(MainActivity.this, "帳號登入成功...", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+            db.collection("activity")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    docString[count] = document.getId();
+                                    System.out.println(count);
+                                    System.out.println(docString[count]);
+                                    count++;
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }
+
+
+
+
+
+
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        AppEventsLogger.activateApp(this);
+//        callbackManager = CallbackManager.Factory.create();
+//        //LoginManager.getInstance().logOut();
+//        loginButton.setReadPermissions("email");
+//        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+////                handleFacebookAccessToken(loginResult.getAccessToken());
+//
+////                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+////
+////                String currentUserID = firebaseAuth.getCurrentUser().getUid();
+////                final Map<String, Object> registerdata = new HashMap<>();
+////                registerdata.put("currentUserID",currentUserID);
+////                registerdata.put("device_token",deviceToken);
+////                registerdata.put("email",UserEmail.getText().toString());
+////                db.collection("user")
+////                        .document(currentUserID)
+////                        .set(registerdata)
+////                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+////                            @Override
+////                            public void onSuccess(Void aVoid) {
+////                                Log.d("TAG", "DocumentSnapshot successfully written!");
+////                            }
+////                        })
+////                        .addOnFailureListener(new OnFailureListener() {
+////                            @Override
+////                            public void onFailure(@NonNull Exception e) {
+////                                Log.w("TAG", "Error writing document", e);
+////                            }
+////                        });
+//
+//                SendUserToMainActivity();
+//                Toast.makeText(MainActivity.this, "帳號創立成功...", Toast.LENGTH_SHORT).show();
+////                loadingBar.dismiss();
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Toast.makeText(getApplicationContext(), "登入失敗ˇ", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                Toast.makeText(getApplicationContext(), "登入出錯", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        // If using in a fragment
+//        loginButton.setFragment(this);
+
+
+
+//        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//                    SendUserToMainActivity();
+//                }
+//            }
+//        };
+
+//        // Callback registration
+//        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+////                loginButton.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View v) {
+////                        Intent intent = new Intent();
+////                        intent.setClass(MainActivity.this,MapsActivity.class);
+////                        startActivity(intent);
+////                    }
+////                });
+//
+//                // App code
+//                System.out.println("onSuccess:"+loginResult.toString());
+//                GraphRequest request = GraphRequest.newMeRequest(
+//                        loginResult.getAccessToken(),
+//                        new GraphRequest.GraphJSONObjectCallback() {
+//                            @Override
+//                            public void onCompleted(JSONObject object, GraphResponse response) {
+//                                try{
+//                                    String email = object.getString("email");
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        });
+//                Bundle parameters = new Bundle();
+//                parameters.putString("fields","id,name,email,gender");
+//                request.setParameters(parameters);
+//                request.executeAsync();
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                System.out.println("onCancel");
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                System.out.println("onError"+error.toString());
+//            }
+//        });
+
+
+
+
+
 
         //取得fb金鑰
 //        try{
@@ -171,13 +303,54 @@ public class MainActivity extends FragmentActivity {
 //        }
 
         //pushtest
+
+//    private void handleFacebookAccessToken(AccessToken accessToken) {
+//        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+//        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if (!task.isSuccessful()) {
+//                    Toast.makeText(getApplicationContext(), "firebase_error_login", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//    }
+
+    private void handleFacebookAccessToken(AccessToken accessToken) {
+
+        loginButton.setVisibility(View.GONE);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (!task.isSuccessful()) {
+//                    System.out.println("fb登入~~~");
+//                    SendUserToMainActivity();
+                    Toast.makeText(getApplicationContext(), "R.string.firebase_error_login", Toast.LENGTH_LONG).show();
+                }
+                loginButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(firebaseAuthListener);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(firebaseAuthListener);
+    }
+
 
     private void initViews()
     {
@@ -250,7 +423,7 @@ public class MainActivity extends FragmentActivity {
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();
 
-            mAuth.signInWithEmailAndPassword(email, password)
+            firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task)
@@ -258,7 +431,7 @@ public class MainActivity extends FragmentActivity {
                             if (task.isSuccessful())
                             {
 //                                useraccount=UserEmail.getText().toString();
-                                String currentUserId = mAuth.getCurrentUser().getUid();
+                                String currentUserId = firebaseAuth.getCurrentUser().getUid();
                                 String deviceToken = FirebaseInstanceId.getInstance().getToken();
                                 final Map<String, Object> logindata = new HashMap<>();
                                 logindata.put("deviceToken",deviceToken);
@@ -287,4 +460,5 @@ public class MainActivity extends FragmentActivity {
         startActivity(mainIntent);
         finish();
     }
+
 }

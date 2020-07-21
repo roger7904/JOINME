@@ -11,11 +11,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -258,7 +260,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         Intent loginIntent = new Intent(home.this, MainActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
-
     }
 
     private void updateUserStatus(String state)
@@ -286,7 +287,24 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.homepage, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.action_logout)
+        {
+            updateUserStatus("offline");
+            LoginManager.getInstance().logOut();
+            mAuth.signOut();
+            SendUserToLoginActivity();
+        }
+
         return true;
     }
 
