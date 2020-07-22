@@ -81,6 +81,9 @@ public class MainActivity extends FragmentActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    private static final String EMAIL = "email";
+    private static final String USER_POSTS = "user_posts";
+    private static final String AUTH_TYPE = "rerequest";
 
 
     @Override
@@ -99,13 +102,20 @@ public class MainActivity extends FragmentActivity {
         count = 0;
 
 
+
+
+
+
+
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton.setReadPermissions(Arrays.asList("email"));
+        loginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS));
+        loginButton.setAuthType(AUTH_TYPE);
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                setResult(RESULT_OK);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 System.out.println("Onsuccess");
             }
@@ -133,6 +143,8 @@ public class MainActivity extends FragmentActivity {
                         registerdata.put("currentUserID",currentUserID);
                         registerdata.put("device_token",deviceToken);
                         registerdata.put("email",user.getEmail());
+//                        registerdata.put("name",user.getDisplayName());
+//                        registerdata.put("photoUrl",user.getPhotoUrl());
                         db.collection("user")
                                 .document(currentUserID)
                                 .set(registerdata)
