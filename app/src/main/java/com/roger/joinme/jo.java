@@ -1004,11 +1004,9 @@ public class jo extends AppCompatActivity {
                             Log.w("TAG", "Error writing document", e);
                         }
                     });
-            db.collection("chat").document(activityTitle.getText().toString()).set(chat);
-//                        db.collection("chat").document(activityTitle.getText().toString()).collection("content")
-//                                .document().set(content);
-            db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
-                    .document().set(participant);
+//            db.collection("chat").document(activityTitle.getText().toString()).set(chat);
+//            db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
+//                    .document().set(participant);
 
         }
     };

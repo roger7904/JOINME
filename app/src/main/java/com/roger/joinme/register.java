@@ -113,7 +113,7 @@ public class register extends AppCompatActivity {
         }
         else
         {
-            loadingBar.setTitle("正在新建帳號");
+            loadingBar.setTitle("新建帳號");
             loadingBar.setMessage("正在新建帳號請稍後...");
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();

@@ -45,7 +45,7 @@ public class noticetest extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //              TOPIC = "/topics/userABC"; //topic has to match what the receiver subscribed to
-                TOPIC = "dnzzuMMZ9yM:APA91bHZUlXNz1gXgj4a9YQjldaxYn1SY3cBP60tkVt25SIc2aTaR4g0-mChTQj1MsN7SztelnHICHfSCBl0-aW_ibshRvaFwgUyb4R-Zke38Av5_ogroUvVi2GAhdLo07mEogOt2M6F";
+                TOPIC = "dAjps_j1HnU:APA91bHbFvQ42mRorWcRwx7VWlRkKGkd7zmWIKe8c_VEYmJeKUE4wsiq8QQfQ-Xw34n9pFMsKMIjsjoF2a46RtDxFTJ9G5zlKhrV3JD6gb9NQW-NL0Phze2wTEawxYef307UJ0ykt7p5";
 
                 NOTIFICATION_TITLE = edtTitle.getText().toString();
                 NOTIFICATION_MESSAGE = edtMessage.getText().toString();
