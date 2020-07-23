@@ -12,10 +12,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,6 +56,7 @@ public class GroupChatActivity extends AppCompatActivity
     private FirebaseFirestore db;
 
     private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime;
+
 
 
     @Override
@@ -91,6 +96,7 @@ public class GroupChatActivity extends AppCompatActivity
                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
+
     }
 
 
@@ -258,6 +264,26 @@ public class GroupChatActivity extends AppCompatActivity
             messageInfoMap.put("date", currentDate);
             messageInfoMap.put("time", currentTime);
             db.collection("chat").document(currentGroupName).collection("content").document().set(messageInfoMap);
+
+            HashMap<String, String> Notification_type = new HashMap<>();
+            //chatNotificationMap.put("from", currentUserID);
+            Notification_type.put("type", "message_send");
+            db.collection("notification").document(currentUserID).set(Notification_type);
+            HashMap<String, String> receivermap = new HashMap<>();
+            db.collection("chat").document(currentGroupName).collection("participant").get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    receivermap.put("userID",document.getString("userID"));
+                                    db.collection("notification").document(currentUserID).collection("receiver").document()
+                                            .set(receivermap);
+
+                                }
+                            }
+                        }
+                    });
         }
     }
 
