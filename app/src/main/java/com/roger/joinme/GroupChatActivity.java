@@ -17,6 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +38,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,7 +64,12 @@ public class GroupChatActivity extends AppCompatActivity
 
     private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime;
 
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
+    final private String contentType = "application/json";
+    final String TAG = "NOTIFICATION TAG";
 
+    private String RECEIVER_DEVICE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -265,25 +277,72 @@ public class GroupChatActivity extends AppCompatActivity
             messageInfoMap.put("time", currentTime);
             db.collection("chat").document(currentGroupName).collection("content").document().set(messageInfoMap);
 
-            HashMap<String, String> Notification_type = new HashMap<>();
-            //chatNotificationMap.put("from", currentUserID);
-            Notification_type.put("type", "message_send");
-            db.collection("notification").document(currentUserID).set(Notification_type);
-            HashMap<String, String> receivermap = new HashMap<>();
+//            HashMap<String, String> Notification_type = new HashMap<>();
+//            //chatNotificationMap.put("from", currentUserID);
+//            Notification_type.put("type", "message_send");
+//            db.collection("notification").document(currentUserID).set(Notification_type);
+//            HashMap<String, String> receivermap = new HashMap<>();
+//            db.collection("chat").document(currentGroupName).collection("participant").get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    receivermap.put("userID",document.getString("userID"));
+//                                    db.collection("notification").document(currentUserID).collection("receiver").document()
+//                                            .set(receivermap);
+//
+//                                }
+//                            }
+//                        }
+//                    });
+
             db.collection("chat").document(currentGroupName).collection("participant").get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    receivermap.put("userID",document.getString("userID"));
-                                    db.collection("notification").document(currentUserID).collection("receiver").document()
-                                            .set(receivermap);
+                                    String participantID = document.getString("userID");
+                                    if(!participantID.equals(currentUserID)) {
+                                        db.collection("user").document(participantID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+
+                                                        RECEIVER_DEVICE = document.getString("device_token");
+                                                        JSONObject notification = new JSONObject();
+                                                        JSONObject notifcationBody = new JSONObject();
+                                                        try {
+                                                            notifcationBody.put("title", "您有新的訊息");
+                                                            notifcationBody.put("message", message);
+
+                                                            notification.put("to", RECEIVER_DEVICE);
+                                                            notification.put("data", notifcationBody);
+                                                        } catch (JSONException e) {
+                                                            Log.e(TAG, "onCreate: " + e.getMessage());
+                                                        }
+                                                        sendNotification(notification);
+                                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                    } else {
+                                                        Log.d(TAG, "No such document");
+                                                    }
+                                                } else {
+                                                    Log.d(TAG, "get failed with ", task.getException());
+                                                }
+                                            }
+                                        });
+                                    }
 
                                 }
                             }
                         }
                     });
+
+
+
         }
     }
 
@@ -337,5 +396,31 @@ public class GroupChatActivity extends AppCompatActivity
 //
 //            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
 //        }
+    }
+
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(GroupChatActivity.this, "Request error", Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 }

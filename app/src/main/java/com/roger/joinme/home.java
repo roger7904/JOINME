@@ -688,7 +688,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(home.this, noticetest.class);
+                intent.setClass(home.this, testmain.class);
                 startActivity(intent);
             }
         });
@@ -696,7 +696,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(home.this, verify.class);
+                intent.setClass(home.this, noticetest.class);
                 startActivity(intent);
             }
         });
