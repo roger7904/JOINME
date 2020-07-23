@@ -54,6 +54,7 @@
 
         </activity>
         <activity android:name=".register" />
+        <activity android:name=".noticetest" />
         <activity android:name=".testmain" />
         <activity android:name=".forgetpwd" />
         <activity android:name=".informationedit" />
