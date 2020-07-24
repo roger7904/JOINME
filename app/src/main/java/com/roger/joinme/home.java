@@ -244,17 +244,22 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     Log.w("TAG", "Listen failed.", e);
                     return;
                 }
-
-                if (snapshot != null && snapshot.exists()) {
+                if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
                     //這邊要驗證有沒有設定名字
                     Toast.makeText(home.this, "歡迎", Toast.LENGTH_SHORT).show();
                 } else {
-//                    SendUserToSettingsActivity();
+                    SendUserToSettingsActivity();
                     Log.d("TAG", "Current data: null");
                 }
             }
         });
 
+    }
+
+    private void SendUserToSettingsActivity()
+    {
+        Intent settingsIntent = new Intent(home.this, testsetting.class);
+        startActivity(settingsIntent);
     }
 
     private void SendUserToLoginActivity()
@@ -280,6 +285,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         onlineStateMap.put("time", saveCurrentTime);
         onlineStateMap.put("date", saveCurrentDate);
         onlineStateMap.put("state", state);
+
         db.collection("user")
                 .document(currentUserID)
                 .set(onlineStateMap, SetOptions.merge())
@@ -704,7 +710,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(home.this, testmain.class);
+                intent.setClass(home.this, noticeupdate.class);
                 startActivity(intent);
             }
         });

@@ -175,8 +175,9 @@ public class testsetting extends AppCompatActivity
 
                             final String downloaedUrl = task.getResult().getUploadSessionUri().toString();
                             Map<String, Object> imgdata = new HashMap<>();
-                            imgdata.put("img",downloaedUrl);
-                            db.collection("user").document(currentUserID).update(imgdata);
+                            imgdata.put("image",downloaedUrl);
+                            db.collection("user").document(currentUserID).collection("profile")
+                                    .document(currentUserID).set(imgdata,SetOptions.merge());
                             loadingBar.dismiss();
                         }
                         else
@@ -215,6 +216,8 @@ public class testsetting extends AppCompatActivity
             profileMap.put("status", setStatus);
             db.collection("user")
                     .document(currentUserID)
+                    .collection("profile")
+                    .document(currentUserID)
                     .set(profileMap, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -237,7 +240,8 @@ public class testsetting extends AppCompatActivity
 
     private void RetrieveUserInfo()
     {
-        final DocumentReference docRef = db.collection("user").document(currentUserID);
+        final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
+                .document(currentUserID);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -247,10 +251,10 @@ public class testsetting extends AppCompatActivity
                     return;
                 }
 
-                if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("img")) {
+                if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
                     String retrieveUserName = snapshot.getString("name");
                     String retrievesStatus = snapshot.getString("status");
-                    String retrieveProfileImage = snapshot.getString("img");
+                    String retrieveProfileImage = snapshot.getString("image");
 
                     userName.setText(retrieveUserName);
                     userStatus.setText(retrievesStatus);
