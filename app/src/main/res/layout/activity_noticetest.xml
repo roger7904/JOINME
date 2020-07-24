@@ -29,7 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:maxLength="15"
-            android:background="@android:drawable/editbox_background_normal"/>
+            android:background="@android:drawable/editbox_background_normal"
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
 
@@ -55,7 +56,8 @@
             android:maxLength="30"
             android:minLines="3"
             android:maxLines="3"
-            android:background="@android:drawable/editbox_background_normal"/>
+            android:background="@android:drawable/editbox_background_normal"
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
 
