@@ -446,8 +446,8 @@ public class MainActivity extends FragmentActivity {
                                 String currentUserId = firebaseAuth.getCurrentUser().getUid();
                                 String deviceToken = FirebaseInstanceId.getInstance().getToken();
                                 final Map<String, Object> logindata = new HashMap<>();
-                                logindata.put("deviceToken",deviceToken);
-                                db.collection("chat").document(currentUserId).update(logindata);
+                                logindata.put("device_token",deviceToken);
+                                db.collection("user").document(currentUserId).update(logindata);
                                 SendUserToMainActivity();
                                 Toast.makeText(MainActivity.this, "登入成功...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();

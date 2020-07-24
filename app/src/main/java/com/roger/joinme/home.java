@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -45,6 +47,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.IOException;
@@ -205,7 +208,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         {
             updateUserStatus("online");
 
-            VerifyUserExistance();
+            //VerifyUserExistance();
         }
     }
 
@@ -233,7 +236,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void VerifyUserExistance()
     {
-        String currentUserID = mAuth.getCurrentUser().getUid();
         db.collection("user").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -274,11 +276,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
         saveCurrentTime = currentTime.format(calendar.getTime());
 
-        HashMap<String, Object> onlineStateMap = new HashMap<>();
+        Map<String, Object> onlineStateMap = new HashMap<>();
         onlineStateMap.put("time", saveCurrentTime);
         onlineStateMap.put("date", saveCurrentDate);
         onlineStateMap.put("state", state);
-        db.collection("user").document(currentUserID).update(onlineStateMap);
+        db.collection("user")
+                .document(currentUserID)
+                .set(onlineStateMap, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error writing document", e);
+                    }
+                });
     }
 
 
@@ -696,7 +712,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(home.this, noticetest.class);
+                intent.setClass(home.this, testsetting.class);
                 startActivity(intent);
             }
         });

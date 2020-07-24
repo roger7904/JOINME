@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/set_user_name"
         android:inputType="textMultiLine"
-        android:hint="hey, i am available now."
+        android:hint="status"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
