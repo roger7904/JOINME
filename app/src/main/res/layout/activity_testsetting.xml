@@ -13,7 +13,17 @@
 <!--        >-->
 <!--    </include>-->
 
-    <de.hdodenhof.circleimageview.CircleImageView
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        android:id="@+id/set_profile_image"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="90dp"-->
+<!--        android:src="@drawable/head"-->
+<!--        app:civ_border_width="5dp"-->
+<!--        app:civ_border_color="@color/colorPrimary"/>-->
+    <ImageView
         android:id="@+id/set_profile_image"
         android:layout_width="300dp"
         android:layout_height="300dp"
@@ -21,8 +31,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="90dp"
         android:src="@drawable/head"
-        app:civ_border_width="5dp"
-        app:civ_border_color="@color/colorPrimary"/>
+        android:visibility="visible"/>
 
     <EditText
         android:id="@+id/set_user_name"

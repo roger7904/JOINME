@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,7 +58,7 @@ public class testsetting extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
     private EditText userName, userStatus;
-    private CircleImageView userProfileImage;
+    private ImageView userProfileImage;
 
     private String currentUserID;
     private FirebaseAuth mAuth;
@@ -121,7 +123,7 @@ public class testsetting extends AppCompatActivity
         UpdateAccountSettings = (Button) findViewById(R.id.update_settings_button);
         userName = (EditText) findViewById(R.id.set_user_name);
         userStatus = (EditText) findViewById(R.id.set_profile_status);
-        userProfileImage = (CircleImageView) findViewById(R.id.set_profile_image);
+        userProfileImage = (ImageView) findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
 
 //        SettingsToolBar = (Toolbar) findViewById(R.id.settings_toolbar);
@@ -240,44 +242,68 @@ public class testsetting extends AppCompatActivity
 
     private void RetrieveUserInfo()
     {
+
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
                 .document(currentUserID);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("TAG", "Listen failed.", e);
-                    return;
-                }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
+                        String retrieveUserName = snapshot.getString("name");
+                        String retrievesStatus = snapshot.getString("status");
+                        String retrieveProfileImage = snapshot.getString("image");
 
-                if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
-                    String retrieveUserName = snapshot.getString("name");
-                    String retrievesStatus = snapshot.getString("status");
-                    String retrieveProfileImage = snapshot.getString("image");
+                        userName.setText(retrieveUserName);
+                        userStatus.setText(retrievesStatus);
 
-                    userName.setText(retrieveUserName);
-                    userStatus.setText(retrievesStatus);
-                    Picasso.get().load(retrieveProfileImage).into(userProfileImage);
-                    Log.d("TAG", "source" + " data: " + snapshot.getData());
-                } else if(snapshot != null && snapshot.exists() && snapshot.contains("name")) {
-                    String retrieveUserName = snapshot.getString("name");
-                    String retrievesStatus = snapshot.getString("status");
-                    System.out.println("name ststus");
-                    userName.setText(retrieveUserName);
-                    userStatus.setText(retrievesStatus);
-                    Log.d("TAG", "source" + " data: null");
-                }else{
-                    userName.setVisibility(View.VISIBLE);
-                    Toast.makeText(testsetting.this, "Please set & update your profile information...", Toast.LENGTH_SHORT).show();
+//                        Picasso.get()
+//                                .load(retrieveProfileImage)
+//                                .placeholder(R.drawable.head)
+//                                .resize(200,220)
+//                                .into(userProfileImage);
+
+                        // Reference to an image file in Cloud Storage
+                        StorageReference storageReference = FirebaseStorage.getInstance()
+                                .getReference()
+                                .child("Profile Images")
+                                .child(currentUserID+".jpg");
+
+                        // Download directly from StorageReference using Glide
+                        // (See MyAppGlideModule for Loader registration)
+                        UserProfileImagesRef.child(currentUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
+                                Glide.with(testsetting.this)
+                                        .load(uri)
+                                        .circleCrop()
+                                        .into(userProfileImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
+
+                        Log.d("TAG", "source" + " data: " + snapshot.getData());
+                    } else if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
+                        String retrieveUserName = snapshot.getString("name");
+                        String retrievesStatus = snapshot.getString("status");
+                        System.out.println("name ststus");
+                        userName.setText(retrieveUserName);
+                        userStatus.setText(retrievesStatus);
+                        Log.d("TAG", "source" + " data: null");
+                    } else {
+                        userName.setVisibility(View.VISIBLE);
+                        Toast.makeText(testsetting.this, "Please set & update your profile information...", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
-
-
     }
-
-
 
     private void SendUserToMainActivity()
     {

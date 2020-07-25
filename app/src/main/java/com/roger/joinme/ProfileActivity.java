@@ -1,16 +1,25 @@
 package com.roger.joinme;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +39,16 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity
 {
-    private String receiverUserID, senderUserID, Current_State;
+    private String receiverUserID, senderUserID, Current_State,currentUserID,currentUserName;
 
     private CircleImageView userProfileImage;
     private TextView userProfileName, userProfileStatus;
@@ -46,6 +65,12 @@ public class ProfileActivity extends AppCompatActivity
 //    private DatabaseReference UserRef, ChatRequestRef, ContactsRef, NotificationRef;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
+    final private String contentType = "application/json";
+
+    private Bitmap userImgbitmap;
 
 
     @Override
@@ -59,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity
 
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         senderUserID = mAuth.getCurrentUser().getUid();
+        currentUserID = mAuth.getCurrentUser().getUid();
 
         userProfileImage = (CircleImageView) findViewById(R.id.visit_profile_image);
         userProfileName = (TextView) findViewById(R.id.visit_user_name);
@@ -67,6 +93,21 @@ public class ProfileActivity extends AppCompatActivity
         DeclineMessageRequestButton = (Button) findViewById(R.id.decline_message_request_button);
         Current_State = "new";
 
+        final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
+                .document(currentUserID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists()) {
+                        currentUserName=snapshot.getString("name");
+                    } else {
+
+                    }
+                }
+            }
+        });
         RetrieveUserInfo();
     }
 
@@ -76,101 +117,130 @@ public class ProfileActivity extends AppCompatActivity
     {
         final DocumentReference docRef = db.collection("user").document(receiverUserID).collection("profile")
                 .document(receiverUserID);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("TAG", "Listen failed.", e);
-                    return;
-                }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
+                        String userImage = snapshot.getString("image");
+                        String userName = snapshot.getString("name");
+                        String userstatus = snapshot.getString("status");
 
-                if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
-                    String userImage = snapshot.getString("image");
-                    String userName = snapshot.getString("name");
-                    String userstatus = snapshot.getString("status");
+//                        userProfileImage.setImageURI(Uri.fromFile(new File(userImage)));
+                        Picasso.get().load(userImage).into(userProfileImage);
 
-                    Picasso.get().load(userImage).placeholder(R.drawable.head).into(userProfileImage);
-                    userProfileName.setText(userName);
-                    userProfileStatus.setText(userstatus);
+//                        getBitmapFromUrl thread=new getBitmapFromUrl();
+//                        thread.start();
+//                        try {
+//                            thread.join();
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        userProfileImage.setImageBitmap(userImgbitmap);
 
-
-                    ManageChatRequests();
-                } else if(snapshot != null && snapshot.exists() && snapshot.contains("name")) {
-                    String userName = snapshot.getString("name");
-                    String userstatus = snapshot.getString("status");
-
-                    userProfileName.setText(userName);
-                    userProfileStatus.setText(userstatus);
+                        userProfileName.setText(userName);
+                        userProfileStatus.setText(userstatus);
 
 
-                    ManageChatRequests();
+                        ManageChatRequests();
+                    } else if(snapshot != null && snapshot.exists() && snapshot.contains("name")){
+                        String userName = snapshot.getString("name");
+                        String userstatus = snapshot.getString("status");
+
+                        userProfileName.setText(userName);
+                        userProfileStatus.setText(userstatus);
+
+
+                        ManageChatRequests();
+                    }
+                } else {
+
                 }
             }
         });
     }
 
+//    public class getBitmapFromUrl extends Thread{
+//        public void run(){
+//            try
+//            {
+//                URL url = new URL(userImage);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setDoInput(true);
+//                connection.connect();
+//                InputStream input = connection.getInputStream();
+//                userImgbitmap = BitmapFactory.decodeStream(input);
+//            }
+//            catch (IOException e)
+//            {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     private void ManageChatRequests()
     {
-        final DocumentReference docRef = db.collection("add_friend_request").document(senderUserID);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        final DocumentReference docRef = db.collection("add_friend_request").document(senderUserID).
+                collection("UserID").document(receiverUserID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("TAG", "Listen failed.", e);
-                    return;
-                }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists()) {
+                        String request_type = snapshot.getString("request_type");
 
-                if (snapshot.contains(receiverUserID))
-                {
-                    String request_type = snapshot.getString("request_type");
+                        if (request_type.equals("sent"))
+                        {
+                            Current_State = "request_sent";
+                            SendMessageRequestButton.setText("Cancel Add Request");
+                        }
+                        else if (request_type.equals("received"))
+                        {
+                            Current_State = "request_received";
+                            SendMessageRequestButton.setText("Accept Add Request");
 
-                    if (request_type.equals("sent"))
-                    {
-                        Current_State = "request_sent";
-                        SendMessageRequestButton.setText("Cancel Add Request");
-                    }
-                    else if (request_type.equals("received"))
-                    {
-                        Current_State = "request_received";
-                        SendMessageRequestButton.setText("Accept Add Request");
+                            DeclineMessageRequestButton.setVisibility(View.VISIBLE);
+                            DeclineMessageRequestButton.setEnabled(true);
 
-                        DeclineMessageRequestButton.setVisibility(View.VISIBLE);
-                        DeclineMessageRequestButton.setEnabled(true);
+                            DeclineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view)
+                                {
+                                    CancelAddRequest();
+                                }
+                            });
+                        }
 
-                        DeclineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+
+                        ManageChatRequests();
+                    } else{
+                        DocumentReference docIdRef = db.collection("user").document(senderUserID).
+                                collection("friends").document(receiverUserID);
+                        docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onClick(View view)
-                            {
-                                CancelAddRequest();
-                            }
-                        });
-                    }
-                }
-                else
-                {
-                    DocumentReference docIdRef = db.collection("user").document(senderUserID).
-                            collection("friends").document(receiverUserID);
-                    docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Current_State = "friends";
-                                    SendMessageRequestButton.setText("Remove this Friend");
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Current_State = "friends";
+                                        SendMessageRequestButton.setText("Remove this Friend");
+                                    } else {
+
+                                    }
                                 } else {
 
                                 }
-                            } else {
-
                             }
-                        }
-                    });
+                        });
+                    }
+                } else {
+
                 }
             }
         });
+
 
         if (!senderUserID.equals(receiverUserID))
         {
@@ -214,7 +284,7 @@ public class ProfileActivity extends AppCompatActivity
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        db.collection("add_friend_request").document(receiverUserID).
+                        db.collection("user").document(receiverUserID).
                                 collection("friends").document(senderUserID).delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -252,7 +322,7 @@ public class ProfileActivity extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
-                            db.collection("add_friend_request").document(receiverUserID).
+                            db.collection("user").document(receiverUserID).
                                     collection("friends").document(senderUserID).set(senderdata)
                                     .addOnCompleteListener(new OnCompleteListener() {
                                         @Override
@@ -264,14 +334,14 @@ public class ProfileActivity extends AppCompatActivity
                                                 Map<String,Object> updates = new HashMap<>();
                                                 updates.put("request_type", FieldValue.delete());
 
-                                                docRef.update(updates).addOnCompleteListener(new OnCompleteListener() {
+                                                docRef.delete().addOnCompleteListener(new OnCompleteListener() {
                                                     @Override
                                                     public void onComplete(@NonNull Task task) {
                                                         if (task.isSuccessful()) {
 
                                                             db.collection("add_friend_request").document(receiverUserID).
                                                                     collection("UserID").
-                                                                    document(senderUserID).update(updates)
+                                                                    document(senderUserID).delete()
                                                                     .addOnCompleteListener(new OnCompleteListener() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task task) {
@@ -282,6 +352,53 @@ public class ProfileActivity extends AppCompatActivity
 
                                                                                 DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
                                                                                 DeclineMessageRequestButton.setEnabled(false);
+
+                                                                                String saveCurrentTime, saveCurrentDate;
+
+                                                                                Calendar calendar = Calendar.getInstance();
+
+                                                                                SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+                                                                                saveCurrentDate = currentDate.format(calendar.getTime());
+
+                                                                                SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+                                                                                saveCurrentTime = currentTime.format(calendar.getTime());
+
+                                                                                HashMap<String, String> chatNotificationMap = new HashMap<>();
+                                                                                chatNotificationMap.put("from", senderUserID);
+                                                                                chatNotificationMap.put("type", "accept");
+                                                                                chatNotificationMap.put("time", saveCurrentTime);
+                                                                                chatNotificationMap.put("date", saveCurrentDate);
+
+                                                                                db.collection("user").document(receiverUserID).
+                                                                                        collection("notification").
+                                                                                        document().
+                                                                                        set(chatNotificationMap);
+
+                                                                                db.collection("user").document(receiverUserID).
+                                                                                        get().
+                                                                                        addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                            @Override
+                                                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                                if (task.isSuccessful()) {
+                                                                                                    DocumentSnapshot document = task.getResult();
+                                                                                                    if (document.exists()) {
+                                                                                                        String RECEIVER_DEVICE = document.getString("device_token");
+                                                                                                        JSONObject notification = new JSONObject();
+                                                                                                        JSONObject notifcationBody = new JSONObject();
+                                                                                                        try {
+                                                                                                            notifcationBody.put("title", "您有新的好友");
+                                                                                                            notifcationBody.put("message", currentUserName+"接受了您的交友邀請");
+                                                                                                            notification.put("to", RECEIVER_DEVICE);
+                                                                                                            notification.put("data", notifcationBody);
+                                                                                                        } catch (JSONException e) {
+                                                                                                        }
+                                                                                                        sendNotification(notification);
+                                                                                                    } else {
+                                                                                                    }
+                                                                                                } else {
+                                                                                                }
+                                                                                            }
+                                                                                        });
                                                                             }
                                                                         }
                                                                     });
@@ -304,13 +421,12 @@ public class ProfileActivity extends AppCompatActivity
         Map<String,Object> updates = new HashMap<>();
         updates.put("request_type", FieldValue.delete());
 
-        docRef.update(updates).addOnCompleteListener(new OnCompleteListener() {
+        docRef.delete().addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
-
                             db.collection("add_friend_request").document(receiverUserID).collection("UserID").
-                                    document(senderUserID).update(updates)
+                                    document(senderUserID).delete()
                                     .addOnCompleteListener(new OnCompleteListener() {
                                         @Override
                                         public void onComplete(@NonNull Task task) {
@@ -321,6 +437,7 @@ public class ProfileActivity extends AppCompatActivity
 
                                                 DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
                                                 DeclineMessageRequestButton.setEnabled(false);
+
                                             }
                                         }
                                     });
@@ -351,11 +468,26 @@ public class ProfileActivity extends AppCompatActivity
                                         @Override
                                         public void onComplete(@NonNull Task task) {
                                             if (task.isSuccessful()) {
+                                                String saveCurrentTime, saveCurrentDate;
+
+                                                Calendar calendar = Calendar.getInstance();
+
+                                                SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+                                                saveCurrentDate = currentDate.format(calendar.getTime());
+
+                                                SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+                                                saveCurrentTime = currentTime.format(calendar.getTime());
+
                                                 HashMap<String, String> chatNotificationMap = new HashMap<>();
                                                 chatNotificationMap.put("from", senderUserID);
                                                 chatNotificationMap.put("type", "request");
+                                                chatNotificationMap.put("time", saveCurrentTime);
+                                                chatNotificationMap.put("date", saveCurrentDate);
 
-                                                db.collection("notification").document(receiverUserID).set(chatNotificationMap)
+                                                db.collection("user").document(receiverUserID).
+                                                        collection("notification").
+                                                        document().
+                                                        set(chatNotificationMap)
                                                         .addOnCompleteListener(new OnCompleteListener() {
                                                             @Override
                                                             public void onComplete(@NonNull Task task) {
@@ -366,6 +498,31 @@ public class ProfileActivity extends AppCompatActivity
                                                                 }
                                                             }
                                                         });
+                                                db.collection("user").document(receiverUserID).
+                                                        get().
+                                                        addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document.exists()) {
+                                                                String RECEIVER_DEVICE = document.getString("device_token");
+                                                                JSONObject notification = new JSONObject();
+                                                                JSONObject notifcationBody = new JSONObject();
+                                                                try {
+                                                                    notifcationBody.put("title", "您有新的好友邀請");
+                                                                    notifcationBody.put("message", currentUserName+"對您傳送了交友邀請");
+                                                                    notification.put("to", RECEIVER_DEVICE);
+                                                                    notification.put("data", notifcationBody);
+                                                                } catch (JSONException e) {
+                                                                }
+                                                                sendNotification(notification);
+                                                            } else {
+                                                            }
+                                                        } else {
+                                                        }
+                                                    }
+                                                });
                                             }
                                         }
                                     });
@@ -373,5 +530,30 @@ public class ProfileActivity extends AppCompatActivity
                     }
                 });
 
+    }
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ProfileActivity.this, "Request error", Toast.LENGTH_LONG).show();
+
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 }
