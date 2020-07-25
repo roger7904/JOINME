@@ -59,7 +59,7 @@
         android:textColor="@android:color/background_light"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:text="Send Message"
+        android:text="Add Friend"
         android:textAllCaps="false"
         />
 
@@ -75,7 +75,7 @@
         android:textColor="@android:color/background_light"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:text="Cancel Chat Request"
+        android:text="Cancel Add Request"
         android:textAllCaps="false"
         android:visibility="invisible"
         />

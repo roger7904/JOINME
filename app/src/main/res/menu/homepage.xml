@@ -8,9 +8,15 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_logout"
+    android:id="@+id/action_logout"
+    android:orderInCategory="100"
+    android:title="logout"
+    app:showAsAction="never" />
+
+    <item
+        android:id="@+id/findfriend"
         android:orderInCategory="100"
-        android:title="logout"
+        android:title="Find Friend"
         app:showAsAction="never" />
 
 </menu>

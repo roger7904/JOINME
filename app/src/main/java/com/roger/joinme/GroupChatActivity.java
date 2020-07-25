@@ -59,7 +59,6 @@ public class GroupChatActivity extends AppCompatActivity
     private TextView displayTextMessages;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference UsersRef, GroupNameRef, GroupMessageKeyRef;
     private FirebaseFirestore db;
 
     private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime;

@@ -1,122 +1,119 @@
-//package com.roger.joinme;
-//
-//import android.content.Intent;
-//
-//import android.os.Bundle;
-//
-//import android.provider.ContactsContract;
-//import android.view.LayoutInflater;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.widget.TextView;
-//
-//
-//import androidx.annotation.NonNull;
-//import androidx.appcompat.app.AppCompatActivity;
-//import androidx.appcompat.widget.Toolbar;
-//import androidx.recyclerview.widget.LinearLayoutManager;
-//import androidx.recyclerview.widget.RecyclerView;
-//
-//import com.firebase.ui.database.FirebaseRecyclerAdapter;
-//import com.firebase.ui.database.FirebaseRecyclerOptions;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
-//import com.google.firebase.firestore.FirestoreRegistrar;
-//import com.squareup.picasso.Picasso;
-//
-//import de.hdodenhof.circleimageview.CircleImageView;
-//
-//public class FindFriendsActivity extends AppCompatActivity
-//{
-//    private Toolbar mToolbar;
-//    private RecyclerView FindFriendsRecyclerList;
-//    private DatabaseReference UsersRef;
-//
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState)
-//    {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_find_friends);
-//
-//
-//        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-//
-//
-//        FindFriendsRecyclerList = (RecyclerView) findViewById(R.id.find_friends_recycler_list);
-//        FindFriendsRecyclerList.setLayoutManager(new LinearLayoutManager(this));
-//
-//
-//        mToolbar = (Toolbar) findViewById(R.id.find_friends_toolbar);
-//        setSupportActionBar(mToolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setTitle("Find Friends");
-//    }
-//
-//
-//    @Override
-//    protected void onStart()
-//    {
-//        super.onStart();
-//        FirebaseRecyclerOptions<ContactsContract.Contacts> options =
-//                new FirebaseRecyclerOptions.Builder<ContactsContract.Contacts>()
-//                        .setQuery(UsersRef, ContactsContract.Contacts.class)
-//                        .build();
-//
-//        FirebaseRecyclerAdapter<ContactsContract.Contacts, FindFriendViewHolder> adapter =
-//                new FirebaseRecyclerAdapter<ContactsContract.Contacts, FindFriendViewHolder>(options) {
-//                    @Override
-//                    protected void onBindViewHolder(@NonNull FindFriendViewHolder holder, final int position, @NonNull ContactsContract.Contacts model)
-//                    {
-//                        holder.userName.setText(model.getClass().getName());
-//                        holder.userStatus.setText(model.getClass().);
-//                        Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
-//
-//
-//                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view)
-//                            {
-//                                String visit_user_id = getRef(position).getKey();
-//
-//                                Intent profileIntent = new Intent(FindFriendsActivity.this, ProfileActivity.class);
-//                                profileIntent.putExtra("visit_user_id", visit_user_id);
-//                                startActivity(profileIntent);
+package com.roger.joinme;
+
+import android.os.Bundle;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class FindFriendsActivity extends AppCompatActivity {
+
+    public List<userprofile> userprofileList;
+    public int count = 1,x = 0,y = 0;
+    public String joineraccount;
+    public String[] account = new String[10000];
+
+    private String currentUserID;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private userprofileAdapter userprofileadapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_find_friends);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
+
+        userprofileList = new ArrayList<>();
+
+//        for(x=0;x<MainActivity.count;x++){
+//            db.collection("activity")
+//                    .document(MainActivity.docString[x])
+//                    .collection("participant")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    if(!document.getString("account").equals("0")){
+////                                        System.out.println(count);
+//                                        account[count] = document.getString("account");
+//                                        itemList.add(new item(count,account[count]));
+//                                        count++;
+//                                    }
+//                                }
 //                            }
-//                        });
-//                    }
-//
-//                    @NonNull
-//                    @Override
-//                    public FindFriendViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
-//                    {
-//                        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
-//                        FindFriendViewHolder viewHolder = new FindFriendViewHolder(view);
-//                        return viewHolder;
-//                    }
-//                };
-//
-//        FindFriendsRecyclerList.setAdapter(adapter);
-//
-//        adapter.startListening();
-//    }
-//
-//
-//
-//    public static class FindFriendViewHolder extends RecyclerView.ViewHolder
-//    {
-//        TextView userName, userStatus;
-//        CircleImageView profileImage;
-//
-//
-//        public FindFriendViewHolder(@NonNull View itemView)
-//        {
-//            super(itemView);
-//
-//            userName = itemView.findViewById(R.id.user_profile_name);
-//            userStatus = itemView.findViewById(R.id.user_status);
-//            profileImage = itemView.findViewById(R.id.users_profile_image);
+//                        }
+//                    });
 //        }
-//    }
-//}
+        initView();
+        db.collection("user")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                db.collection("user").document(document.getId()).collection("profile")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot documentt : task.getResult()) {
+                                                        if (documentt.contains("name")) {
+                                                            userprofileList.add(new userprofile(
+                                                                    documentt.getString("name"),
+                                                                    documentt.getString("status"),
+                                                                    documentt.getString("image"),
+                                                                    documentt.getString("currentUserID")));
+                                                            userprofileadapter.notifyDataSetChanged();
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
+
+//        System.out.println(y);
+//        for(y=0;y<=count;y++){
+//            System.out.println("00000"+account[y]);
+//            y++;
+//            itemList.add(new item(y,account[y-1]));
+//        }
+
+//        System.out.println("test"+itemListt);
+        //userprofileList.add(new userprofile("name","status","image"));
+
+    }
+
+    public void initView(){
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rrecycleview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        userprofileadapter = new userprofileAdapter(this, userprofileList);
+        recyclerView.setAdapter(userprofileadapter);
+    }
+
+
+}

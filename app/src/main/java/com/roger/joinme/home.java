@@ -325,9 +325,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             LoginManager.getInstance().logOut();
             mAuth.signOut();
             SendUserToLoginActivity();
+        }if (item.getItemId() == R.id.findfriend)
+        {
+            SendUserToFindFriendsActivity();
         }
 
         return true;
+    }
+
+    private void SendUserToFindFriendsActivity()
+    {
+        Intent findFriendsIntent = new Intent(home.this, FindFriendsActivity.class);
+        startActivity(findFriendsIntent);
     }
 
     @Override

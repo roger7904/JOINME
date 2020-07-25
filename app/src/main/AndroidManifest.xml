@@ -82,10 +82,12 @@
             android:label="@string/title_activity_homepage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".register" />
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".noticetest" />
         <activity android:name=".testsetting" />
         <activity android:name=".testmain" />
         <activity android:name=".forgetpwd" />
+        <activity android:name=".FindFriendsActivity" />
         <activity android:name=".informationedit" />
         <activity
             android:name=".selfpage"
