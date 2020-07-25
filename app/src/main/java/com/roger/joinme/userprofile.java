@@ -1,14 +1,17 @@
 package com.roger.joinme;
 
+import android.net.Uri;
+
 public class userprofile {
-    public String name, status, image,id;
+    public String name, status,id;
+    public Uri image;
 
     public userprofile()
     {
 
     }
 
-    public userprofile(String name, String status, String image,String id) {
+    public userprofile(String name, String status, Uri image,String id) {
         this.name = name;
         this.status = status;
         this.image = image;
@@ -34,11 +37,11 @@ public class userprofile {
         this.status = status;
     }
 
-    public String getImage() {
+    public Uri getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
 }

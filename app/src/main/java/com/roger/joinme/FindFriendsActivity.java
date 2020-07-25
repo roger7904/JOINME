@@ -1,17 +1,24 @@
 package com.roger.joinme;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +36,7 @@ public class FindFriendsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private userprofileAdapter userprofileadapter;
+    private StorageReference UserProfileImagesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,7 @@ public class FindFriendsActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         userprofileList = new ArrayList<>();
+        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
 //        for(x=0;x<MainActivity.count;x++){
 //            db.collection("activity")
@@ -77,14 +86,43 @@ public class FindFriendsActivity extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     for (QueryDocumentSnapshot documentt : task.getResult()) {
-                                                        if (documentt.contains("name")) {
-                                                            userprofileList.add(new userprofile(
-                                                                    documentt.getString("name"),
-                                                                    documentt.getString("status"),
-                                                                    documentt.getString("image"),
-                                                                    documentt.getString("currentUserID")));
-                                                            userprofileadapter.notifyDataSetChanged();
-
+                                                        if (documentt.contains("name") && documentt.contains("image")) {
+                                                            String name = documentt.getString("name");
+                                                            String status = documentt.getString("status");
+                                                            String id = documentt.getString("currentUserID");
+                                                            UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                    userprofileList.add(new userprofile(
+                                                                            name, status, uri, id));
+                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception exception) {
+                                                                    // Handle any errors
+                                                                }
+                                                            });
+                                                        }
+                                                        else if(documentt.contains("name")){
+                                                            String name=documentt.getString("name");
+                                                            String status=documentt.getString("status");
+                                                            String id=documentt.getString("currentUserID");
+                                                            UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                    userprofileList.add(new userprofile(
+                                                                            name, status, uri, id));
+                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception exception) {
+                                                                    // Handle any errors
+                                                                }
+                                                            });
                                                         }
                                                     }
                                                 }

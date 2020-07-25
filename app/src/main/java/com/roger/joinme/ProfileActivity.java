@@ -20,6 +20,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -71,6 +74,7 @@ public class ProfileActivity extends AppCompatActivity
     final private String contentType = "application/json";
 
     private Bitmap userImgbitmap;
+    private StorageReference UserProfileImagesRef;
 
 
     @Override
@@ -92,6 +96,8 @@ public class ProfileActivity extends AppCompatActivity
         SendMessageRequestButton = (Button) findViewById(R.id.send_message_request_button);
         DeclineMessageRequestButton = (Button) findViewById(R.id.decline_message_request_button);
         Current_State = "new";
+
+        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
                 .document(currentUserID);
@@ -128,7 +134,21 @@ public class ProfileActivity extends AppCompatActivity
                         String userstatus = snapshot.getString("status");
 
 //                        userProfileImage.setImageURI(Uri.fromFile(new File(userImage)));
-                        Picasso.get().load(userImage).into(userProfileImage);
+                        UserProfileImagesRef.child(receiverUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
+                                Glide.with(ProfileActivity.this)
+                                        .load(uri)
+                                        .circleCrop()
+                                        .into(userProfileImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
 
 //                        getBitmapFromUrl thread=new getBitmapFromUrl();
 //                        thread.start();
@@ -147,7 +167,10 @@ public class ProfileActivity extends AppCompatActivity
                     } else if(snapshot != null && snapshot.exists() && snapshot.contains("name")){
                         String userName = snapshot.getString("name");
                         String userstatus = snapshot.getString("status");
-
+                        Glide.with(ProfileActivity.this)
+                                .load(R.drawable.head)
+                                .circleCrop()
+                                .into(userProfileImage);
                         userProfileName.setText(userName);
                         userProfileStatus.setText(userstatus);
 

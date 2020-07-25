@@ -264,14 +264,6 @@ public class testsetting extends AppCompatActivity
 //                                .resize(200,220)
 //                                .into(userProfileImage);
 
-                        // Reference to an image file in Cloud Storage
-                        StorageReference storageReference = FirebaseStorage.getInstance()
-                                .getReference()
-                                .child("Profile Images")
-                                .child(currentUserID+".jpg");
-
-                        // Download directly from StorageReference using Glide
-                        // (See MyAppGlideModule for Loader registration)
                         UserProfileImagesRef.child(currentUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
@@ -293,10 +285,18 @@ public class testsetting extends AppCompatActivity
                         String retrieveUserName = snapshot.getString("name");
                         String retrievesStatus = snapshot.getString("status");
                         System.out.println("name ststus");
+                        Glide.with(testsetting.this)
+                                .load(R.drawable.head)
+                                .circleCrop()
+                                .into(userProfileImage);
                         userName.setText(retrieveUserName);
                         userStatus.setText(retrievesStatus);
                         Log.d("TAG", "source" + " data: null");
                     } else {
+                        Glide.with(testsetting.this)
+                                .load(R.drawable.head)
+                                .circleCrop()
+                                .into(userProfileImage);
                         userName.setVisibility(View.VISIBLE);
                         Toast.makeText(testsetting.this, "Please set & update your profile information...", Toast.LENGTH_SHORT).show();
                     }

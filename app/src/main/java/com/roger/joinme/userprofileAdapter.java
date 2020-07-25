@@ -3,6 +3,7 @@ package com.roger.joinme;
 import android.content.Context;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,22 +47,14 @@ public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.
     @Override
     public void onBindViewHolder(userprofileAdapter.ViewHolder holder, int position) {
         userprofile userprofile = userprofileList.get(position);
-//        holder.
-
-        Picasso.get().load(userprofile.getImage()).into(holder.circleImageViewid);
         holder.textName.setText(userprofile.getName());
         holder.textStatus.setText(userprofile.getStatus());
 
-//        holder.activity.setText(item.getContent());
-//        holder.activity.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-////                Intent intent = new Intent();
-////                intent.setClass(itemAdapter.this,verify.class);
-////                startActivity(intent);
-//                System.out.println("123");
-//            }
-//        });
+        Glide.with(holder.itemView.getContext())
+                .load(userprofile.getImage())
+                .circleCrop()
+                .into(holder.circleImageViewid);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -75,14 +73,14 @@ public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        CircleImageView circleImageViewid;
+        ImageView circleImageViewid;
         ImageView useronlineimage;
         TextView textStatus, textName;
         Button btnaccept;
         Button btncancel;
         ViewHolder(View itemView) {
             super(itemView);
-            circleImageViewid=(CircleImageView) itemView.findViewById(R.id.users_profile_image);
+            circleImageViewid= (ImageView) itemView.findViewById(R.id.users_profile_image);
             useronlineimage = (ImageView) itemView.findViewById(R.id.user_online_status);
             textStatus = (TextView) itemView.findViewById(R.id.user_status);
             textName = (TextView) itemView.findViewById(R.id.user_profile_name);
