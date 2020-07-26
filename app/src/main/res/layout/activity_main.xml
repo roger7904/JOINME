@@ -28,14 +28,14 @@
         android:background="@drawable/shape_textview"
         android:ems="10"
 
-        android:hint="帳號"
+        android:hint="信箱"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.439" />
+        app:layout_constraintVertical_bias="0.448" />
 
     <EditText
         android:id="@+id/passwd"
@@ -52,7 +52,7 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551" />
+        app:layout_constraintVertical_bias="0.566" />
 
     <Button
         android:id="@+id/login"
@@ -75,18 +75,35 @@
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="#e0e0e0"
         android:stateListAnimator="@null"
+
         android:text="@string/register"
         android:textColor="@color/colorButtonText"
         android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@id/account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.273"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintVertical_bias="0.485" />
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintHorizontal_bias="0.593"
+    <Button
+        android:id="@+id/loginPage"
+        android:layout_width="94dp"
+        android:layout_height="43dp"
+        android:background="@drawable/loginBtnBck"
+        android:stateListAnimator="@null"
+
+        android:text="登入"
+        android:textColor="@color/colorButtonText"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@id/account"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
+        app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintVertical_bias="0.485" />
 
     <Button
         android:id="@+id/forgetpassword"
@@ -95,57 +112,37 @@
         android:background="#006DA251"
         android:stateListAnimator="@null"
         android:text="@string/forget_pwd"
+
         android:textColor="@color/colorButtonText"
         android:textSize="20dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.393"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintVertical_bias="0.175" />
 
     <TextView
         android:id="@+id/or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="175dp"
-        android:layout_marginLeft="175dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="177dp"
-        android:layout_marginRight="177dp"
+        android:layout_marginTop="8dp"
         android:text="@string/or"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register" />
-
-    <Button
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="27dp"
-        android:layout_marginRight="27dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/forgetpassword" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="183dp"
+        android:layout_height="26dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="104dp"
-        android:layout_marginLeft="104dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="107dp"
-        android:layout_marginRight="107dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.458"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/or" />
+        app:layout_constraintTop_toBottomOf="@id/or"
+        app:layout_constraintVertical_bias="0.322" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -153,5 +150,28 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="206dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="151dp"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toTopOf="@id/login_button"
+        app:layout_constraintEnd_toStartOf="@id/or"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/forgetpassword"
+        tools:layout_constraintBottom_toTopOf="@id/login_button"
+        tools:layout_constraintEnd_toStartOf="@id/or"
+        tools:layout_constraintTop_toBottomOf="@id/forgetpassword" />
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="151dp"
+        android:layout_height="1dp"
+        android:background="#0B0A0A"
+        app:layout_constraintBottom_toTopOf="@id/login_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/or"
+        app:layout_constraintTop_toBottomOf="@id/forgetpassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

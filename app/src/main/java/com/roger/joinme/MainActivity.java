@@ -65,6 +65,7 @@ public class MainActivity extends FragmentActivity {
     private Button login;
     private Button register;
     private Button ForgetPasswordLink;
+    public Button loginPageBtn;
 
 
     private LoginButton loginButton;
@@ -100,12 +101,6 @@ public class MainActivity extends FragmentActivity {
         initData();
         setListeners();
         count = 0;
-
-
-
-
-
-
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -373,6 +368,7 @@ public class MainActivity extends FragmentActivity {
         UserEmail = (EditText)findViewById(R.id.account);
         UserPassword = (EditText)findViewById(R.id.passwd);
         loadingBar = new ProgressDialog(this);
+        loginPageBtn = (Button)findViewById(R.id.loginPage);
     }
 
     private void initData()
@@ -404,6 +400,7 @@ public class MainActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
+        loginPageBtn.setEnabled(false);
 //        loginButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

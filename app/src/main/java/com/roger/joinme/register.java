@@ -33,6 +33,8 @@ public class register extends AppCompatActivity {
     private EditText UserEmail;
     private EditText UserPassword;
     private Button CreateAccountButton;
+    public Button loginBtn;
+    public Button registerBtn;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -72,6 +74,8 @@ public class register extends AppCompatActivity {
         back_to_login=(Button)findViewById(R.id.btn_back_to_login);
         loadingBar = new ProgressDialog(this);
         CreateAccountButton = (Button) findViewById(R.id.button_verify);
+        loginBtn = (Button)findViewById(R.id.loginPage);
+        registerBtn = (Button)findViewById(R.id.registerPage);
     }
 
     private void initData()
@@ -97,6 +101,8 @@ public class register extends AppCompatActivity {
                 CreateNewAccount();
             }
         });
+        loginBtn.setEnabled(false);
+        registerBtn.setEnabled(false);
     }
     private void CreateNewAccount()
     {

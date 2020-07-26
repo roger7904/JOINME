@@ -12,13 +12,13 @@
     <string name="favorite_page">收藏</string>
     <string name="or">或</string>
     <string name="fblogin">使用Facebook登入</string>
-    <string name="forget_pwd">忘記密碼</string>
+    <string name="forget_pwd">忘記密碼?</string>
     <string name="account">帳號</string>
     <string name="password">密碼</string>
     <string name="register">註冊</string>
     <string name="email">信箱</string>
     <string name="verification_code">驗證碼</string>
-    <string name="verify">驗證</string>
+    <string name="verify">發送驗證碼</string>
     <string name="title_activity_homepage">homepage</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

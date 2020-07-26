@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class informationedit extends AppCompatActivity {
 
     private Button send;
+    public Button loginPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class informationedit extends AppCompatActivity {
     private void initViews()
     {
         send=(Button)findViewById(R.id.btn_send);
+        loginPage=(Button)findViewById(R.id.loginPage);
     }
 
 
@@ -35,5 +37,6 @@ public class informationedit extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        loginPage.setEnabled(false);
     }
 }
