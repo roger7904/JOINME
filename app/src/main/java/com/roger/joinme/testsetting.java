@@ -180,6 +180,7 @@ public class testsetting extends AppCompatActivity
                             imgdata.put("image",downloaedUrl);
                             db.collection("user").document(currentUserID).collection("profile")
                                     .document(currentUserID).set(imgdata,SetOptions.merge());
+                            RetrieveUserInfo();
                             loadingBar.dismiss();
                         }
                         else

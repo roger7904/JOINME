@@ -208,7 +208,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         {
             updateUserStatus("online");
 
-            //VerifyUserExistance();
+            VerifyUserExistance();
         }
     }
 
@@ -236,7 +236,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void VerifyUserExistance()
     {
-        db.collection("user").document(currentUserID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection("user").document(currentUserID)
+                .collection("profile")
+                .document(currentUserID)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -244,8 +247,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     Log.w("TAG", "Listen failed.", e);
                     return;
                 }
-                if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
-                    //這邊要驗證有沒有設定名字
+                if (snapshot != null && snapshot.exists()) {
                     Toast.makeText(home.this, "歡迎", Toast.LENGTH_SHORT).show();
                 } else {
                     SendUserToSettingsActivity();
