@@ -217,7 +217,26 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.ViewHold
                             }
                         });
 
+                db.collection("message").document(currentUserID).
+                        collection("UserID").document(request.getID())
+                        .set(receiverdata)
+                        .addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    db.collection("message").document(request.getID()).
+                                            collection("UserID").document(currentUserID).set(senderdata)
+                                            .addOnCompleteListener(new OnCompleteListener() {
+                                                @Override
+                                                public void onComplete(@NonNull Task task) {
+                                                    if (task.isSuccessful()) {
 
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
             }
         });
 

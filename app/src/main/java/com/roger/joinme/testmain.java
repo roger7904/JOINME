@@ -52,48 +52,6 @@ public class testmain extends AppCompatActivity
     }
 
 
-//
-//
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu)
-//    {
-//        super.onCreateOptionsMenu(menu);
-//
-//        getMenuInflater().inflate(R.menu.options_menu, menu);
-//
-//        return true;
-//    }
-//
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item)
-//    {
-//        super.onOptionsItemSelected(item);
-//
-//        if (item.getItemId() == R.id.main_logout_option)
-//        {
-//            updateUserStatus("offline");
-//            mAuth.signOut();
-//            SendUserToLoginActivity();
-//        }
-//        if (item.getItemId() == R.id.main_settings_option)
-//        {
-//            SendUserToSettingsActivity();
-//        }
-//        if (item.getItemId() == R.id.main_create_group_option)
-//        {
-//            RequestNewGroup();
-//        }
-//        if (item.getItemId() == R.id.main_find_friends_option)
-//        {
-//            SendUserToFindFriendsActivity();
-//        }
-//
-//        return true;
-//    }
-//
-//
 //    private void RequestNewGroup()
 //    {
 //        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
@@ -130,41 +88,5 @@ public class testmain extends AppCompatActivity
 //
 //        builder.show();
 //    }
-//
-//
-//
-//    private void CreateNewGroup(final String groupName)
-//    {
-//        RootRef.child("Groups").child(groupName).setValue("")
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task)
-//                    {
-//                        if (task.isSuccessful())
-//                        {
-//                            Toast.makeText(MainActivity.this, groupName + " group is Created Successfully...", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
-//
-//
-
-//
-//    private void SendUserToSettingsActivity()
-//    {
-//        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-//        startActivity(settingsIntent);
-//    }
-//
-//
-//    private void SendUserToFindFriendsActivity()
-//    {
-//        Intent findFriendsIntent = new Intent(MainActivity.this, com.roger.joinme.FindFriendsActivity.class);
-//        startActivity(findFriendsIntent);
-//    }
-//
-//
-//
 
 }

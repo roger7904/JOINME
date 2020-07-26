@@ -13,16 +13,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.squareup.picasso.Picasso;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.ViewHolder> {
     private Context context;
@@ -34,9 +27,6 @@ public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.
         this.userprofileList = userprofileList;
 
     }
-
-//    public userprofileAdapter(FindFriendsActivity findFriendsActivity, List<userprofile> userprofileList) {
-//    }
 
     @Override
     public userprofileAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,10 +49,19 @@ public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.
             @Override
             public void onClick(View view)
             {
-                String visit_user_id = userprofile.getID();
-                Intent profileIntent = new Intent(holder.itemView.getContext(), ProfileActivity.class);
-                profileIntent.putExtra("visit_user_id", visit_user_id);
-                holder.itemView.getContext().startActivity(profileIntent);
+                if(userprofile.getActivity().equals("find_friend") || userprofile.getActivity().equals("friend")){
+                    String visit_user_id = userprofile.getID();
+                    Intent profileIntent = new Intent(holder.itemView.getContext(), ProfileActivity.class);
+                    profileIntent.putExtra("visit_user_id", visit_user_id);
+                    holder.itemView.getContext().startActivity(profileIntent);
+                }else if(userprofile.getActivity().equals("chat")){
+                    Intent chatIntent = new Intent(holder.itemView.getContext(), ChatActivity.class);
+                    chatIntent.putExtra("visit_user_id", userprofile.getID());
+                    chatIntent.putExtra("visit_user_name", userprofile.getName());
+                    chatIntent.putExtra("visit_image", userprofile.getImage());
+                    holder.itemView.getContext().startActivity(chatIntent);
+                }
+
             }
         });
     }

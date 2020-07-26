@@ -3,7 +3,7 @@ package com.roger.joinme;
 import android.net.Uri;
 
 public class userprofile {
-    public String name, status,id;
+    public String name, status,id,activity;
     public Uri image;
 
     public userprofile()
@@ -11,13 +11,16 @@ public class userprofile {
 
     }
 
-    public userprofile(String name, String status, Uri image,String id) {
+    public userprofile(String name, String status, Uri image,String id,String activity) {
         this.name = name;
         this.status = status;
         this.image = image;
         this.id=id;
+        this.activity=activity;
     }
-
+    public String getActivity() {
+        return activity;
+    }
     public String getName() {
         return name;
     }
