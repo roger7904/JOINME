@@ -10,13 +10,26 @@
     <item
     android:id="@+id/action_logout"
     android:orderInCategory="100"
-    android:title="logout"
+    android:title="登出"
     app:showAsAction="never" />
 
     <item
-        android:id="@+id/findfriend"
+    android:id="@+id/findfriend"
+    android:orderInCategory="100"
+    android:title="尋找好友"
+    app:showAsAction="never" />
+
+    <item
+        android:id="@+id/main_settings_option"
         android:orderInCategory="100"
-        android:title="Find Friend"
+        android:title="設定個人資料"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/friend_request"
+        android:orderInCategory="100"
+        android:title="好友邀請"
+        app:showAsAction="never" />
+
 
 </menu>

@@ -329,8 +329,21 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         {
             SendUserToFindFriendsActivity();
         }
+        if (item.getItemId() == R.id.main_settings_option)
+        {
+            SendUserToSettingsActivity();
+        }if (item.getItemId() == R.id.friend_request)
+        {
+            SendUserTorequest();
+        }
 
         return true;
+    }
+
+    private void SendUserTorequest()
+    {
+        Intent findFriendsIntent = new Intent(home.this, friend_request.class);
+        startActivity(findFriendsIntent);
     }
 
     private void SendUserToFindFriendsActivity()
@@ -727,7 +740,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(home.this, testsetting.class);
+                intent.setClass(home.this, noticeupdate.class);
                 startActivity(intent);
             }
         });

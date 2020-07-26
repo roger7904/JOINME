@@ -82,6 +82,7 @@
             android:label="@string/title_activity_homepage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".register" />
+        <activity android:name=".friend_request" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".noticetest" />
         <activity android:name=".testsetting" />
