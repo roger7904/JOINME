@@ -541,7 +541,7 @@ public class jo extends AppCompatActivity {
                         //上傳DB改用thread實現
 
                         submitbtn.setEnabled(false);
-                        submitbtn.setText("報名成功");
+                        submitbtn.setText("創建成功");
                     } else {
                         Toast.makeText(jo.this, "活動起訖時間填寫錯誤", Toast.LENGTH_LONG).show();
                     }

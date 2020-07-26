@@ -56,12 +56,34 @@
                     <TextView
                         android:id="@+id/activityContent"
                         android:layout_width="match_parent"
-                        android:layout_height="275dp"
+                        android:layout_height="194dp"
                         android:scrollbars="vertical"
                         android:text="活動內容"
                         android:textSize="20sp" />
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/deletebtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="刪除活動" />
+
+                    <Button
+                        android:id="@+id/favoritebtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="加入收藏" />
+
+                </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
 
