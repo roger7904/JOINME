@@ -852,7 +852,11 @@ public class jo extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which, boolean isChecked)
                             {
                                 // TODO Auto-generated method stub
-                                flag_list[which]=true;
+                                if(isChecked){
+                                    flag_list[which]=true;
+                                }else{
+                                    flag_list[which]=false;
+                                }
                             }
                         })
                         .setPositiveButton("確認", new DialogInterface.OnClickListener()
