@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FindFriendsActivity extends AppCompatActivity {
 
-    public List<userprofile> userprofileList;
+    private List<userprofile> userprofileList;
     public int count = 1,x = 0,y = 0;
     public String joineraccount;
     public String[] account = new String[10000];
