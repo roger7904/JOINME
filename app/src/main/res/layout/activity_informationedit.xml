@@ -112,7 +112,7 @@
         android:layout_marginTop="36dp"
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
-        android:background="@drawable/loginBtnBck"
+        android:background="@drawable/loginbtnbck"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/loginPage"

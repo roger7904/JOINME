@@ -27,153 +27,154 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MapsActivity"
-            tools:layout_editor_absoluteX="47dp"
-            tools:layout_editor_absoluteY="-57dp" />
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <ImageView
             android:id="@+id/imageView25"
-            android:layout_width="462dp"
-            android:layout_height="162dp"
-            android:layout_marginTop="56dp"
+            android:layout_width="513dp"
+            android:layout_height="166dp"
             android:background="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="0.499"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.094" />
 
         <Button
             android:id="@+id/storebtn"
             android:layout_width="45dp"
             android:layout_height="74dp"
-            android:layout_marginTop="124dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginRight="28dp"
             android:background="@drawable/discount"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/ballbtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="0.251"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.201" />
 
         <Button
             android:id="@+id/ktvbtn"
             android:layout_width="45dp"
             android:layout_height="74dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginLeft="36dp"
-            android:layout_marginTop="124dp"
             android:background="@drawable/ktv"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/informationbtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.296"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.201" />
 
         <Button
             android:id="@+id/informationbtn"
             android:layout_width="45dp"
             android:layout_height="74dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="124dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:background="@drawable/timelimit"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/ballbtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="0.622"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.201" />
 
         <Button
             android:id="@+id/ballbtn"
             android:layout_width="45dp"
             android:layout_height="74dp"
-            android:layout_marginTop="124dp"
-            android:layout_marginEnd="56dp"
-            android:layout_marginRight="56dp"
             android:background="@drawable/ball"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.703"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.201" />
 
         <Button
             android:id="@+id/otherbtn"
             android:layout_width="45dp"
             android:layout_height="74dp"
-            android:layout_marginStart="112dp"
-            android:layout_marginLeft="112dp"
-            android:layout_marginTop="124dp"
             android:background="@drawable/others"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/informationbtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.748"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.201" />
 
         <Button
             android:id="@+id/settingBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginTop="600dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp"
             android:background="@drawable/setting"
-            app:layout_constraintBottom_toTopOf="@+id/map"
-            app:layout_constraintEnd_toStartOf="@+id/messageBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="0.118"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.873" />
 
         <Button
             android:id="@+id/messageBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginTop="600dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="34dp"
             android:background="@drawable/message"
-            app:layout_constraintBottom_toTopOf="@+id/map"
-            app:layout_constraintEnd_toStartOf="@+id/joBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="0.585"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.873" />
 
         <Button
             android:id="@+id/joBtn"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="164dp"
-            android:layout_marginLeft="164dp"
-            android:layout_marginTop="570dp"
             android:background="@drawable/jo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.901" />
 
         <Button
             android:id="@+id/noticeBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="600dp"
-            android:layout_marginBottom="34dp"
             android:background="@drawable/notice"
-            app:layout_constraintBottom_toTopOf="@+id/map"
-            app:layout_constraintStart_toEndOf="@+id/joBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.393"
+            app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.874" />
 
         <Button
             android:id="@+id/collectBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="600dp"
-            android:layout_marginBottom="34dp"
             android:background="@drawable/collection"
-            app:layout_constraintBottom_toTopOf="@+id/map"
-            app:layout_constraintStart_toEndOf="@+id/noticeBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.881"
+            app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.873" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="207dp" />
+            app:layout_constraintGuide_percent="0.5"
+            tools:layout_constraintGuide_percent="0.5" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -197,25 +198,25 @@
             android:id="@+id/editsuffer"
             android:layout_width="202dp"
             android:layout_height="35dp"
-            android:layout_marginTop="76dp"
-            android:layout_marginEnd="108dp"
-            android:layout_marginRight="108dp"
-            android:background="@drawable/shape_textview"
+            android:background="@drawable/shape_edittext"
             android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.109" />
 
         <Button
             android:id="@+id/button16"
             android:layout_width="35dp"
             android:layout_height="37dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginBottom="616dp"
             android:background="@drawable/p5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editsuffer"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.072"
+            app:layout_constraintStart_toEndOf="@id/editsuffer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.106" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

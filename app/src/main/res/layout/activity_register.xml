@@ -114,7 +114,7 @@
         android:id="@+id/registerPage"
         android:layout_width="94dp"
         android:layout_height="43dp"
-        android:background="@drawable/loginBtnBck"
+        android:background="@drawable/loginbtnbck"
         android:text="@string/register"
         android:textColor="@color/colorButtonText"
         android:textSize="18sp"

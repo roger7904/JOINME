@@ -92,7 +92,7 @@
         android:id="@+id/loginPage"
         android:layout_width="94dp"
         android:layout_height="43dp"
-        android:background="@drawable/loginBtnBck"
+        android:background="@drawable/loginbtnbck"
         android:stateListAnimator="@null"
 
         android:text="登入"

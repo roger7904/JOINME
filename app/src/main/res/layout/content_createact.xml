@@ -10,21 +10,22 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#e0e0e0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="73dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_textview"
                 android:orientation="horizontal"
-                android:paddingLeft="15sp"
-                android:paddingTop="10sp"
-                android:paddingRight="15sp"
-                android:paddingBottom="10sp">
+                android:paddingRight="10sp"
+                android:paddingBottom="10sp"
+                tools:layout_marginTop="10sp">
 
                 <TextView
                     android:id="@+id/textView29"
@@ -39,15 +40,18 @@
                 <EditText
                     android:id="@+id/editText6"
                     android:layout_width="237dp"
-                    android:layout_height="57dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="textPersonName" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="73dp"
+                android:layout_width="364dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="10sp"
+                android:background="@drawable/shape_textview"
                 android:orientation="horizontal"
                 android:paddingLeft="15sp"
                 android:paddingTop="10sp"
@@ -56,7 +60,7 @@
 
                 <TextView
                     android:id="@+id/textView30"
-                    android:layout_width="wrap_content"
+                    android:layout_width="108dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10sp"
@@ -67,7 +71,7 @@
                 <Spinner
                     android:id="@+id/activityType"
                     android:layout_width="237dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="37dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
 
@@ -223,6 +227,14 @@
                     android:layout_weight="1"
                     android:text="後結束"
                     android:textSize="24sp" />
+
+                <fragment
+                    android:id="@+id/nav_host_fragment"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:defaultNavHost="true"
+                    app:navGraph="@navigation/mobile_navigation" />
 
             </LinearLayout>
 
@@ -384,17 +396,6 @@
                 android:text="提交" />
         </LinearLayout>
     </ScrollView>
-
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
