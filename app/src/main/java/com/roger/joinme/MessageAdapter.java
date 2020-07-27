@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +28,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,6 +42,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private List<Messages> userMessagesList;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private StorageReference UserProfileImagesRef;
 
 
     public MessageAdapter (Context context,List<Messages> userMessagesList)
@@ -54,6 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
+        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
         return new MessageViewHolder(view);
     }
@@ -78,11 +85,38 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists() && document.contains("image")) {
-                        Glide.with(messageViewHolder.itemView.getContext())
-                                .load(fromUserID+".jpg")
-                                .circleCrop()
-                                .into(messageViewHolder.receiverProfileImage);
+                        UserProfileImagesRef.child(fromUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
+                                Glide.with(messageViewHolder.itemView.getContext())
+                                        .load(uri)
+                                        .circleCrop()
+                                        .into(messageViewHolder.receiverProfileImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
+
                     } else {
+                        UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Got the download URL for 'users/me/profile.png'
+                                Glide.with(messageViewHolder.itemView.getContext())
+                                        .load(uri)
+                                        .circleCrop()
+                                        .into(messageViewHolder.receiverProfileImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
 
                     }
                 } else {
@@ -90,6 +124,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 }
             }
         });
+
+
 
         messageViewHolder.receiverMessageText.setVisibility(View.GONE);
         messageViewHolder.receiverProfileImage.setVisibility(View.GONE);

@@ -7,75 +7,60 @@
     tools:context=".GroupChatActivity">
 
 
-    <com.google.android.material.appbar.AppBarLayout
+    <include
+        android:id="@+id/chat_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        layout="@layout/app_bar_layout">
+    </include>
 
 
-    <ScrollView
-        android:id="@+id/my_scroll_view"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/private_messages_list_of_users"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/myLinearLayout">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/group_chat_text_display"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:textColor="@android:color/background_dark"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="60dp"
-                />
-
-        </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/chat_toolbar"
+        android:layout_above="@+id/myLinearLayout"
+        android:layout_marginBottom="6dp"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
 
 
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/myLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/background_light"
+        android:orientation="horizontal"
         android:layout_alignParentLeft="true">
+
 
         <EditText
             android:id="@+id/input_group_message"
             android:layout_width="370dp"
             android:layout_height="wrap_content"
-            android:hint="write your message here..."
+            android:hint="輸入訊息"
             android:padding="17dp"
-            />
+            android:maxLines="5"
+            android:layout_toEndOf="@+id/send_files_btn"
+            android:layout_toStartOf="@+id/send_message_btn"
+            android:layout_toRightOf="@+id/send_files_btn"
+            android:layout_toLeftOf="@+id/send_message_btn" />
+
 
         <ImageButton
             android:id="@+id/send_message_button"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu_send"
-            />
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@android:color/white"
+            android:layout_alignParentRight="true" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

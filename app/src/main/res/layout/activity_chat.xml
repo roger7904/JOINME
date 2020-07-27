@@ -5,11 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
     tools:context=".ChatActivity">
 
     <include
         android:id="@+id/chat_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
         layout="@layout/app_bar_layout">
     </include>
 
@@ -50,7 +52,7 @@
             android:id="@+id/input_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="type message here..."
+            android:hint="輸入訊息"
             android:padding="15dp"
             android:maxLines="5"
             android:layout_toEndOf="@+id/send_files_btn"

@@ -120,11 +120,22 @@ public class ChatFragment extends Fragment {
                                                                         }
                                                                         else if(documentt.contains("name")){
                                                                             String name=documentt.getString("name");
-                                                                            String status=documentt.getString("status");
                                                                             String id=documentt.getString("currentUserID");
                                                                             UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                                 @Override
                                                                                 public void onSuccess(Uri uri) {
+                                                                                    String status="";
+                                                                                    if (state.equals("online"))
+                                                                                    {
+                                                                                        status="online";
+                                                                                    }
+                                                                                    else if (state.equals("offline"))
+                                                                                    {
+                                                                                        status="Last Seen: " + date + " " + time;
+                                                                                    }
+                                                                                    userprofileList.add(new userprofile(
+                                                                                            name, status, uri, id,"chat"));
+                                                                                    userprofileadapter.notifyDataSetChanged();
                                                                                     // Got the download URL for 'users/me/profile.png'
                                                                                     userprofileList.add(new userprofile(
                                                                                             name, status, uri, id,"chat"));
