@@ -386,11 +386,15 @@ public class ProfileActivity extends AppCompatActivity
                                                                             SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
                                                                             saveCurrentTime = currentTime.format(calendar.getTime());
 
+                                                                            Long tsLong = System.currentTimeMillis()/1000;
+                                                                            String ts = tsLong.toString();
+
                                                                             HashMap<String, String> chatNotificationMap = new HashMap<>();
                                                                             chatNotificationMap.put("from", senderUserID);
                                                                             chatNotificationMap.put("type", "accept");
                                                                             chatNotificationMap.put("time", saveCurrentTime);
                                                                             chatNotificationMap.put("date", saveCurrentDate);
+                                                                            chatNotificationMap.put("millisecond", ts);
 
                                                                             db.collection("user").document(receiverUserID).
                                                                                     collection("notification").
@@ -523,11 +527,15 @@ public class ProfileActivity extends AppCompatActivity
                                                 SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
                                                 saveCurrentTime = currentTime.format(calendar.getTime());
 
+                                                Long tsLong = System.currentTimeMillis()/1000;
+                                                String ts = tsLong.toString();
+
                                                 HashMap<String, String> chatNotificationMap = new HashMap<>();
                                                 chatNotificationMap.put("from", senderUserID);
                                                 chatNotificationMap.put("type", "request");
                                                 chatNotificationMap.put("time", saveCurrentTime);
                                                 chatNotificationMap.put("date", saveCurrentDate);
+                                                chatNotificationMap.put("millisecond", ts);
 
                                                 db.collection("user").document(receiverUserID).
                                                         collection("notification").

@@ -168,11 +168,15 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.ViewHold
                                                                                         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
                                                                                         saveCurrentTime = currentTime.format(calendar.getTime());
 
+                                                                                        Long tsLong = System.currentTimeMillis()/1000;
+                                                                                        String ts = tsLong.toString();
+
                                                                                         HashMap<String, String> chatNotificationMap = new HashMap<>();
                                                                                         chatNotificationMap.put("from", currentUserID);
                                                                                         chatNotificationMap.put("type", "accept");
                                                                                         chatNotificationMap.put("time", saveCurrentTime);
                                                                                         chatNotificationMap.put("date", saveCurrentDate);
+                                                                                        chatNotificationMap.put("millisecond", ts);
 
                                                                                         db.collection("user").document( request.getID()).
                                                                                                 collection("notification").

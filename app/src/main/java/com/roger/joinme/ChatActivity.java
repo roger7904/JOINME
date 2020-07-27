@@ -22,6 +22,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,9 +42,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,7 +80,14 @@ public class ChatActivity extends AppCompatActivity
     private RecyclerView userMessagesList;
 
 
-    private String saveCurrentTime, saveCurrentDate;
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
+    final private String contentType = "application/json";
+    final String TAG = "NOTIFICATION TAG";
+
+    private String RECEIVER_DEVICE;
+
+    private String saveCurrentTime, saveCurrentDate,currentUserName;
 
 
 
@@ -93,6 +109,22 @@ public class ChatActivity extends AppCompatActivity
 
 
         IntializeControllers();
+
+        final DocumentReference docRef = db.collection("user").document(messageSenderID).collection("profile")
+                .document(messageSenderID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists()) {
+                        currentUserName=snapshot.getString("name");
+                    } else {
+
+                    }
+                }
+            }
+        });
 
 
         userName.setText(messageReceiverName);
@@ -146,13 +178,7 @@ public class ChatActivity extends AppCompatActivity
         userMessagesList.setAdapter(messageAdapter);
 
 
-        Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
-
-        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
-        saveCurrentTime = currentTime.format(calendar.getTime());
     }
 
 
@@ -194,6 +220,7 @@ public class ChatActivity extends AppCompatActivity
                 .collection("UserID")
                 .document(messageReceiverID)
                 .collection("content")
+                .orderBy("millisecond",Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -243,6 +270,17 @@ public class ChatActivity extends AppCompatActivity
         }
         else
         {
+            Calendar calendar = Calendar.getInstance();
+
+            SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+            saveCurrentDate = currentDate.format(calendar.getTime());
+
+            SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+            saveCurrentTime = currentTime.format(calendar.getTime());
+
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
+
             Map messageTextBody = new HashMap();
             messageTextBody.put("message", messageText);
             messageTextBody.put("type", "text");
@@ -251,6 +289,8 @@ public class ChatActivity extends AppCompatActivity
             //messageTextBody.put("messageID", messagePushID);
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
+
+            messageTextBody.put("millisecond", ts);
 
 
             db.collection("message").document(messageSenderID).collection("UserID")
@@ -265,7 +305,35 @@ public class ChatActivity extends AppCompatActivity
                                 @Override
                                 public void onComplete(@NonNull Task task) {
                                     if (task.isSuccessful()) {
+                                            db.collection("user").document(messageReceiverID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        if (document.exists()) {
 
+                                                            RECEIVER_DEVICE = document.getString("device_token");
+                                                            JSONObject notification = new JSONObject();
+                                                            JSONObject notifcationBody = new JSONObject();
+                                                            try {
+                                                                notifcationBody.put("title", "您有新的訊息");
+                                                                notifcationBody.put("message", currentUserName+": "+messageText);
+
+                                                                notification.put("to", RECEIVER_DEVICE);
+                                                                notification.put("data", notifcationBody);
+                                                            } catch (JSONException e) {
+                                                                Log.e(TAG, "onCreate: " + e.getMessage());
+                                                            }
+                                                            sendNotification(notification);
+                                                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                        } else {
+                                                            Log.d(TAG, "No such document");
+                                                        }
+                                                    } else {
+                                                        Log.d(TAG, "get failed with ", task.getException());
+                                                    }
+                                                }
+                                            });
                                     } else {
 
                                     }
@@ -278,5 +346,31 @@ public class ChatActivity extends AppCompatActivity
                     }
                 });
         }
+    }
+
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ChatActivity.this, "Request error", Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 }
