@@ -30,6 +30,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import org.json.JSONException;
@@ -108,6 +109,7 @@ public class GroupChatActivity extends AppCompatActivity
         db.collection("chat")
                 .document(currentGroupName)
                 .collection("content")
+                .orderBy("millisecond",Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -203,6 +205,9 @@ public class GroupChatActivity extends AppCompatActivity
             SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
             currentTime = currentTimeFormat.format(calForTime.getTime());
 
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
+
             Map messageTextBody = new HashMap();
             messageTextBody.put("message", messageText);
             messageTextBody.put("type", "text");
@@ -211,6 +216,7 @@ public class GroupChatActivity extends AppCompatActivity
             //messageTextBody.put("messageID", messagePushID);
             messageTextBody.put("time", currentTime);
             messageTextBody.put("date", currentDate);
+            messageTextBody.put("millisecond", ts);
 
 
             db.collection("chat").document(currentGroupName).collection("content")
