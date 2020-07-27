@@ -88,7 +88,7 @@ public class ContactFragment extends Fragment {
                                                                 public void onSuccess(Uri uri) {
                                                                     // Got the download URL for 'users/me/profile.png'
                                                                     userprofileList.add(new userprofile(
-                                                                            name, status, uri, id));
+                                                                            name, status, uri, id,"friend"));
                                                                     userprofileadapter.notifyDataSetChanged();
                                                                 }
                                                             }).addOnFailureListener(new OnFailureListener() {
@@ -107,7 +107,7 @@ public class ContactFragment extends Fragment {
                                                                 public void onSuccess(Uri uri) {
                                                                     // Got the download URL for 'users/me/profile.png'
                                                                     userprofileList.add(new userprofile(
-                                                                            name, status, uri, id));
+                                                                            name, status, uri, id,"friend"));
                                                                     userprofileadapter.notifyDataSetChanged();
                                                                 }
                                                             }).addOnFailureListener(new OnFailureListener() {

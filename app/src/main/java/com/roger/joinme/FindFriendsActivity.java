@@ -95,7 +95,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                                                                 public void onSuccess(Uri uri) {
                                                                     // Got the download URL for 'users/me/profile.png'
                                                                     userprofileList.add(new userprofile(
-                                                                            name, status, uri, id));
+                                                                            name, status, uri, id,"find_friend"));
                                                                     userprofileadapter.notifyDataSetChanged();
                                                                 }
                                                             }).addOnFailureListener(new OnFailureListener() {
@@ -114,7 +114,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                                                                 public void onSuccess(Uri uri) {
                                                                     // Got the download URL for 'users/me/profile.png'
                                                                     userprofileList.add(new userprofile(
-                                                                            name, status, uri, id));
+                                                                            name, status, uri, id,"find_friend"));
                                                                     userprofileadapter.notifyDataSetChanged();
                                                                 }
                                                             }).addOnFailureListener(new OnFailureListener() {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupChatActivity">
-
+    tools:context=".ChatActivity">
 
     <include
         android:id="@+id/chat_toolbar"
@@ -21,14 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/chat_toolbar"
-        android:layout_above="@+id/myLinearLayout"
+        android:layout_above="@+id/chat_linear_layout"
         android:layout_marginBottom="6dp"
         >
     </androidx.recyclerview.widget.RecyclerView>
 
 
     <RelativeLayout
-        android:id="@+id/myLinearLayout"
+        android:id="@+id/chat_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -38,12 +38,22 @@
         android:layout_alignParentLeft="true">
 
 
+        <ImageButton
+            android:id="@+id/send_files_btn"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_menu_send"
+            android:layout_alignParentStart="true"
+            android:backgroundTint="@android:color/white"
+            android:layout_alignParentLeft="true" />
+
+
         <EditText
-            android:id="@+id/input_group_message"
-            android:layout_width="370dp"
+            android:id="@+id/input_message"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="輸入訊息"
-            android:padding="17dp"
+            android:padding="15dp"
             android:maxLines="5"
             android:layout_toEndOf="@+id/send_files_btn"
             android:layout_toStartOf="@+id/send_message_btn"
@@ -52,8 +62,8 @@
 
 
         <ImageButton
-            android:id="@+id/send_message_button"
-            android:layout_width="50dp"
+            android:id="@+id/send_message_btn"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu_send"
             android:layout_alignParentEnd="true"
@@ -61,6 +71,5 @@
             android:layout_alignParentRight="true" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

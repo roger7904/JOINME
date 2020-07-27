@@ -1,65 +1,176 @@
 package com.roger.joinme;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ChatFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class ChatFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private View chatFragmentView;
+    private List<userprofile> userprofileList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String currentUserID;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private userprofileAdapter userprofileadapter;
+    private StorageReference UserProfileImagesRef;
+
     public ChatFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1, String param2) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        chatFragmentView=inflater.inflate(R.layout.fragment_chat, container, false);
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
+
+        userprofileList = new ArrayList<>();
+        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+
+        initView();
+        RetrieveAndDisplayContact();
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        return chatFragmentView;
+    }
+
+    private void RetrieveAndDisplayContact() {
+        db.collection("message").document(currentUserID).collection("UserID")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                db.collection("user").document(document.getId())
+                                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                String date=document.getString("date");
+                                                String state=document.getString("state");
+                                                String time=document.getString("time");
+
+                                                db.collection("user").document(document.getId()).collection("profile")
+                                                        .get()
+                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    for (QueryDocumentSnapshot documentt : task.getResult()) {
+                                                                        if (documentt.contains("name") && documentt.contains("image")) {
+                                                                            String name = documentt.getString("name");
+                                                                            String id = documentt.getString("currentUserID");
+                                                                            UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                @Override
+                                                                                public void onSuccess(Uri uri) {
+                                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                                    String status="";
+                                                                                    if (state.equals("online"))
+                                                                                    {
+                                                                                        status="online";
+                                                                                    }
+                                                                                    else if (state.equals("offline"))
+                                                                                    {
+                                                                                        status="Last Seen: " + date + " " + time;
+                                                                                    }
+                                                                                    userprofileList.add(new userprofile(
+                                                                                            name, status, uri, id,"chat"));
+                                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception exception) {
+                                                                                    // Handle any errors
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                        else if(documentt.contains("name")){
+                                                                            String name=documentt.getString("name");
+                                                                            String id=documentt.getString("currentUserID");
+                                                                            UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                @Override
+                                                                                public void onSuccess(Uri uri) {
+                                                                                    String status="";
+                                                                                    if (state.equals("online"))
+                                                                                    {
+                                                                                        status="online";
+                                                                                    }
+                                                                                    else if (state.equals("offline"))
+                                                                                    {
+                                                                                        status="Last Seen: " + date + " " + time;
+                                                                                    }
+                                                                                    userprofileList.add(new userprofile(
+                                                                                            name, status, uri, id,"chat"));
+                                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                                    userprofileList.add(new userprofile(
+                                                                                            name, status, uri, id,"chat"));
+                                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception exception) {
+                                                                                    // Handle any errors
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                            } else {
+
+                                            }
+                                        } else {
+
+                                        }
+                                    }
+                                });
+
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void initView(){
+        RecyclerView recyclerView = (RecyclerView) chatFragmentView.findViewById(R.id.chats_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(chatFragmentView.getContext()));
+        userprofileadapter = new userprofileAdapter(chatFragmentView.getContext(), userprofileList);
+        recyclerView.setAdapter(userprofileadapter);
     }
 }
