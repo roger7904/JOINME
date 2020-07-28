@@ -218,27 +218,27 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         }
     }
 
-    @Override
-    protected void onStop()
-    {
-        super.onStop();
-
-        if (currentUser != null)
-        {
-            updateUserStatus("offline");
-        }
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-
-        if (currentUser != null)
-        {
-            updateUserStatus("offline");
-        }
-    }
+//    @Override
+//    protected void onStop()
+//    {
+//        super.onStop();
+//
+//        if (currentUser != null)
+//        {
+//            updateUserStatus("offline");
+//        }
+//    }
+//
+//    @Override
+//    protected void onDestroy()
+//    {
+//        super.onDestroy();
+//
+//        if (currentUser != null)
+//        {
+//            updateUserStatus("offline");
+//        }
+//    }
 
     private void VerifyUserExistance()
     {

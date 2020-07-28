@@ -31,7 +31,7 @@
         android:layout_marginBottom="36dp"
         android:background="@drawable/shape_textview"
         android:ems="10"
-        android:hint="驗證碼"
+        android:hint="確認密碼"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@id/button_verify"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,13 +71,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="144dp"
-        android:background="#e0e0e0"
-        android:text="@string/verify"
         android:textColor="#000"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btn_back_to_login"

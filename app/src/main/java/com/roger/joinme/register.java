@@ -33,6 +33,7 @@ public class register extends AppCompatActivity {
     private Button back_to_login;
     private EditText UserEmail;
     private EditText UserPassword;
+    private EditText UserPasswordVerify;
     private Button CreateAccountButton;
     public Button loginBtn;
     public Button registerBtn;
@@ -72,6 +73,7 @@ public class register extends AppCompatActivity {
     {
         UserPassword = (EditText)findViewById(R.id.editText_pwd);
         UserEmail = (EditText)findViewById(R.id.editText_email);
+        UserPasswordVerify= (EditText)findViewById(R.id.editText_verify);
         back_to_login=(Button)findViewById(R.id.btn_back_to_login);
         loadingBar = new ProgressDialog(this);
         CreateAccountButton = (Button) findViewById(R.id.button_verify);
@@ -109,14 +111,18 @@ public class register extends AppCompatActivity {
     {
         String email = UserEmail.getText().toString();
         String password = UserPassword.getText().toString();
+        String passwordverify = UserPasswordVerify.getText().toString();
 
         if (TextUtils.isEmpty(email))
         {
-            Toast.makeText(this, "Please enter email...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "請輸入信箱...", Toast.LENGTH_SHORT).show();
         }
-        if (TextUtils.isEmpty(password))
+        else if (TextUtils.isEmpty(password))
         {
-            Toast.makeText(this, "Please enter password...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "請輸入密碼...", Toast.LENGTH_SHORT).show();
+        }
+        else if(!password.equals(passwordverify)){
+            Toast.makeText(this, "確認密碼不符...", Toast.LENGTH_SHORT).show();
         }
         else
         {
