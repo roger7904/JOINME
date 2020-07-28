@@ -439,15 +439,29 @@ public class MainActivity extends FragmentActivity {
                         {
                             if (task.isSuccessful())
                             {
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if (user.isEmailVerified())
+                                {
+                                    String currentUserId = firebaseAuth.getCurrentUser().getUid();
+                                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                                    final Map<String, Object> logindata = new HashMap<>();
+                                    logindata.put("device_token",deviceToken);
+                                    db.collection("user").document(currentUserId).update(logindata);
+                                    SendUserToMainActivity();
+                                    Toast.makeText(MainActivity.this, "登入成功...", Toast.LENGTH_SHORT).show();
+                                    loadingBar.dismiss();
+
+                                }
+                                else
+                                {
+                                    // email is not verified, so just prompt the message to the user and restart this activity.
+                                    // NOTE: don't forget to log out the user.
+                                    FirebaseAuth.getInstance().signOut();
+                                    Toast.makeText(MainActivity.this, "信箱尚未驗證...", Toast.LENGTH_SHORT).show();
+                                    //restart this activity
+
+                                }
 //                                useraccount=UserEmail.getText().toString();
-                                String currentUserId = firebaseAuth.getCurrentUser().getUid();
-                                String deviceToken = FirebaseInstanceId.getInstance().getToken();
-                                final Map<String, Object> logindata = new HashMap<>();
-                                logindata.put("device_token",deviceToken);
-                                db.collection("user").document(currentUserId).update(logindata);
-                                SendUserToMainActivity();
-                                Toast.makeText(MainActivity.this, "登入成功...", Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
 
 
                             }

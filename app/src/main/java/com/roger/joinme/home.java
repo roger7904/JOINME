@@ -171,24 +171,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         db=FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        currentUserID = mAuth.getCurrentUser().getUid();
-        DocumentReference docRef = db.collection("user").document(currentUserID);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        useraccount=document.getString("email");
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d("TAG", "No such document");
-                    }
-                } else {
-                    Log.d("TAG", "get failed with ", task.getException());
-                }
-            }
-        });
+        if (currentUser == null)
+        {
+            SendUserToLoginActivity();
+        }
+
         initViews();
         setListeners();
         maplistener = 0;
@@ -209,6 +196,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             updateUserStatus("online");
 
             VerifyUserExistance();
+
+            currentUserID = mAuth.getCurrentUser().getUid();
+            DocumentReference docRef = db.collection("user").document(currentUserID);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            useraccount=document.getString("email");
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        } else {
+                            Log.d("TAG", "No such document");
+                        }
+                    } else {
+                        Log.d("TAG", "get failed with ", task.getException());
+                    }
+                }
+            });
         }
     }
 
@@ -236,6 +242,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void VerifyUserExistance()
     {
+        currentUserID = mAuth.getCurrentUser().getUid();
         db.collection("user").document(currentUserID)
                 .collection("profile")
                 .document(currentUserID)
@@ -273,6 +280,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void updateUserStatus(String state)
     {
+        currentUserID = mAuth.getCurrentUser().getUid();
         String saveCurrentTime, saveCurrentDate;
 
         Calendar calendar = Calendar.getInstance();

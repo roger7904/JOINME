@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -85,16 +86,16 @@ public class register extends AppCompatActivity {
     private void setListeners()
     {
 
+//        back_to_login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(register.this,MainActivity.class);
+//                startActivity(intent);
+//                register.this.finish();
+//            }
+//        });
         back_to_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(register.this,MainActivity.class);
-                startActivity(intent);
-                register.this.finish();
-            }
-        });
-        CreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
@@ -153,9 +154,35 @@ public class register extends AppCompatActivity {
                                             }
                                         });
 
-                                SendUserToMainActivity();
-                                Toast.makeText(register.this, "帳號創立成功...", Toast.LENGTH_SHORT).show();
+                                SendUserToLoginActivity();
+                                Toast.makeText(register.this, "請到信箱認證帳號...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                user.sendEmailVerification()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    // email sent
+                                                    // after email is sent just logout the user and finish this activity
+//                                                    FirebaseAuth.getInstance().signOut();
+//                                                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+//                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    // email not sent, so display message and restart the activity or do whatever you wish to do
+
+                                                    //restart this activity
+//                                                    overridePendingTransition(0, 0);
+//                                                    finish();
+//                                                    overridePendingTransition(0, 0);
+//                                                    startActivity(getIntent());
+
+                                                }
+                                            }
+                                        });
                             }
                             else
                             {
@@ -169,11 +196,12 @@ public class register extends AppCompatActivity {
     }
 
 
-    private void SendUserToMainActivity()
+
+
+    private void SendUserToLoginActivity()
     {
-        Intent mainIntent = new Intent(register.this, home.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainIntent);
-        finish();
+        Intent loginIntent = new Intent(register.this, MainActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
     }
 }
