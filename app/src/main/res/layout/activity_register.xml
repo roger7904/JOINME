@@ -32,7 +32,7 @@
         android:background="@drawable/shape_textview"
         android:ems="10"
         android:hint="確認密碼"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@id/button_verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -60,7 +60,8 @@
         android:background="@drawable/shape_textview"
         android:ems="10"
         android:hint="密碼"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
+
         app:layout_constraintBottom_toTopOf="@id/editText_verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
