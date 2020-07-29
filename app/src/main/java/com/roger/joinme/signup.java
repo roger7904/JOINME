@@ -83,6 +83,7 @@ public class signup extends AppCompatActivity {
         initViews();
         initData();
         setListeners();
+        System.out.println(home.useraccount);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         //抓集合
@@ -110,7 +111,7 @@ public class signup extends AppCompatActivity {
                                     }
 
                                     activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
-                                    if (document.getString("organizerID") == home.useraccount) {
+                                    if (document.getString("organizerID") != home.useraccount) {
                                         deletebtn.setVisibility(View.GONE);
                                     }
 
