@@ -160,7 +160,7 @@ public class register extends AppCompatActivity {
                                             }
                                         });
 
-                                SendUserToLoginActivity();
+
                                 Toast.makeText(register.this, "請到信箱認證帳號...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -175,6 +175,8 @@ public class register extends AppCompatActivity {
 //                                                    FirebaseAuth.getInstance().signOut();
 //                                                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
 //                                                    finish();
+                                                    FirebaseAuth.getInstance().signOut();
+                                                    SendUserToLoginActivity();
                                                 }
                                                 else
                                                 {
@@ -189,6 +191,7 @@ public class register extends AppCompatActivity {
                                                 }
                                             }
                                         });
+
                             }
                             else
                             {
@@ -196,6 +199,8 @@ public class register extends AppCompatActivity {
                                 Toast.makeText(register.this, "Error : " + message, Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
+
+
                         }
                     });
         }
