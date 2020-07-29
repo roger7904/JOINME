@@ -34,7 +34,6 @@ public class register extends AppCompatActivity {
     private EditText UserEmail;
     private EditText UserPassword;
     private EditText UserPasswordVerify;
-    private Button CreateAccountButton;
     public Button loginBtn;
     public Button registerBtn;
 
@@ -76,7 +75,6 @@ public class register extends AppCompatActivity {
         UserPasswordVerify= (EditText)findViewById(R.id.editText_verify);
         back_to_login=(Button)findViewById(R.id.btn_back_to_login);
         loadingBar = new ProgressDialog(this);
-        CreateAccountButton = (Button) findViewById(R.id.button_verify);
         loginBtn = (Button)findViewById(R.id.loginPage);
         registerBtn = (Button)findViewById(R.id.registerPage);
     }
