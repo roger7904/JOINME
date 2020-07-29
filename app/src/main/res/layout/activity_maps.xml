@@ -115,10 +115,10 @@
             android:background="@drawable/setting"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline"
-            app:layout_constraintHorizontal_bias="0.118"
+            app:layout_constraintHorizontal_bias="0.13"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.873" />
+            app:layout_constraintVertical_bias="0.94" />
 
         <Button
             android:id="@+id/messageBtn"
@@ -127,22 +127,22 @@
             android:background="@drawable/message"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline"
-            app:layout_constraintHorizontal_bias="0.585"
+            app:layout_constraintHorizontal_bias="0.583"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.873" />
+            app:layout_constraintVertical_bias="0.94" />
 
         <Button
             android:id="@+id/joBtn"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:background="@drawable/jo"
+            android:background="@drawable/jome"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.512"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.901" />
+            app:layout_constraintVertical_bias="0.96" />
 
         <Button
             android:id="@+id/noticeBtn"
@@ -151,10 +151,10 @@
             android:background="@drawable/notice"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.393"
+            app:layout_constraintHorizontal_bias="0.42"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.874" />
+            app:layout_constraintVertical_bias="0.94" />
 
         <Button
             android:id="@+id/collectBtn"
@@ -166,7 +166,7 @@
             app:layout_constraintHorizontal_bias="0.881"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.873" />
+            app:layout_constraintVertical_bias="0.94" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

@@ -11,52 +11,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="206dp" />
+        app:layout_constraintGuide_end="206dp"
+        app:layout_constraintGuide_percent="0.5" />
+
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="181dp"
         android:layout_height="150dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/head" />
 
-
     <EditText
         android:id="@+id/editText_verify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
         android:background="@drawable/shape_textview"
         android:ems="10"
-        android:hint="確認密碼"
+        android:hint="驗證碼"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@id/button_verify"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerPage"
+        app:layout_constraintVertical_bias="0.886" />
 
     <EditText
         android:id="@+id/editText_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
         android:background="@drawable/shape_textview"
         android:ems="10"
         android:hint="信箱"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@id/editText_pwd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView2"
+        app:layout_constraintVertical_bias="0.74" />
 
     <EditText
         android:id="@+id/editText_pwd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
         android:background="@drawable/shape_textview"
         android:ems="10"
         android:hint="密碼"
@@ -65,19 +67,23 @@
         app:layout_constraintBottom_toTopOf="@id/editText_verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginPage"
+        app:layout_constraintVertical_bias="0.765" />
 
     <Button
         android:id="@+id/button_verify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="144dp"
+        android:text="發送驗證碼"
         android:textColor="#000"
         android:textSize="20dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.838" />
 
     <Button
         android:id="@+id/btn_back_to_login"
@@ -105,10 +111,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/editText_email"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
-        app:layout_constraintHorizontal_bias="0.839"
+        app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView2"
-        app:layout_constraintVertical_bias="0.408" />
+        app:layout_constraintVertical_bias="0.542" />
 
     <Button
         android:id="@+id/registerPage"
@@ -123,6 +129,6 @@
         app:layout_constraintHorizontal_bias="0.162"
         app:layout_constraintStart_toStartOf="@id/guideline3"
         app:layout_constraintTop_toBottomOf="@id/imageView2"
-        app:layout_constraintVertical_bias="0.408" />
+        app:layout_constraintVertical_bias="0.543" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
