@@ -972,7 +972,7 @@ public class jo extends AppCompatActivity {
 //                        content.put("name", currentUserName);
 //                        content.put("message", "創建了此活動");
 //                        content.put("time", currentTime);
-            participant.put("userID", currentUserID);
+            participant.put("UserID", currentUserID);
 
             //查看map內容
 

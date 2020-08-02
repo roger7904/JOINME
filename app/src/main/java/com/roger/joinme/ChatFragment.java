@@ -85,69 +85,65 @@ public class ChatFragment extends Fragment {
                                                 String time=document.getString("time");
 
                                                 db.collection("user").document(document.getId()).collection("profile")
+                                                        .document(document.getId())
                                                         .get()
-                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                             @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                                 if (task.isSuccessful()) {
-                                                                    for (QueryDocumentSnapshot documentt : task.getResult()) {
-                                                                        if (documentt.contains("name") && documentt.contains("image")) {
-                                                                            String name = documentt.getString("name");
-                                                                            String id = documentt.getString("currentUserID");
-                                                                            UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                @Override
-                                                                                public void onSuccess(Uri uri) {
-                                                                                    // Got the download URL for 'users/me/profile.png'
-                                                                                    String status="";
-                                                                                    if (state.equals("online"))
-                                                                                    {
-                                                                                        status="online";
-                                                                                    }
-                                                                                    else if (state.equals("offline"))
-                                                                                    {
-                                                                                        status="Last Seen: " + date + " " + time;
-                                                                                    }
-                                                                                    userprofileList.add(new userprofile(
-                                                                                            name, status, uri, id,"chat"));
-                                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                    DocumentSnapshot documentt = task.getResult();
+                                                                    if (documentt.contains("name") && documentt.contains("image")) {
+                                                                        String name = documentt.getString("name");
+                                                                        String id = documentt.getString("currentUserID");
+                                                                        UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                            @Override
+                                                                            public void onSuccess(Uri uri) {
+                                                                                // Got the download URL for 'users/me/profile.png'
+                                                                                String status="";
+                                                                                if (state.equals("online"))
+                                                                                {
+                                                                                    status="online";
                                                                                 }
-                                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                                @Override
-                                                                                public void onFailure(@NonNull Exception exception) {
-                                                                                    // Handle any errors
+                                                                                else if (state.equals("offline"))
+                                                                                {
+                                                                                    status="Last Seen: " + date + " " + time;
                                                                                 }
-                                                                            });
-                                                                        }
-                                                                        else if(documentt.contains("name")){
-                                                                            String name=documentt.getString("name");
-                                                                            String id=documentt.getString("currentUserID");
-                                                                            UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                @Override
-                                                                                public void onSuccess(Uri uri) {
-                                                                                    String status="";
-                                                                                    if (state.equals("online"))
-                                                                                    {
-                                                                                        status="online";
-                                                                                    }
-                                                                                    else if (state.equals("offline"))
-                                                                                    {
-                                                                                        status="Last Seen: " + date + " " + time;
-                                                                                    }
-                                                                                    userprofileList.add(new userprofile(
-                                                                                            name, status, uri, id,"chat"));
-                                                                                    userprofileadapter.notifyDataSetChanged();
-                                                                                    // Got the download URL for 'users/me/profile.png'
-                                                                                    userprofileList.add(new userprofile(
-                                                                                            name, status, uri, id,"chat"));
-                                                                                    userprofileadapter.notifyDataSetChanged();
+                                                                                userprofileList.add(new userprofile(
+                                                                                        name, status, uri, id,"chat"));
+                                                                                userprofileadapter.notifyDataSetChanged();
+                                                                            }
+                                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception exception) {
+                                                                                // Handle any errors
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                    else if(documentt.contains("name")){
+                                                                        String name=documentt.getString("name");
+                                                                        String id=documentt.getString("currentUserID");
+                                                                        UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                            @Override
+                                                                            public void onSuccess(Uri uri) {
+                                                                                String status="";
+                                                                                if (state.equals("online"))
+                                                                                {
+                                                                                    status="online";
                                                                                 }
-                                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                                @Override
-                                                                                public void onFailure(@NonNull Exception exception) {
-                                                                                    // Handle any errors
+                                                                                else if (state.equals("offline"))
+                                                                                {
+                                                                                    status="Last Seen: " + date + " " + time;
                                                                                 }
-                                                                            });
-                                                                        }
+                                                                                userprofileList.add(new userprofile(
+                                                                                        name, status, uri, id,"chat"));
+                                                                                userprofileadapter.notifyDataSetChanged();
+                                                                            }
+                                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception exception) {
+                                                                                // Handle any errors
+                                                                            }
+                                                                        });
                                                                     }
                                                                 }
                                                             }
