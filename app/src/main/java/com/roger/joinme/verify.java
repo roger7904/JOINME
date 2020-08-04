@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -44,6 +45,9 @@ public class verify extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     public TextView userAccount,userName,userSex,userAge,userPhone,activityTitle;
     public CollectionReference[] docRef = new CollectionReference[1000000];
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private String currentUserID;
 
     public verify(){
 
@@ -75,6 +79,9 @@ public class verify extends AppCompatActivity {
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
+        mAuth = FirebaseAuth.getInstance();
+        db=FirebaseFirestore.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
 
         initViews();
         setListeners();
@@ -91,7 +98,7 @@ public class verify extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.getString("organizerID").equals(home.useraccount)){
+                                if(document.getString("organizerID").equals(currentUserID)){
 //                                    System.out.println("333");
                                     db.collection("activity")
                                             .get()

@@ -125,9 +125,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private ClusterManager<MyItem> mClusterManager;
     public MyItem offsetItem;
     public BitmapDescriptor markerDescriptor;
-    public static String activitytitle;
     public int maplistener = 0;
-    public static String useraccount;
+//    public static String useraccount;
     private String currentUserID, currentUserName;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -198,23 +197,23 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             VerifyUserExistance();
 
             currentUserID = mAuth.getCurrentUser().getUid();
-            DocumentReference docRef = db.collection("user").document(currentUserID);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            useraccount=document.getString("email");
-                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        } else {
-                            Log.d("TAG", "No such document");
-                        }
-                    } else {
-                        Log.d("TAG", "get failed with ", task.getException());
-                    }
-                }
-            });
+//            DocumentReference docRef = db.collection("user").document(currentUserID);
+//            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        DocumentSnapshot document = task.getResult();
+//                        if (document.exists()) {
+//                            useraccount=document.getString("email");
+//                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+//                        } else {
+//                            Log.d("TAG", "No such document");
+//                        }
+//                    } else {
+//                        Log.d("TAG", "get failed with ", task.getException());
+//                    }
+//                }
+//            });
         }
     }
 
@@ -460,9 +459,9 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mClusterManager.setOnClusterItemInfoWindowClickListener(
                 new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
                     @Override public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
-                        activitytitle = stringClusterItem.getTitle();
                         Intent intent = new Intent();
                         intent.setClass(home.this, signup.class);
+                        intent.putExtra("activitytitle", stringClusterItem.getTitle());
                         startActivity(intent);
                     }
                 });

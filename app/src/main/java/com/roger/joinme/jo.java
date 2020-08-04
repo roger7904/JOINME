@@ -122,7 +122,6 @@ public class jo extends AppCompatActivity {
     private String picUrl;
     private Button button5,eDate;
     private Button sbtn, ebtn,chooseRes;
-    public String organizerID;
     public String uriString;
     public boolean imguploaded = false;
     public TextView nowRestriction;
@@ -168,7 +167,7 @@ public class jo extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         currentUserID = mAuth.getCurrentUser().getUid();
-        DocumentReference docRef = db.collection("user").document(currentUserID);
+        DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile").document(currentUserID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -199,26 +198,6 @@ public class jo extends AppCompatActivity {
         }
         //设置数据
 
-        //將主辦人放入揪團資料
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("user")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                System.out.println(home.useraccount);
-                                if (document.getString("email").equals(home.useraccount)) {
-//                                    System.out.println(document.getString("name"));
-                                    organizerID = document.getString("email");
-//                                    System.out.println("one:"+organizerID);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                });
     }
 
     public void initPlace() {
@@ -346,54 +325,6 @@ public class jo extends AppCompatActivity {
             }
         });
 
-
-
-//        friendpage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(jo.this, friend.class);
-//                startActivity(intent);
-//            }
-//        });
-
-//        favorite.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(jo.this, favorite.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
-//        jo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(jo.this, jo.class);
-//                startActivity(intent);
-//            }
-//        });
-
-//        notice.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(jo.this, notice.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        setting.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(jo.this, setting.class);
-//                startActivity(intent);
-//            }
-//        });
-
         imgtest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -432,8 +363,6 @@ public class jo extends AppCompatActivity {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
 
-
-
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
                         mLoadhandler=new Handler(){
@@ -456,89 +385,6 @@ public class jo extends AppCompatActivity {
 
 
                         System.out.print(uriString);
-//                        final Map<String, Object> book = new HashMap<>();
-//                        final Map<String, Object> ubook = new HashMap<>();
-//                        final Map<String, Object> chat = new HashMap<>();
-//                        final Map<String, Object> content = new HashMap<>();
-//                        final Map<String, Object> participant = new HashMap<>();
-//                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//                        book.put("title", activityTitle.getText().toString());
-//                        book.put("postContent", activityContent.getText().toString());
-//                        book.put("activityType", spinner.getSelectedItem().toString());
-//                        book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
-//                        //先切割字串再轉成geopoint格式
-//                        String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
-//                        book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
-//                        book.put("numberOfPeople", limitBtn.getText());
-//                        book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
-//                        book.put("endTime", ets);
-//                        book.put("organizerID", organizerID);
-//                        book.put("imgUri", uriString);
-//                        book.put("onlyMale",flag_list[0]);
-//                        book.put("onlyFemale",flag_list[1]);
-//                        book.put("Ontime",flag_list[2]);
-//                        ubook.put("account", "0");
-//                        chat.put("activity", activityTitle.getText().toString());
-//                        chat.put("newestcontent", currentUserName+"創建了此活動");
-//                        chat.put("organizer", currentUserName);
-//                        Calendar calForDate = Calendar.getInstance();
-//                        SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-//                        currentDate = currentDateFormat.format(calForDate.getTime());
-//
-//                        Calendar calForTime = Calendar.getInstance();
-//                        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
-//                        currentTime = currentTimeFormat.format(calForTime.getTime());
-//
-////                        content.put("date", currentDate);
-////                        content.put("name", currentUserName);
-////                        content.put("message", "創建了此活動");
-////                        content.put("time", currentTime);
-//                        participant.put("userID", currentUserID);
-//
-//                        //查看map內容
-//
-//                        db.collection("activity")
-//                                .document(activityTitle.getText().toString())
-//                                .set(book)
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Log.w("TAG", "Error writing document", e);
-//                                    }
-//                                });
-//                        db.collection("activity")
-//                                .document(activityTitle.getText().toString())
-//                                .collection("participant")
-//                                .document("0")
-//                                .set(ubook)
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d("TAG", "DocumentSnapshot successfully written!");
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Log.w("TAG", "Error writing document", e);
-//                                    }
-//                                });
-//                        db.collection("chat").document(activityTitle.getText().toString()).set(chat);
-////                        db.collection("chat").document(activityTitle.getText().toString()).collection("content")
-////                                .document().set(content);
-//                        db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
-//                                .document().set(participant);
-//                        Toast.makeText(jo.this, "活動建立成功", Toast.LENGTH_LONG).show();
-//                        submitbtn.setEnabled(false);
-//                        submitbtn.setText("報名成功");
-                        //上傳DB改用thread實現
 
                         submitbtn.setEnabled(false);
                         submitbtn.setText("創建成功");
@@ -935,10 +781,10 @@ public class jo extends AppCompatActivity {
         public void run() {
 
             final Map<String, Object> book = new HashMap<>();
-            final Map<String, Object> ubook = new HashMap<>();
             final Map<String, Object> chat = new HashMap<>();
             final Map<String, Object> content = new HashMap<>();
             final Map<String, Object> participant = new HashMap<>();
+            final Map<String, Object> joinact = new HashMap<>();
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             book.put("title", activityTitle.getText().toString());
@@ -951,15 +797,15 @@ public class jo extends AppCompatActivity {
             book.put("numberOfPeople", limitBtn.getText());
             book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
             book.put("endTime", ets);
-            book.put("organizerID", organizerID);
+            book.put("organizerID", currentUserID);
             book.put("imgUri", uriString);
             book.put("onlyMale",flag_list[0]);
             book.put("onlyFemale",flag_list[1]);
             book.put("Ontime",flag_list[2]);
-            ubook.put("account", "0");
             chat.put("activity", activityTitle.getText().toString());
             chat.put("newestcontent", currentUserName+"創建了此活動");
             chat.put("organizer", currentUserName);
+            joinact.put("organizerID",currentUserID);
             Calendar calForDate = Calendar.getInstance();
             SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
             currentDate = currentDateFormat.format(calForDate.getTime());
@@ -967,11 +813,6 @@ public class jo extends AppCompatActivity {
             Calendar calForTime = Calendar.getInstance();
             SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
             currentTime = currentTimeFormat.format(calForTime.getTime());
-
-//                        content.put("date", currentDate);
-//                        content.put("name", currentUserName);
-//                        content.put("message", "創建了此活動");
-//                        content.put("time", currentTime);
             participant.put("UserID", currentUserID);
 
             //查看map內容
@@ -994,8 +835,8 @@ public class jo extends AppCompatActivity {
             db.collection("activity")
                     .document(activityTitle.getText().toString())
                     .collection("participant")
-                    .document("0")
-                    .set(ubook)
+                    .document(currentUserID)
+                    .set(participant)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -1008,9 +849,24 @@ public class jo extends AppCompatActivity {
                             Log.w("TAG", "Error writing document", e);
                         }
                     });
-//            db.collection("chat").document(activityTitle.getText().toString()).set(chat);
-//            db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
-//                    .document().set(participant);
+            db.collection("join_act_request")
+                    .document(activityTitle.getText().toString())
+                    .set(joinact)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("TAG", "Error writing document", e);
+                        }
+                    });
+            db.collection("chat").document(activityTitle.getText().toString()).set(chat);
+            db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
+                    .document(currentUserID).set(participant);
 
         }
     };

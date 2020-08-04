@@ -11,7 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,17 +52,25 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class signup extends AppCompatActivity {
 
     public Button signupbtn, deletebtn, favoritebtn;
     public TextView title;
     public ImageView activityPhoto;
     public TextView activityContent;
-    final Map<String, Object> actbook = new HashMap<>();
-    public String account;
+
     public Bitmap actImg;
+    private String activitytitle,organizerID;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private String currentUserID,currentUserName;
     String imageUrl;
-    String[] participant;
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
+    final private String contentType = "application/json";
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -65,111 +79,64 @@ public class signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-//
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-//                .setDrawerLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        //NavigationUI.setupWithNavController(navigationView, navController);
+        mAuth = FirebaseAuth.getInstance();
+        db=FirebaseFirestore.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        activitytitle = getIntent().getExtras().get("activitytitle").toString();
+        final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
+                .document(currentUserID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists()) {
+                        currentUserName=snapshot.getString("name");
+                    } else {
+
+                    }
+                }
+            }
+        });
+
+        db.collection("activity").document(activitytitle).
+                get().
+                addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Date snnippet = document.getTimestamp("startTime").toDate();
+                                SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                title.setText(activitytitle);
+                                organizerID=document.getString("organizerID");
+                                imageUrl = document.getString("imgUri");
+                                if (!imageUrl.equals("")) { //目前大部分活動的imguri為留空，故沒有的話就不替換了
+                                    getBitmapFromUrl thread = new getBitmapFromUrl();
+                                    thread.start();
+                                    try {
+                                        thread.join();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    activityPhoto.setImageBitmap(actImg);
+                                }
+
+                                activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
+                                if (document.getString("organizerID") != currentUserID) {
+                                    deletebtn.setVisibility(View.GONE);
+                                }
+                            } else {
+                            }
+                        } else {
+                        }
+                    }
+                });
 
         initViews();
         initData();
         setListeners();
-        System.out.println(home.useraccount);
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //抓集合
-        db.collection("activity")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getString("title").equals(home.activitytitle)) {
-                                    Date snnippet = document.getTimestamp("startTime").toDate();
-                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
-                                    title.setText(home.activitytitle);
-                                    imageUrl = document.getString("imgUri");
-                                    if (!imageUrl.equals("")) { //目前大部分活動的imguri為留空，故沒有的話就不替換了
-                                        getBitmapFromUrl thread = new getBitmapFromUrl();
-                                        thread.start();
-                                        try {
-                                            thread.join();
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        activityPhoto.setImageBitmap(actImg);
-                                    }
-
-                                    activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
-                                    if (document.getString("organizerID") != home.useraccount) {
-                                        deletebtn.setVisibility(View.GONE);
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                });
-
-        db.collection("activity").document(home.activitytitle).collection("participant")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                               if (task.isSuccessful()) {
-                                                   int i = 0;
-                                                   for (QueryDocumentSnapshot document : task.getResult()) {
-                                                       i++;
-                                                   }
-                                                   participant=new String[i];
-                                               }
-                                           }
-                                       }
-                );
-
-        db.collection("activity").document(home.activitytitle).collection("participant")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                               if (task.isSuccessful()) {
-                                                   int i = 0;
-                                                   for (QueryDocumentSnapshot document : task.getResult()) {
-                                                       participant[i]=document.getString("account");
-                                                       i++;
-                                                   }
-                                               }
-                                           }
-                                       }
-                );
-
-        //MainActivity.useraccount;
-        db.collection("user")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getString("email").equals(home.useraccount)) {
-                                    account = document.getString("email");
-                                    actbook.put("account", document.getString("email"));
-                                }
-                            }
-                        }
-                    }
-                });
-
     }
 
     @Override
@@ -202,11 +169,21 @@ public class signup extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         // TODO Auto-generated method stub
-                        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        for (String name : participant){
-                            db.collection("activity").document(home.activitytitle).collection("participant").document(name).delete();
-                        }
-                        db.collection("activity").document(home.activitytitle).delete();
+                        db.collection("activity").document(activitytitle).delete();
+                        final DocumentReference docRef = db.collection("chat").document(activitytitle);
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot snapshot = task.getResult();
+                                    if (snapshot != null && snapshot.exists()) {
+                                        db.collection("chat").document(activitytitle).delete();
+                                    } else {
+
+                                    }
+                                }
+                            }
+                        });
                         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl);
                         storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -236,22 +213,94 @@ public class signup extends AppCompatActivity {
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("activity")
-                        .document(home.activitytitle)
-                        .collection("participant")
-                        .document(account)
-                        .set(actbook)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                final Map<String, Object> actbook = new HashMap<>();
+//                actbook.put("UserID",currentUserID);
+//                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                db.collection("activity")
+//                        .document(activitytitle)
+//                        .collection("participant")
+//                        .document(currentUserID)
+//                        .set(actbook)
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                Log.d("TAG", "DocumentSnapshot successfully written!");
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.w("TAG", "Error writing document", e);
+//                            }
+//                        });
+                HashMap<String, String> join = new HashMap<>();
+                join.put("UserID", currentUserID);
+                db.collection("join_act_request").document(activitytitle)
+                        .collection("UserID")
+                        .document(currentUserID)
+                        .set(join)
+                        .addOnCompleteListener(new OnCompleteListener() {
+                               @Override
+                               public void onComplete(@NonNull Task task) {
+                                   if (task.isSuccessful()) {
+
+                                   }
+                               }
+                           });
+                String saveCurrentTime, saveCurrentDate;
+
+                Calendar calendar = Calendar.getInstance();
+
+                SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+                saveCurrentDate = currentDate.format(calendar.getTime());
+
+                SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+                saveCurrentTime = currentTime.format(calendar.getTime());
+
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
+
+                HashMap<String, String> chatNotificationMap = new HashMap<>();
+                chatNotificationMap.put("from", currentUserID);
+                chatNotificationMap.put("type", "joinact");
+                chatNotificationMap.put("time", saveCurrentTime);
+                chatNotificationMap.put("date", saveCurrentDate);
+                chatNotificationMap.put("millisecond", ts);
+
+                db.collection("user").document(organizerID).
+                        collection("notification").
+                        document().
+                        set(chatNotificationMap)
+                        .addOnCompleteListener(new OnCompleteListener() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("TAG", "DocumentSnapshot successfully written!");
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                }
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
+                        });
+                db.collection("user").document(organizerID).
+                        get().
+                        addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("TAG", "Error writing document", e);
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        String RECEIVER_DEVICE = document.getString("device_token");
+                                        JSONObject notification = new JSONObject();
+                                        JSONObject notifcationBody = new JSONObject();
+                                        try {
+                                            notifcationBody.put("title", "您有新的入團申請");
+                                            notifcationBody.put("message", currentUserName+"對"+activitytitle+"提出了入團申請");
+                                            notification.put("to", RECEIVER_DEVICE);
+                                            notification.put("data", notifcationBody);
+                                        } catch (JSONException e) {
+                                        }
+                                        sendNotification(notification);
+                                    } else {
+                                    }
+                                } else {
+                                }
                             }
                         });
                 signupbtn.setText("已報名");
@@ -274,6 +323,32 @@ public class signup extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(signup.this, "Request error", Toast.LENGTH_LONG).show();
+
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
 }
