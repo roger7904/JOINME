@@ -60,18 +60,17 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="340dp"
+                    android:layout_width="338dp"
                     android:layout_height="272dp"
                     android:layout_marginBottom="10sp"
-                    android:background="@drawable/shape_textview"
+                    android:background="@drawable/verifybtn"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="5sp">
 
                     <LinearLayout
-                        android:layout_width="335dp"
-                        android:layout_height="257dp"
-                        android:background="#FFFFFF"
+                        android:layout_width="349dp"
+                        android:layout_height="272dp"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -144,6 +143,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="59dp"
+                            android:layout_marginTop="10dp"
                             android:orientation="horizontal">
 
                             <Button
@@ -152,20 +152,20 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="2dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/shape_verifybtn"
+                                android:background="#00000000"
                                 android:text="V批准"
                                 android:textColor="#FFFFFF"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
 
                             <Button
                                 android:id="@+id/reject"
-                                android:layout_width="wrap_content"
+                                android:layout_width="75dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@drawable/shape_verifybtn"
+                                android:background="#00000000"
                                 android:text="X拒絕"
                                 android:textColor="#ffffff"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -173,9 +173,9 @@
 
                 <LinearLayout
                     android:layout_width="339dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5sp"
-                    android:background="@drawable/shape_textview"
+                    android:layout_height="272dp"
+                    android:layout_marginBottom="10sp"
+                    android:background="@drawable/verifybtn"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="5sp">
@@ -183,12 +183,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#FFFFFF"
                         android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="59dp"
                             android:layout_margin="10dp"
                             android:orientation="horizontal"
                             android:paddingLeft="60dp"
@@ -264,29 +263,30 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="2dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/shape_verifybtn"
+                                android:background="#00000000"
                                 android:text="V批准"
                                 android:textColor="#FFFFFF"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
 
                             <Button
                                 android:id="@+id/rejection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@drawable/shape_verifybtn"
+                                android:background="#00000000"
                                 android:text="X拒絕"
                                 android:textColor="#ffffff"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
 
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="339dp"
+                    android:layout_height="272dp"
                     android:layout_marginBottom="10sp"
+                    android:background="@drawable/verifybtn"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="5sp">
@@ -294,12 +294,11 @@
                     <LinearLayout
                         android:layout_width="341dp"
                         android:layout_height="match_parent"
-                        android:background="@drawable/shape_textview"
                         android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="63dp"
                             android:layout_margin="10dp"
                             android:orientation="horizontal"
                             android:paddingLeft="60dp"
@@ -307,7 +306,7 @@
 
                             <Button
                                 android:id="@+id/button17"
-                                android:layout_width="wrap_content"
+                                android:layout_width="88dp"
                                 android:layout_height="50dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/photo" />
@@ -374,20 +373,20 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="2dp"
                                 android:layout_weight="1"
-                                android:background="@drawable/shape_verifybtn"
+                                android:background="#00000000"
                                 android:text="V批准"
                                 android:textColor="#FFFFFF"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
 
                             <Button
                                 android:id="@+id/button23"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="@drawable/shape_verifybtn"
+                                android:background="#00000000"
                                 android:text="X拒絕"
                                 android:textColor="#ffffff"
-                                android:textSize="20sp" />
+                                android:textSize="24sp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
