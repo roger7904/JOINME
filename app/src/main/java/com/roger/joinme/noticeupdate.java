@@ -1,16 +1,25 @@
 package com.roger.joinme;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,57 +28,54 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class noticeupdate extends AppCompatActivity {
 
-    public List<item> itemList;
-    public int count = 1,x = 0,y = 0;
-    public String joineraccount;
-    public String[] account = new String[10000];
+    private List<item> itemList;
+
+    private String currentUserID;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private itemAdapter itemadapter;
+//    private StorageReference UserProfileImagesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_noticeupdate);
+        setContentView(R.layout.activity_noticeupdate);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
 
         itemList = new ArrayList<>();
+//        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        for(x=0;x<MainActivity.count;x++){
-            db.collection("activity")
-                    .document(MainActivity.docString[x])
-                    .collection("participant")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if(!document.getString("account").equals("0")){
-//                                        System.out.println(count);
-                                        account[count] = document.getString("account");
-                                        itemList.add(new item(count,account[count]));
-                                        count++;
-                                    }
-                                }
+        initView();
+
+        db.collection("user").document(currentUserID).collection("notification")
+                .orderBy("millisecond", Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentt : task.getResult()) {
+                                String from = documentt.getString("from");
+                                String type = documentt.getString("type");
+                                itemList.add(new item(from,type));
+                                itemadapter.notifyDataSetChanged();
                             }
                         }
-                    });
-        }
+                    }
+                });
 
-//        System.out.println(y);
-//        for(y=0;y<=count;y++){
-//            System.out.println("00000"+account[y]);
-//            y++;
-//            itemList.add(new item(y,account[y-1]));
-//        }
 
-//        System.out.println("test"+itemListt);
-        itemList.add(new item(2,"2"));
-        itemList.add(new item(3,"3"));
-        itemList.add(new item(4,"4"));
-        initView();
     }
+
     public void initView(){
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycleview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new itemAdapter(this,itemList));
+        itemadapter = new itemAdapter(this, itemList);
+        recyclerView.setAdapter(itemadapter);
     }
+
+
 }

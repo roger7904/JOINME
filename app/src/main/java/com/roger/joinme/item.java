@@ -1,32 +1,32 @@
 package com.roger.joinme;
 
 public class item {
-    private int id;
-    private String content;
+    private String from;
+    private String type;
 
 //    public item() {
 //        super();
 //    }
 
-    public item(int id, String content) {
+    public item(String from, String type) {
         super();
-        this.id = id;
-        this.content = content;
+        this.from = from;
+        this.type = type;
     }
 
-    public int getId() {
-        return id;
+    public String getFrom() {
+        return from;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getContent() {
-        return content;
+    public String getType() {
+        return type;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setType(String type) {
+        this.type = type;
     }
 }
