@@ -62,6 +62,7 @@ public class verifyActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.getString("organizerID").equals(currentUserID)){
+                                    String activity=document.getId();
                                     db.collection("join_act_request").document(document.getId()).collection("UserID")
                                             .get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -89,7 +90,7 @@ public class verifyActivity extends AppCompatActivity {
                                                                                         public void onSuccess(Uri uri) {
                                                                                             // Got the download URL for 'users/me/profile.png'
                                                                                             verifyList.add(new verify(
-                                                                                                    uri,name,gender,age,phone,id ));
+                                                                                                    uri,name,gender,age,phone,id,activity ));
                                                                                             verifyadapter.notifyDataSetChanged();
                                                                                         }
                                                                                     }).addOnFailureListener(new OnFailureListener() {
@@ -109,7 +110,7 @@ public class verifyActivity extends AppCompatActivity {
                                                                                         public void onSuccess(Uri uri) {
                                                                                             // Got the download URL for 'users/me/profile.png'
                                                                                             verifyList.add(new verify(
-                                                                                                    uri,name,gender,age,phone,id ));
+                                                                                                    uri,name,gender,age,phone,id,activity ));
                                                                                             verifyadapter.notifyDataSetChanged();
                                                                                         }
                                                                                     }).addOnFailureListener(new OnFailureListener() {

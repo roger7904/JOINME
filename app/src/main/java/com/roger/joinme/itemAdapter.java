@@ -72,7 +72,10 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                     holder.itemView.getContext().startActivity(profileIntent);
                                 }
                             });
+                        }else if(item.getType().equals("act_accept")){
+                            holder.activity.setText(fromname+"核准了您的入團申請");
                         }
+
                     } else {
 
                     }

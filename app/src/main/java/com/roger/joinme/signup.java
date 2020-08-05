@@ -124,8 +124,10 @@ public class signup extends AppCompatActivity {
                                 }
 
                                 activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
-                                if (document.getString("organizerID") != currentUserID) {
+                                if (!document.getString("organizerID").equals(currentUserID)) {
                                     deletebtn.setVisibility(View.GONE);
+                                }else{
+                                    signupbtn.setVisibility(View.GONE);
                                 }
                             } else {
                             }
@@ -170,6 +172,7 @@ public class signup extends AppCompatActivity {
                     public void onClick(DialogInterface arg0, int arg1) {
                         // TODO Auto-generated method stub
                         db.collection("activity").document(activitytitle).delete();
+                        db.collection("activity").document(activitytitle).collection("participant").document().delete();
                         final DocumentReference docRef = db.collection("chat").document(activitytitle);
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -178,6 +181,23 @@ public class signup extends AppCompatActivity {
                                     DocumentSnapshot snapshot = task.getResult();
                                     if (snapshot != null && snapshot.exists()) {
                                         db.collection("chat").document(activitytitle).delete();
+                                        db.collection("chat").document(activitytitle).collection("participant").document().delete();
+                                        db.collection("chat").document(activitytitle).collection("content").document().delete();
+                                    } else {
+
+                                    }
+                                }
+                            }
+                        });
+                        db.collection("join_act_request").document(activitytitle)
+                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot snapshot = task.getResult();
+                                    if (snapshot != null && snapshot.exists()) {
+                                        db.collection("join_act_request").document(activitytitle).delete();
+                                        db.collection("join_act_request").document(activitytitle).collection("UserID").document().delete();
                                     } else {
 
                                     }

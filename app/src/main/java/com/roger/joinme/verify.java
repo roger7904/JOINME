@@ -3,7 +3,7 @@ package com.roger.joinme;
 import android.net.Uri;
 
 public class verify {
-    public String name, gender,id,age,phone;
+    public String name, gender,id,age,phone,activity;
     public Uri image;
 
     public verify()
@@ -11,13 +11,14 @@ public class verify {
 
     }
 
-    public verify(Uri image,String name, String gender, String age,String phone,String id) {
+    public verify(Uri image,String name, String gender, String age,String phone,String id,String activity) {
         this.name = name;
         this.gender = gender;
         this.image = image;
         this.id=id;
         this.phone=phone;
         this.age=age;
+        this.activity=activity;
     }
 
     public String getName() {
@@ -55,6 +56,13 @@ public class verify {
 
     public void setId(String id) {
         this.id = id;
+    }
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
     }
 
 
