@@ -31,5 +31,11 @@
         android:title="好友邀請"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/verify_request"
+        android:orderInCategory="100"
+        android:title="驗證活動申請"
+        app:showAsAction="never" />
+
 
 </menu>

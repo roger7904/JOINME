@@ -303,7 +303,7 @@ public class signup extends AppCompatActivity {
                                 }
                             }
                         });
-                signupbtn.setText("已報名");
+                signupbtn.setText("已申請報名");
                 signupbtn.setEnabled(false);
             }
         });

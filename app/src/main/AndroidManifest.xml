@@ -103,6 +103,9 @@
             android:name=".GroupChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".verifyActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".home"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -143,9 +146,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".chatting"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".verify"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".noticeupdate"
