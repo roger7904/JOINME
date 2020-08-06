@@ -21,7 +21,7 @@
 
 
             <LinearLayout
-                android:layout_width="230dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
@@ -60,14 +60,15 @@
             </LinearLayout>
 
 
-
-            <ImageView
+            <Button
                 android:id="@+id/user_online_status"
                 android:layout_width="50dp"
                 android:layout_height="43dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/p12"
-                />
+                android:layout_marginRight="10dp"
+                android:background="@drawable/p12"
+           />
+
 
 
     </LinearLayout>

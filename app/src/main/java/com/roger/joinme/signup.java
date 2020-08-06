@@ -63,7 +63,7 @@ public class signup extends AppCompatActivity {
     public TextView activityContent;
 
     public Bitmap actImg;
-    private String activitytitle,organizerID;
+    private String activitytitle,organizerID,activityType;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUserID,currentUserName;
@@ -107,6 +107,7 @@ public class signup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
+                                activityType=document.getString("activityType");
                                 Date snnippet = document.getTimestamp("startTime").toDate();
                                 SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
                                 title.setText(activitytitle);
@@ -325,6 +326,30 @@ public class signup extends AppCompatActivity {
                         });
                 signupbtn.setText("已申請報名");
                 signupbtn.setEnabled(false);
+            }
+        });
+
+        favoritebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HashMap<String, String> favoritemap = new HashMap<>();
+                favoritemap.put("activity", activitytitle);
+                db.collection("user")
+                        .document(currentUserID)
+                        .collection("favorite")
+                        .document(activitytitle)
+                        .set(favoritemap)
+                        .addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+
+                                }
+                            }
+                        });
+
+                favoritebtn.setText("已加入收藏");
+                favoritebtn.setEnabled(false);
             }
         });
     }

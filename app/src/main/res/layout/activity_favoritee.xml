@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".verifyActivity">
+
+
+    <include
+        android:id="@+id/chat_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        layout="@layout/app_bar_layout">
+    </include>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favorite_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/chat_toolbar"
+        android:layout_above="@+id/myLinearLayout"
+        android:layout_marginBottom="6dp"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</RelativeLayout>

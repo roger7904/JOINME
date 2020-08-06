@@ -106,6 +106,9 @@
             android:name=".verifyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".favoriteActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".home"
             android:theme="@style/AppTheme.NoActionBar">
 

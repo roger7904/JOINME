@@ -763,6 +763,14 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
+        favoritebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, favoriteActivity.class);
+                startActivity(intent);
+            }
+        });
         ballbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

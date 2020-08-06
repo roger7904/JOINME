@@ -1,198 +1,51 @@
 package com.roger.joinme;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.net.Uri;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+public class favorite {
+    public String name, place,time;
+    public Uri image;
 
-public class favorite extends AppCompatActivity {
-    private Button user;
-    private Button homepage;
-    private Button selfpage;
-    private Button activitypage;
-    private Button friendpage;
-    private Button logout;
-    private ImageButton chatroom;
-    private ImageButton favorite;
-    private ImageButton jo;
-    private ImageButton notice;
-    private ImageButton setting;
-    private AppBarConfiguration mAppBarConfiguration;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-//                .setDrawerLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        //NavigationUI.setupWithNavController(navigationView, navController);
-
-        initViews();
-        setListeners();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.homepage, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-    private void initViews()
+    public favorite()
     {
-        user=(Button)findViewById(R.id.btn_user);
-        homepage=(Button)findViewById(R.id.btn_to_homepage);
-        selfpage=(Button)findViewById(R.id.btn_to_selfpage);
-        activitypage=(Button)findViewById(R.id.btn_to_jo);
-        friendpage=(Button)findViewById(R.id.btn_to_notice);
-        logout=(Button)findViewById(R.id.btn_logout);
-        chatroom=(ImageButton)findViewById(R.id.imgbtn_chatroom);
-        favorite=(ImageButton)findViewById(R.id.imgbtn_favorite);
-        jo=(ImageButton)findViewById(R.id.imgbtn_jo);
-        notice=(ImageButton)findViewById(R.id.imgbtn_notice);
-        setting=(ImageButton)findViewById(R.id.imgbtn_setting);
+
     }
 
-    private void initData()
-    {
+    public favorite(Uri image,String name, String place, String time) {
+        this.name = name;
+        this.place = place;
+        this.image = image;
+        this.time=time;
     }
 
-    private void setListeners()
-    {
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, informationedit.class);
-                startActivity(intent);
-            }
-        });
+    public String getName() {
+        return name;
+    }
 
-        homepage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, homepage.class);
-                startActivity(intent);
-            }
-        });
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+    public String getPlace() {
+        return place;
+    }
 
-        activitypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, allactivity.class);
-                startActivity(intent);
-            }
-        });
+    public void setPlace(String place) {
+        this.place = place;
+    }
+    public String getTime() {
+        return time;
+    }
 
-        selfpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, selfpage.class);
-                startActivity(intent);
-            }
-        });
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-        chatroom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, chatroom.class);
-                startActivity(intent);
-            }
-        });
+    public Uri getImage() {
+        return image;
+    }
 
-        friendpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, friend.class);
-                startActivity(intent);
-            }
-        });
-
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, favorite.class);
-                startActivity(intent);
-            }
-        });
-
-
-
-        jo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, jo.class);
-                startActivity(intent);
-            }
-        });
-
-        notice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, notice.class);
-                startActivity(intent);
-            }
-        });
-
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(favorite.this, setting.class);
-                startActivity(intent);
-            }
-        });
+    public void setImage(Uri image) {
+        this.image = image;
     }
 }
-
