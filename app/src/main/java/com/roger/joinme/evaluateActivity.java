@@ -28,7 +28,7 @@
 //import androidx.recyclerview.widget.LinearLayoutManager;
 //import androidx.recyclerview.widget.RecyclerView;
 //
-//public class friend_request extends AppCompatActivity {
+//public class evaluateActivity extends AppCompatActivity {
 //
 //    private List<request> requestList;
 //
