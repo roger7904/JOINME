@@ -53,31 +53,31 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/collection" />
+                android:background="@drawable/star" />
             <Button
                 android:id="@+id/two"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/collection" />
+                android:background="@drawable/star" />
             <Button
                 android:id="@+id/three"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/collection" />
+                android:background="@drawable/star" />
             <Button
                 android:id="@+id/four"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/collection" />
+                android:background="@drawable/star" />
             <Button
                 android:id="@+id/five"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/collection" />
+                android:background="@drawable/star" />
 
 
         </LinearLayout>
@@ -101,7 +101,7 @@
             />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/send_evaluate"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="30dp"
