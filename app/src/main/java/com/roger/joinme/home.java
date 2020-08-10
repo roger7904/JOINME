@@ -9,6 +9,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -76,6 +81,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -134,6 +142,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
 
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
+    final private String contentType = "application/json";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -161,6 +173,110 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setListeners();
         maplistener = 0;
         getDBlistener();
+
+        db.collection("activity")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete (@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (((document.getTimestamp("endTime").getSeconds()) < System.currentTimeMillis() / 1000) && !document.contains("notification")){
+                                    String activityname=document.getId();
+                                    HashMap<String, Object> notimap = new HashMap<>();
+                                    notimap.put("notification", true);
+                                    db.collection("activity").document(activityname)
+                                            .set(notimap, SetOptions.merge())
+                                            .addOnCompleteListener(new OnCompleteListener() {
+                                                @Override
+                                                public void onComplete(@NonNull Task task) {
+                                                    if (task.isSuccessful()) {
+
+                                                    }
+                                                }
+                                            });
+                                    String saveCurrentTime, saveCurrentDate;
+
+                                    Calendar calendar = Calendar.getInstance();
+
+                                    SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+                                    saveCurrentDate = currentDate.format(calendar.getTime());
+
+                                    SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+                                    saveCurrentTime = currentTime.format(calendar.getTime());
+
+                                    Long tsLong = System.currentTimeMillis()/1000;
+                                    String ts = tsLong.toString();
+
+                                    HashMap<String, String> chatNotificationMap = new HashMap<>();
+                                    chatNotificationMap.put("from", document.getString("organizerID"));
+                                    chatNotificationMap.put("type", "evaluate");
+                                    chatNotificationMap.put("time", saveCurrentTime);
+                                    chatNotificationMap.put("date", saveCurrentDate);
+                                    chatNotificationMap.put("millisecond", ts);
+                                    chatNotificationMap.put("activityname", activityname);
+
+
+                                    db.collection("activity").document(activityname).
+                                            collection("participant")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        System.out.println("aaaaaaaaaaaa");
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            String UserID=document.getId();
+                                                            db.collection("user").document(UserID)
+                                                                    .collection("notification")
+                                                                    .document()
+                                                                    .set(chatNotificationMap)
+                                                                    .addOnCompleteListener(new OnCompleteListener() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task task) {
+                                                                            if (task.isSuccessful()) {
+                                                                                System.out.println("ttttttttt");
+                                                                                db.collection("user")
+                                                                                        .document(UserID)
+                                                                                        .get()
+                                                                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                            @Override
+                                                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                                if (task.isSuccessful()) {
+                                                                                                    DocumentSnapshot document = task.getResult();
+                                                                                                    if (document.exists()) {
+                                                                                                        String RECEIVER_DEVICE = document.getString("device_token");
+                                                                                                        JSONObject notification = new JSONObject();
+                                                                                                        JSONObject notifcationBody = new JSONObject();
+                                                                                                        try {
+                                                                                                            notifcationBody.put("title", "您有新的評價通知");
+                                                                                                            notifcationBody.put("message", "您參與的活動"+activityname+"已經結束"+"，點此處前往評價");
+                                                                                                            notification.put("to", RECEIVER_DEVICE);
+                                                                                                            notification.put("data", notifcationBody);
+                                                                                                        } catch (JSONException e) {
+                                                                                                        }
+                                                                                                        sendNotification(notification);
+                                                                                                    } else {
+                                                                                                    }
+                                                                                                } else {
+                                                                                                }
+                                                                                            }
+                                                                                        });
+                                                                            }
+                                                                        }
+                                                                    });
+
+
+                                                        }
+                                                    }
+                                                }
+                                            });
+
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -357,13 +473,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
                     switch (doc.getType()) {
                         case ADDED:
-                            System.out.println("1");
                             mClusterManager.clearItems();
                             mClusterManager.cluster();
                             maplistener = 1;
                             break;
                         case REMOVED:
-                            System.out.println("2");
                             mClusterManager.clearItems();
                             mClusterManager.cluster();
                             maplistener = 1;
@@ -445,7 +559,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void addItems() {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("activity")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -453,23 +566,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     public void onComplete (@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                lat = document.getGeoPoint("geopoint").getLatitude();
-                                lng = document.getGeoPoint("geopoint").getLongitude();
-                                if(document.getString("activityType").equals("ball")){
-                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                                }else if(document.getString("activityType").equals("eat")){
-                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-                                }else if(document.getString("activityType").equals("KTV")){
-                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-                                }else{
-                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                                if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000){
+                                    lat = document.getGeoPoint("geopoint").getLatitude();
+                                    lng = document.getGeoPoint("geopoint").getLongitude();
+                                    if (document.getString("activityType").equals("ball")) {
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                                    } else if (document.getString("activityType").equals("eat")) {
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                                    } else if (document.getString("activityType").equals("KTV")) {
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+                                    } else {
+                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                                    }
+                                    //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                    Date snnippet = document.getTimestamp("startTime").toDate();
+                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                    offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
+                                    mClusterManager.addItem(offsetItem);
+                                    mMap.setOnInfoWindowClickListener(mClusterManager);
                                 }
-                                //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                Date snnippet = document.getTimestamp("startTime").toDate();
-                                SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
-                                mClusterManager.addItem(offsetItem);
-                                mMap.setOnInfoWindowClickListener(mClusterManager);
                             }
                         }
                     }
@@ -758,8 +873,9 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                             public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        lat = document.getGeoPoint("geopoint").getLatitude();
-                                        lng = document.getGeoPoint("geopoint").getLongitude();
+                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
+                                            lat = document.getGeoPoint("geopoint").getLatitude();
+                                            lng = document.getGeoPoint("geopoint").getLongitude();
 //                                        System.out.println(document.getString("activityPhoto"));
 //                                        try {
 //                                            URL url = new URL(document.getString("activityPhoto"));
@@ -774,14 +890,15 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //                                        } catch (IOException e) {
 //                                            e.printStackTrace();
 //                                        }
-                                        //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                        Date snnippet = document.getTimestamp("startTime").toDate();
-                                        SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
+                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                            Date snnippet = document.getTimestamp("startTime").toDate();
+                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                            markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
 
-                                        mClusterManager.addItem(offsetItem);
-                                        mMap.setOnInfoWindowClickListener(mClusterManager);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
                                     }
                                 }
                             }
@@ -808,17 +925,19 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                             public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        lat = document.getGeoPoint("geopoint").getLatitude();
-                                        lng = document.getGeoPoint("geopoint").getLongitude();
+                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
+                                            lat = document.getGeoPoint("geopoint").getLatitude();
+                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                        //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                        Date snnippet = document.getTimestamp("startTime").toDate();
-                                        SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        markerDescriptor = markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
+                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                            Date snnippet = document.getTimestamp("startTime").toDate();
+                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                            markerDescriptor = markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
 
-                                        mClusterManager.addItem(offsetItem);
-                                        mMap.setOnInfoWindowClickListener(mClusterManager);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
                                     }
                                 }
                             }
@@ -845,17 +964,19 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                             public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        lat = document.getGeoPoint("geopoint").getLatitude();
-                                        lng = document.getGeoPoint("geopoint").getLongitude();
+                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
+                                            lat = document.getGeoPoint("geopoint").getLatitude();
+                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                        //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                        Date snnippet = document.getTimestamp("startTime").toDate();
-                                        SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
+                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                            Date snnippet = document.getTimestamp("startTime").toDate();
+                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                            markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
 
-                                        mClusterManager.addItem(offsetItem);
-                                        mMap.setOnInfoWindowClickListener(mClusterManager);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
                                     }
                                 }
                             }
@@ -882,17 +1003,19 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                             public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        lat = document.getGeoPoint("geopoint").getLatitude();
-                                        lng = document.getGeoPoint("geopoint").getLongitude();
+                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
+                                            lat = document.getGeoPoint("geopoint").getLatitude();
+                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                        //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                        Date snnippet = document.getTimestamp("startTime").toDate();
-                                        SimpleDateFormat ft = new SimpleDateFormat( " yyyy-MM-dd hh :mm:ss " );
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                                        MyItem offsetItem = new MyItem(lat, lng,document.getString("title"),ft.format(snnippet),markerDescriptor);
+                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                            Date snnippet = document.getTimestamp("startTime").toDate();
+                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                            markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
 
-                                        mClusterManager.addItem(offsetItem);
-                                        mMap.setOnInfoWindowClickListener(mClusterManager);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
                                     }
                                 }
                             }
@@ -901,6 +1024,32 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
+    }
+
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(home.this, "Request error", Toast.LENGTH_LONG).show();
+
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
 }

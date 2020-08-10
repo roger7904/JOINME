@@ -116,6 +116,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
                 Intent profileIntent = new Intent(holder.itemView.getContext(), personalevaluateActivity.class);
                 profileIntent.putExtra("visit_user_id", visit_user_id);
                 profileIntent.putExtra("star", 1);
+                profileIntent.putExtra("activityname", evaluate.getActivityname());
                 holder.itemView.getContext().startActivity(profileIntent);
             }
         });
@@ -128,6 +129,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
                 Intent profileIntent = new Intent(holder.itemView.getContext(), personalevaluateActivity.class);
                 profileIntent.putExtra("visit_user_id", visit_user_id);
                 profileIntent.putExtra("star", 2);
+                profileIntent.putExtra("activityname", evaluate.getActivityname());
                 holder.itemView.getContext().startActivity(profileIntent);
             }
         });
@@ -140,6 +142,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
                 Intent profileIntent = new Intent(holder.itemView.getContext(), personalevaluateActivity.class);
                 profileIntent.putExtra("visit_user_id", visit_user_id);
                 profileIntent.putExtra("star", 3);
+                profileIntent.putExtra("activityname", evaluate.getActivityname());
                 holder.itemView.getContext().startActivity(profileIntent);
             }
         });
@@ -152,6 +155,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
                 Intent profileIntent = new Intent(holder.itemView.getContext(), personalevaluateActivity.class);
                 profileIntent.putExtra("visit_user_id", visit_user_id);
                 profileIntent.putExtra("star", 4);
+                profileIntent.putExtra("activityname", evaluate.getActivityname());
                 holder.itemView.getContext().startActivity(profileIntent);
             }
         });

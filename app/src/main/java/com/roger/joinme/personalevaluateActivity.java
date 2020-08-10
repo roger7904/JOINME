@@ -63,7 +63,7 @@ public class personalevaluateActivity extends AppCompatActivity
     private ImageView userProfileImage;
     private Integer star;
 
-    private String currentUserID,UserID;
+    private String currentUserID,UserID,activityname;
     private FirebaseAuth mAuth;
 
     private FirebaseFirestore db;
@@ -79,6 +79,7 @@ public class personalevaluateActivity extends AppCompatActivity
 
         UserID = getIntent().getExtras().get("visit_user_id").toString();
         star = (Integer) getIntent().getExtras().get("star");
+        activityname = getIntent().getExtras().get("activityname").toString();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -201,6 +202,40 @@ public class personalevaluateActivity extends AppCompatActivity
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Map<String, Object> evaluatemap = new HashMap<>();
+                evaluatemap.put("evaluate", true);
+                evaluatemap.put("star", star);
+                evaluatemap.put("evaluate_content", evaluatecontent.getText().toString());
+                db.collection("activity").document(activityname)
+                    .collection("participant")
+                    .document(UserID)
+                    .set(evaluatemap, SetOptions.merge())
+                    .addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()) {
+                                Map<String, Object> evaluatemap2 = new HashMap<>();
+                                evaluatemap2.put("activityname", activityname);
+                                evaluatemap2.put("star", star);
+                                evaluatemap2.put("evaluate_content", evaluatecontent.getText().toString());
+                                db.collection("user").document(UserID)
+                                        .collection("evaluate")
+                                        .document(activityname)
+                                        .set(evaluatemap2)
+                                        .addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if (task.isSuccessful()) {
+                                                    Intent Intent = new Intent(personalevaluateActivity.this, evaluateActivity.class);
+                                                    startActivity(Intent);
+                                                    Toast.makeText(personalevaluateActivity.this,
+                                                            "評價完成", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    });
 
             }
         });
