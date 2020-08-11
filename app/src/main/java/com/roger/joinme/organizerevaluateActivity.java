@@ -55,15 +55,14 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class personalevaluateActivity extends AppCompatActivity
+public class organizerevaluateActivity extends AppCompatActivity
 {
     private Button one,two,three,four,five,send;
     private TextView textName;
     private EditText evaluatecontent;
     private ImageView userProfileImage;
     private Integer star;
-
-    private String currentUserID,UserID,activityname;
+    private String currentUserID,activityname,UserID;
     private FirebaseAuth mAuth;
 
     private FirebaseFirestore db;
@@ -75,51 +74,25 @@ public class personalevaluateActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_evaluate_personal);
+        setContentView(R.layout.activity_evaluate_organizer);
 
-        UserID = getIntent().getExtras().get("visit_user_id").toString();
-        star = (Integer) getIntent().getExtras().get("star");
+
         activityname = getIntent().getExtras().get("activityname").toString();
+        UserID = getIntent().getExtras().get("UserID").toString();
+
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
+
+        star=5;
+
         InitializeFields();
         setListeners();
         RetrieveUserInfo();
-        if(star.equals(1)){
-            one.setBackgroundResource(R.drawable.star);
-            two.setBackgroundResource(R.drawable.star2);
-            three.setBackgroundResource(R.drawable.star2);
-            four.setBackgroundResource(R.drawable.star2);
-            five.setBackgroundResource(R.drawable.star2);
-        }else if(star.equals(2)){
-            one.setBackgroundResource(R.drawable.star);
-            two.setBackgroundResource(R.drawable.star);
-            three.setBackgroundResource(R.drawable.star2);
-            four.setBackgroundResource(R.drawable.star2);
-            five.setBackgroundResource(R.drawable.star2);
-        }else if(star.equals(3)){
-            one.setBackgroundResource(R.drawable.star);
-            two.setBackgroundResource(R.drawable.star);
-            three.setBackgroundResource(R.drawable.star);
-            four.setBackgroundResource(R.drawable.star2);
-            five.setBackgroundResource(R.drawable.star2);
-        }else if(star.equals(4)){
-            one.setBackgroundResource(R.drawable.star);
-            two.setBackgroundResource(R.drawable.star);
-            three.setBackgroundResource(R.drawable.star);
-            four.setBackgroundResource(R.drawable.star);
-            five.setBackgroundResource(R.drawable.star2);
-        }else if(star.equals(5)){
-            one.setBackgroundResource(R.drawable.star);
-            two.setBackgroundResource(R.drawable.star);
-            three.setBackgroundResource(R.drawable.star);
-            four.setBackgroundResource(R.drawable.star);
-            five.setBackgroundResource(R.drawable.star);
-        }
+
     }
 
     private void InitializeFields()
@@ -203,41 +176,58 @@ public class personalevaluateActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Map<String, Object> evaluatemap = new HashMap<>();
-                evaluatemap.put("evaluate", true);
-                evaluatemap.put("evaluate_from", currentUserID);
-                evaluatemap.put("star", star);
-                evaluatemap.put("evaluate_content", evaluatecontent.getText().toString());
+                evaluatemap.put("evaluate_to_organizer", true);
+
                 db.collection("activity").document(activityname)
-                    .collection("participant")
-                    .document(UserID)
-                    .set(evaluatemap, SetOptions.merge())
-                    .addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if (task.isSuccessful()) {
-                                Map<String, Object> evaluatemap2 = new HashMap<>();
-                                evaluatemap2.put("activityname", activityname);
-                                evaluatemap2.put("evaluate_from", currentUserID);
-                                evaluatemap2.put("star", star);
-                                evaluatemap2.put("evaluate_content", evaluatecontent.getText().toString());
-                                db.collection("user").document(UserID)
-                                        .collection("evaluate")
-                                        .document()
-                                        .set(evaluatemap2)
-                                        .addOnCompleteListener(new OnCompleteListener() {
-                                            @Override
-                                            public void onComplete(@NonNull Task task) {
-                                                if (task.isSuccessful()) {
-                                                    Intent Intent = new Intent(personalevaluateActivity.this, evaluateActivity.class);
-                                                    startActivity(Intent);
-                                                    Toast.makeText(personalevaluateActivity.this,
-                                                            "評價完成", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
+                        .collection("participant")
+                        .document(currentUserID)
+                        .set(evaluatemap,SetOptions.merge())
+                        .addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+
+                                }
                             }
-                        }
-                    });
+                        });
+//                Map<String, Object> evaluatemap = new HashMap<>();
+//                evaluatemap.put("evaluate", true);
+//                evaluatemap.put("evaluate_from", currentUserID);
+//                evaluatemap.put("star", star);
+//                evaluatemap.put("evaluate_content", evaluatecontent.getText().toString());
+//                db.collection("activity").document(activityname)
+//                        .collection("participant")
+//                        .document(UserID)
+//                        .set(evaluatemap, SetOptions.merge())
+//                        .addOnCompleteListener(new OnCompleteListener() {
+//                            @Override
+//                            public void onComplete(@NonNull Task task) {
+//                                if (task.isSuccessful()) {
+                                    Map<String, Object> evaluatemap2 = new HashMap<>();
+                                    evaluatemap2.put("activityname", activityname);
+                                    evaluatemap2.put("evaluate_from", currentUserID);
+                                    evaluatemap2.put("star", star);
+                                    evaluatemap2.put("evaluate_content", evaluatecontent.getText().toString());
+                                    db.collection("user").document(UserID)
+                                            .collection("evaluate")
+                                            .document()
+                                            .set(evaluatemap2)
+                                            .addOnCompleteListener(new OnCompleteListener() {
+                                                @Override
+                                                public void onComplete(@NonNull Task task) {
+                                                    if (task.isSuccessful()) {
+                                                        Intent Intent = new Intent(organizerevaluateActivity.this, evaluateActivity.class);
+                                                        startActivity(Intent);
+                                                        Toast.makeText(organizerevaluateActivity.this,
+                                                                "評價完成", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+//                                }
+//                            }
+//                        });
+
+
 
             }
         });
@@ -245,7 +235,6 @@ public class personalevaluateActivity extends AppCompatActivity
 
     private void RetrieveUserInfo()
     {
-
         final DocumentReference docRef = db.collection("user").document(UserID).collection("profile")
                 .document(UserID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -261,7 +250,7 @@ public class personalevaluateActivity extends AppCompatActivity
                         UserProfileImagesRef.child(UserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Glide.with(personalevaluateActivity.this)
+                                Glide.with(organizerevaluateActivity.this)
                                         .load(uri)
                                         .circleCrop()
                                         .into(userProfileImage);
@@ -279,7 +268,7 @@ public class personalevaluateActivity extends AppCompatActivity
 
                         textName.setText(retrieveUserName);
 
-                        Glide.with(personalevaluateActivity.this)
+                        Glide.with(organizerevaluateActivity.this)
                                 .load(R.drawable.head)
                                 .circleCrop()
                                 .into(userProfileImage);

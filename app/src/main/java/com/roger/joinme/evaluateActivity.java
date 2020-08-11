@@ -51,7 +51,9 @@ public class evaluateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_request);
+        setContentView(R.layout.activity_evaluate);
+
+        activityname = getIntent().getExtras().get("activityname").toString();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -72,7 +74,7 @@ public class evaluateActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(!document.contains("evaluate")){
+                                if(!document.contains("evaluate") && !document.getId().equals(currentUserID)){
                                     db.collection("user").document(document.getId()).collection("profile")
                                             .get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -130,6 +132,7 @@ public class evaluateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Map<String, Object> evaluatemap = new HashMap<>();
                 evaluatemap.put("evaluate", true);
+                evaluatemap.put("evaluate_from", currentUserID);
                 evaluatemap.put("star", 5);
 
                 db.collection("activity").document(activityname).
@@ -140,7 +143,7 @@ public class evaluateActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if(!document.contains("evaluate")){
+                                        if(!document.contains("evaluate") && !document.getId().equals(currentUserID)){
                                             String UserID=document.getId();
                                             db.collection("activity").document(activityname)
                                                     .collection("participant")
@@ -152,11 +155,12 @@ public class evaluateActivity extends AppCompatActivity {
                                                             if (task.isSuccessful()) {
                                                                 Map<String, Object> evaluatemap2 = new HashMap<>();
                                                                 evaluatemap2.put("activityname", activityname);
+                                                                evaluatemap2.put("evaluate_from", currentUserID);
                                                                 evaluatemap2.put("star", 5);
 
                                                                 db.collection("user").document(UserID)
                                                                         .collection("evaluate")
-                                                                        .document(activityname)
+                                                                        .document()
                                                                         .set(evaluatemap2)
                                                                         .addOnCompleteListener(new OnCompleteListener() {
                                                                             @Override

@@ -88,7 +88,14 @@
         <activity android:name=".testsetting" />
         <activity android:name=".testmain" />
         <activity android:name=".forgetpwd" />
-        <activity android:name=".FindFriendsActivity" />
+        <activity android:name=".FindFriendsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".evaluateActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".personalevaluateActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".organizerevaluateActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".informationedit" />
         <activity
             android:name=".selfpage"

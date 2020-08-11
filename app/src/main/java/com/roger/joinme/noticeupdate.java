@@ -60,8 +60,15 @@ public class noticeupdate extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentt : task.getResult()) {
                                 String from = documentt.getString("from");
                                 String type = documentt.getString("type");
-                                itemList.add(new item(from,type));
-                                itemadapter.notifyDataSetChanged();
+                                if(documentt.contains("activityname")){
+                                    String activityname = documentt.getString("activityname");
+                                    itemList.add(new item(from,type,activityname));
+                                    itemadapter.notifyDataSetChanged();
+                                }else{
+                                    itemList.add(new item(from,type,"none"));
+                                    itemadapter.notifyDataSetChanged();
+                                }
+
                             }
                         }
                     }

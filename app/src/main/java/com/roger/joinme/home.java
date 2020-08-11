@@ -250,7 +250,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                                                                                         JSONObject notifcationBody = new JSONObject();
                                                                                                         try {
                                                                                                             notifcationBody.put("title", "您有新的評價通知");
-                                                                                                            notifcationBody.put("message", "您參與的活動"+activityname+"已經結束"+"，點此處前往評價");
+                                                                                                            notifcationBody.put("message", "您參與的活動"+activityname+"已經結束"+"，至通知處前往評價");
                                                                                                             notification.put("to", RECEIVER_DEVICE);
                                                                                                             notification.put("data", notifcationBody);
                                                                                                         } catch (JSONException e) {

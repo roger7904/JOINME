@@ -82,7 +82,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
 //            }
 //        });
 
-        View view = LayoutInflater.from(context).inflate(R.layout.verify_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.evaluate_layout, parent, false);
         return new ViewHolder(view);
     }
 
