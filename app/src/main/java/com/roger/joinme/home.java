@@ -284,7 +284,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     {
         super.onStart();
 
-        if (currentUser == null)
+        if (currentUser == null || mAuth== null )
         {
             SendUserToLoginActivity();
         }

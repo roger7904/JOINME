@@ -57,7 +57,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class testsetting extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
-    private EditText userName, userStatus;
+    private EditText userName, userStatus,usergender,userage,userphone;
     private ImageView userProfileImage;
 
     private String currentUserID;
@@ -125,6 +125,9 @@ public class testsetting extends AppCompatActivity
         userStatus = (EditText) findViewById(R.id.set_profile_status);
         userProfileImage = (ImageView) findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
+        usergender = (EditText) findViewById(R.id.gender);
+        userage = (EditText) findViewById(R.id.age);
+        userphone = (EditText) findViewById(R.id.phone);
 
 //        SettingsToolBar = (Toolbar) findViewById(R.id.settings_toolbar);
 //        setSupportActionBar(SettingsToolBar);
@@ -202,21 +205,41 @@ public class testsetting extends AppCompatActivity
     {
         String setUserName = userName.getText().toString();
         String setStatus = userStatus.getText().toString();
+        String gender = usergender.getText().toString();
+        String age = userage.getText().toString();
+        String phone = userphone.getText().toString();
+
 
         if (TextUtils.isEmpty(setUserName))
         {
-            Toast.makeText(this, "Please write your user name first....", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "請填寫姓名", Toast.LENGTH_SHORT).show();
         }
         if (TextUtils.isEmpty(setStatus))
         {
-            Toast.makeText(this, "Please write your status....", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "請填寫狀態", Toast.LENGTH_SHORT).show();
         }
+        if (TextUtils.isEmpty(gender))
+        {
+            Toast.makeText(this, "請填寫性別", Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.isEmpty(age))
+        {
+            Toast.makeText(this, "請填寫年齡", Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.isEmpty(phone))
+        {
+            Toast.makeText(this, "請填寫手機", Toast.LENGTH_SHORT).show();
+        }
+
         else
         {
             HashMap<String, Object> profileMap = new HashMap<>();
             profileMap.put("currentUserID", currentUserID);
             profileMap.put("name", setUserName);
             profileMap.put("status", setStatus);
+            profileMap.put("gender", gender);
+            profileMap.put("age", age);
+            profileMap.put("phone", phone);
             db.collection("user")
                     .document(currentUserID)
                     .collection("profile")
@@ -254,10 +277,15 @@ public class testsetting extends AppCompatActivity
                     if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
                         String retrieveUserName = snapshot.getString("name");
                         String retrievesStatus = snapshot.getString("status");
-                        String retrieveProfileImage = snapshot.getString("image");
+                        String gender = snapshot.getString("gender");
+                        String age = snapshot.getString("age");
+                        String phone = snapshot.getString("phone");
 
                         userName.setText(retrieveUserName);
                         userStatus.setText(retrievesStatus);
+                        usergender.setText(gender);
+                        userage.setText(age);
+                        userphone.setText(phone);
 
 //                        Picasso.get()
 //                                .load(retrieveProfileImage)
@@ -285,7 +313,15 @@ public class testsetting extends AppCompatActivity
                     } else if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
                         String retrieveUserName = snapshot.getString("name");
                         String retrievesStatus = snapshot.getString("status");
-                        System.out.println("name ststus");
+                        String gender = snapshot.getString("gender");
+                        String age = snapshot.getString("age");
+                        String phone = snapshot.getString("phone");
+
+
+                        usergender.setText(gender);
+                        userage.setText(age);
+                        userphone.setText(phone);
+
                         Glide.with(testsetting.this)
                                 .load(R.drawable.head)
                                 .circleCrop()
