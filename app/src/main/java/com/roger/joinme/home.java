@@ -334,7 +334,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     Log.w("TAG", "Listen failed.", e);
                     return;
                 }
-                if (snapshot != null && snapshot.exists()) {
+                if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
                     Toast.makeText(home.this, "歡迎", Toast.LENGTH_SHORT).show();
                 } else {
                     SendUserToSettingsActivity();
