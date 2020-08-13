@@ -78,7 +78,7 @@ public class favoriteActivity extends AppCompatActivity {
                                                     String name = d.getId();
                                                     String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
                                                     String place = d.getString("location");
-                                                    UserProfileImagesRef.child(name+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    UserProfileImagesRef.child(name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                         @Override
                                                         public void onSuccess(Uri uri) {
                                                             // Got the download URL for 'users/me/profile.png'
