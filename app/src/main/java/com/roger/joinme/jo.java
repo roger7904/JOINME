@@ -333,7 +333,6 @@ public class jo extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);    //使用Intent.ACTION_GET_CONTENT
                 startActivityForResult(intent, 1);      //取得相片後, 返回
                 imguploaded = true;
-                Toast.makeText(jo.this, "請點選上傳鈕才成功上傳", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -376,12 +375,17 @@ public class jo extends AppCompatActivity {
                         Thread t1=new Thread(uploadcover);
                         Thread t2=new Thread(uploadtoDB);
                         t1.start();
-                        try {
-                            t2.sleep(2000);
-                            t2.start();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        synchronized (t1){
+                            try {
+                                t1.wait(4000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        t2.start();
+
+
+
 
 
                         System.out.print(uriString);
@@ -732,46 +736,48 @@ public class jo extends AppCompatActivity {
     Runnable uploadcover = new Runnable() {
         @Override
         public void run() {
-            FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
-            StorageReference StorageRef = storage.getReference();
-            final StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
-            imgtest.setDrawingCacheEnabled(true);
-            imgtest.buildDrawingCache();
-            Bitmap bitmap = ((BitmapDrawable) imgtest.getDrawable()).getBitmap();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
+            synchronized (this) {
+                FirebaseStorage storage = FirebaseStorage.getInstance("gs://joinme-6fe0a.appspot.com/");
+                StorageReference StorageRef = storage.getReference();
+                final StorageReference pRef = StorageRef.child(activityTitle.getText().toString());
+                imgtest.setDrawingCacheEnabled(true);
+                imgtest.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) imgtest.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
 
-            UploadTask uploadTask = pRef.putBytes(data);
+                UploadTask uploadTask = pRef.putBytes(data);
 
 
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
-                    pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            uriString = uri.toString();
-                            System.out.println(uriString);
-                            mLoadhandler.sendEmptyMessage(0);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle any errors
-                        }
-                    });
-                    ;
-                }
-            });
-
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                        // ...
+                        pRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                uriString = uri.toString();
+                                System.out.println(uriString);
+                                mLoadhandler.sendEmptyMessage(0);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                            }
+                        });
+                        ;
+                    }
+                });
+                notify();
+            }
         }
 
     };
