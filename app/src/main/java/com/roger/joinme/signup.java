@@ -1,9 +1,11 @@
 package com.roger.joinme;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +19,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,6 +72,7 @@ public class signup extends AppCompatActivity {
     public Bitmap actImg;
     private String activitytitle,organizerID,activityType;
     private FirebaseFirestore db;
+    private FirebaseStorage firebaseStorage;
     private FirebaseAuth mAuth;
     private String currentUserID,currentUserName;
     String imageUrl;
@@ -81,6 +89,7 @@ public class signup extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
+        firebaseStorage=FirebaseStorage.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         activitytitle = getIntent().getExtras().get("activitytitle").toString();
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
@@ -112,18 +121,14 @@ public class signup extends AppCompatActivity {
                                 SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
                                 title.setText(activitytitle);
                                 organizerID=document.getString("organizerID");
-                                imageUrl = document.getString("imgUri");
-                                if (!imageUrl.equals("")) { //目前大部分活動的imguri為留空，故沒有的話就不替換了
-                                    getBitmapFromUrl thread = new getBitmapFromUrl();
-                                    thread.start();
-                                    try {
-                                        thread.join();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    activityPhoto.setImageBitmap(actImg);
-                                }
+                                StorageReference img=firebaseStorage.getReference();
+                                img.child(activitytitle).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Glide.with(signup.this).load(uri).into(activityPhoto);
 
+                                    }
+                                });
                                 activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
                                 if (!document.getString("organizerID").equals(currentUserID)) {
                                     deletebtn.setVisibility(View.GONE);
@@ -395,5 +400,7 @@ public class signup extends AppCompatActivity {
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
+
+
 
 }

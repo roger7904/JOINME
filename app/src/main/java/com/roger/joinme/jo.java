@@ -375,13 +375,6 @@ public class jo extends AppCompatActivity {
                         Thread t1=new Thread(uploadcover);
                         Thread t2=new Thread(uploadtoDB);
                         t1.start();
-                        synchronized (t1){
-                            try {
-                                t1.wait(4000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
                         t2.start();
 
 
@@ -804,7 +797,6 @@ public class jo extends AppCompatActivity {
             book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
             book.put("endTime", ets);
             book.put("organizerID", currentUserID);
-            book.put("imgUri", uriString);
             book.put("onlyMale",flag_list[0]);
             book.put("onlyFemale",flag_list[1]);
             book.put("Ontime",flag_list[2]);
