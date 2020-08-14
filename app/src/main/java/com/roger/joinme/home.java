@@ -91,7 +91,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         GoogleMap.OnCameraMoveStartedListener,
         GoogleMap.OnCameraMoveListener,
         GoogleMap.OnCameraMoveCanceledListener,
-        GoogleMap.OnCameraIdleListener{
+        GoogleMap.OnCameraIdleListener {
     private Button user;
     private Button homepage;
     private Button selfpage;
@@ -134,7 +134,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public MyItem offsetItem;
     public BitmapDescriptor markerDescriptor;
     public int maplistener = 0;
-//    public static String useraccount;
+    //    public static String useraccount;
     private String currentUserID, currentUserName;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -161,11 +161,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        db=FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        if (currentUser == null)
-        {
+        if (currentUser == null) {
             SendUserToLoginActivity();
         }
 
@@ -178,11 +177,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete (@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (((document.getTimestamp("endTime").getSeconds()) < System.currentTimeMillis() / 1000) && !document.contains("notification")){
-                                    String activityname=document.getId();
+                                if (((document.getTimestamp("endTime").getSeconds()) < System.currentTimeMillis() / 1000) && !document.contains("notification")) {
+                                    String activityname = document.getId();
                                     HashMap<String, Object> notimap = new HashMap<>();
                                     notimap.put("notification", true);
                                     db.collection("activity").document(activityname)
@@ -205,7 +204,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                     SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
                                     saveCurrentTime = currentTime.format(calendar.getTime());
 
-                                    Long tsLong = System.currentTimeMillis()/1000;
+                                    Long tsLong = System.currentTimeMillis() / 1000;
                                     String ts = tsLong.toString();
 
                                     HashMap<String, String> chatNotificationMap = new HashMap<>();
@@ -226,7 +225,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                                     if (task.isSuccessful()) {
                                                         System.out.println("aaaaaaaaaaaa");
                                                         for (QueryDocumentSnapshot document : task.getResult()) {
-                                                            String UserID=document.getId();
+                                                            String UserID = document.getId();
                                                             db.collection("user").document(UserID)
                                                                     .collection("notification")
                                                                     .document()
@@ -250,7 +249,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                                                                                         JSONObject notifcationBody = new JSONObject();
                                                                                                         try {
                                                                                                             notifcationBody.put("title", "您有新的評價通知");
-                                                                                                            notifcationBody.put("message", "您參與的活動"+activityname+"已經結束"+"，至通知處前往評價");
+                                                                                                            notifcationBody.put("message", "您參與的活動" + activityname + "已經結束" + "，至通知處前往評價");
                                                                                                             notification.put("to", RECEIVER_DEVICE);
                                                                                                             notification.put("data", notifcationBody);
                                                                                                         } catch (JSONException e) {
@@ -280,16 +279,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
 
-        if (currentUser == null || mAuth== null )
-        {
+        if (currentUser == null || mAuth == null) {
             SendUserToLoginActivity();
-        }
-        else
-        {
+        } else {
             updateUserStatus("online");
 
             VerifyUserExistance();
@@ -320,46 +315,42 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //        }
 //    }
 
-    private void VerifyUserExistance()
-    {
+    private void VerifyUserExistance() {
         currentUserID = mAuth.getCurrentUser().getUid();
         db.collection("user").document(currentUserID)
                 .collection("profile")
                 .document(currentUserID)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("TAG", "Listen failed.", e);
-                    return;
-                }
-                if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
-                    Toast.makeText(home.this, "歡迎", Toast.LENGTH_SHORT).show();
-                } else {
-                    SendUserToSettingsActivity();
-                    Log.d("TAG", "Current data: null");
-                }
-            }
-        });
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("TAG", "Listen failed.", e);
+                            return;
+                        }
+                        if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
+                            Toast.makeText(home.this, "歡迎", Toast.LENGTH_SHORT).show();
+                        } else {
+                            SendUserToSettingsActivity();
+                            Log.d("TAG", "Current data: null");
+                        }
+                    }
+                });
 
     }
 
-    private void SendUserToSettingsActivity()
-    {
+    private void SendUserToSettingsActivity() {
         Intent settingsIntent = new Intent(home.this, testsetting.class);
         startActivity(settingsIntent);
     }
 
-    private void SendUserToLoginActivity()
-    {
+    private void SendUserToLoginActivity() {
         Intent loginIntent = new Intent(home.this, MainActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
     }
 
-    private void updateUserStatus(String state)
-    {
+    private void updateUserStatus(String state) {
         currentUserID = mAuth.getCurrentUser().getUid();
         String saveCurrentTime, saveCurrentDate;
 
@@ -394,8 +385,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -405,49 +394,42 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if (item.getItemId() == R.id.action_logout)
-        {
+        if (item.getItemId() == R.id.action_logout) {
             updateUserStatus("offline");
             LoginManager.getInstance().logOut();
             mAuth.signOut();
             SendUserToLoginActivity();
-        }if (item.getItemId() == R.id.findfriend)
-        {
+        }
+        if (item.getItemId() == R.id.findfriend) {
             SendUserToFindFriendsActivity();
         }
-        if (item.getItemId() == R.id.main_settings_option)
-        {
+        if (item.getItemId() == R.id.main_settings_option) {
             SendUserToSettingsActivity();
-        }if (item.getItemId() == R.id.friend_request)
-        {
+        }
+        if (item.getItemId() == R.id.friend_request) {
             SendUserTorequest();
         }
-        if (item.getItemId() == R.id.verify_request)
-        {
+        if (item.getItemId() == R.id.verify_request) {
             SendUserToverify();
         }
 
         return true;
     }
 
-    private void SendUserToverify()
-    {
+    private void SendUserToverify() {
         Intent findFriendsIntent = new Intent(home.this, verifyActivity.class);
         startActivity(findFriendsIntent);
     }
 
-    private void SendUserTorequest()
-    {
+    private void SendUserTorequest() {
         Intent findFriendsIntent = new Intent(home.this, friend_request.class);
         startActivity(findFriendsIntent);
     }
 
-    private void SendUserToFindFriendsActivity()
-    {
+    private void SendUserToFindFriendsActivity() {
         Intent findFriendsIntent = new Intent(home.this, FindFriendsActivity.class);
         startActivity(findFriendsIntent);
     }
@@ -459,7 +441,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 || super.onSupportNavigateUp();
     }
 
-    public void getDBlistener(){
+    public void getDBlistener() {
         //監聽資料庫
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference docRef = db.collection("activity");
@@ -547,7 +529,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 //        addItems();
         mClusterManager.setOnClusterItemInfoWindowClickListener(
                 new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
-                    @Override public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
+                    @Override
+                    public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
                         Intent intent = new Intent();
                         intent.setClass(home.this, signup.class);
                         intent.putExtra("activitytitle", stringClusterItem.getTitle());
@@ -563,10 +546,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete (@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000){
+                                if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
                                     lat = document.getGeoPoint("geopoint").getLatitude();
                                     lng = document.getGeoPoint("geopoint").getLongitude();
                                     if (document.getString("activityType").equals("ball")) {
@@ -580,7 +563,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                     }
                                     //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                     Date snnippet = document.getTimestamp("startTime").toDate();
-                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
                                     offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
                                     mClusterManager.addItem(offsetItem);
                                     mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -592,22 +575,22 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     private void initViews() {
-        ballbtn = (Button)findViewById(R.id.ballbtn);
-        storebtn = (Button)findViewById(R.id.storebtn);
-        ktvbtn = (Button)findViewById(R.id.ktvbtn);
-        informationbtn = (Button)findViewById(R.id.informationbtn);
-        jobtn = (Button)findViewById(R.id.joBtn);
-        favoritebtn = (Button)findViewById(R.id.collectBtn);
-        settingbtn = (Button)findViewById(R.id.settingBtn);
-        messagebtn = (Button)findViewById(R.id.messageBtn);
-        noticebtn = (Button)findViewById(R.id.noticeBtn);
+        ballbtn = (Button) findViewById(R.id.ballbtn);
+        storebtn = (Button) findViewById(R.id.storebtn);
+        ktvbtn = (Button) findViewById(R.id.ktvbtn);
+        informationbtn = (Button) findViewById(R.id.informationbtn);
+        jobtn = (Button) findViewById(R.id.joBtn);
+        favoritebtn = (Button) findViewById(R.id.collectBtn);
+        settingbtn = (Button) findViewById(R.id.settingBtn);
+        messagebtn = (Button) findViewById(R.id.messageBtn);
+        noticebtn = (Button) findViewById(R.id.noticeBtn);
     }
 
     //取得使用者當前位置 -1
     public void init() {
         mLocationPermissionGranted = true;
 
-        Places.initialize(getApplicationContext(),"AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4");
+        Places.initialize(getApplicationContext(), "AIzaSyAKuaxAND8zfIysSz1HdoNF88o1aK8ZIN4");
         PlacesClient placesClient = Places.createClient(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -683,17 +666,17 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     //是否給予JOINME讀取定位資訊
-    public Boolean chechPermission(){
+    public Boolean chechPermission() {
         String[] pm = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION};
 
         List<String> list = new ArrayList<>();
 
-        for(int i=0;i<pm.length;i++) {
+        for (int i = 0; i < pm.length; i++) {
             if (ActivityCompat.checkSelfPermission(this, pm[i]) != PackageManager.PERMISSION_GRANTED) {
                 list.add(pm[i]);
             }
         }
-        if(list.size()>0){
+        if (list.size() > 0) {
             ActivityCompat.requestPermissions(this, list.toArray(new String[list.size()]), 1);
             return false;
         }
@@ -703,16 +686,16 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //是否給予joinme權限
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch(requestCode) {
+        switch (requestCode) {
             case 1:
-                if (grantResults.length > 0){
+                if (grantResults.length > 0) {
                     int i;
-                    for(i =0;i<permissions.length;i++) {
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    for (i = 0; i < permissions.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             break;
                         }
                     }
-                    if(i==permissions.length){
+                    if (i == permissions.length) {
                         init();
                     }
                 } else {
@@ -768,19 +751,19 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     //地址轉經緯度method(很容易讀不到資料)
-    public LatLng getLocationFromAddress(String address){
+    public LatLng getLocationFromAddress(String address) {
         Geocoder geo = new Geocoder(this);
         List<Address> adres;
         LatLng point = null;
-        try{
-            adres = geo.getFromLocationName(address,5);
+        try {
+            adres = geo.getFromLocationName(address, 5);
             Thread.sleep(500);
-            while(adres.size() == 0){
-                adres = geo.getFromLocationName(address,5);
+            while (adres.size() == 0) {
+                adres = geo.getFromLocationName(address, 5);
                 Thread.sleep(500);
             }
             Address location = adres.get(0);
-            point = new LatLng(location.getLatitude(),location.getLongitude());
+            point = new LatLng(location.getLatitude(), location.getLongitude());
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -798,8 +781,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
 
-    private void initData()
-    {
+    private void initData() {
     }
 
     private void setListeners() {
@@ -865,12 +847,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
-                db.collection( "activity" )
+                db.collection("activity")
                         .whereEqualTo("activityType", "ball")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
@@ -917,12 +899,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
-                db.collection( "activity" )
+                db.collection("activity")
                         .whereEqualTo("activityType", "eat")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
@@ -956,12 +938,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
-                db.collection( "activity" )
+                db.collection("activity")
                         .whereEqualTo("activityType", "KTV")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
@@ -995,12 +977,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 //讀取資料庫資料
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
-                db.collection( "activity" )
+                db.collection("activity")
                         .whereEqualTo("activityType", "information")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
@@ -1040,7 +1022,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         Toast.makeText(home.this, "Request error", Toast.LENGTH_LONG).show();
 
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

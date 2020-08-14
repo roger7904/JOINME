@@ -364,17 +364,19 @@ public class jo extends AppCompatActivity {
 
                     if (sts.compareTo(ets) < 0) {
                         //初始化Places API
-                        mLoadhandler=new Handler(){
-                            @Override
-                            public void handleMessage(Message msg)
-                            {
-                                mloadingDialog.dismiss();
-                            }
-                        };
-                        mloadingDialog = ProgressDialog.show(jo.this , "" , "Uploading. Please wait...." , true);
+//                        mLoadhandler=new Handler(){
+//                            @Override
+//                            public void handleMessage(Message msg)
+//                            {
+//                                mloadingDialog.dismiss();
+//                            }
+//                        };
+//                        mloadingDialog = ProgressDialog.show(jo.this , "" , "Uploading. Please wait...." , true);
                         Thread t1=new Thread(uploadcover);
                         Thread t2=new Thread(uploadtoDB);
-                        t1.start();
+                        if(imguploaded){
+                            t1.start();
+                        }
                         t2.start();
 
 
@@ -788,6 +790,7 @@ public class jo extends AppCompatActivity {
 
             book.put("title", activityTitle.getText().toString());
             book.put("postContent", activityContent.getText().toString());
+            book.put("img", imguploaded);
             book.put("activityType", spinner.getSelectedItem().toString());
             book.put("location", userSelectLocation); //先不上傳地址，轉成經緯度前會導致首頁報錯
             //先切割字串再轉成geopoint格式
@@ -796,7 +799,7 @@ public class jo extends AppCompatActivity {
             book.put("numberOfPeople", limitBtn.getText());
             book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
             book.put("endTime", ets);
-            book.put("organizerID", currentUserID);
+                    book.put("organizerID", currentUserID);
             book.put("onlyMale",flag_list[0]);
             book.put("onlyFemale",flag_list[1]);
             book.put("Ontime",flag_list[2]);

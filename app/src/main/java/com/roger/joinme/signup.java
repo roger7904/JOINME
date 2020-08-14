@@ -118,18 +118,22 @@ public class signup extends AppCompatActivity {
                             if (document.exists()) {
                                 activityType=document.getString("activityType");
                                 Date snnippet = document.getTimestamp("startTime").toDate();
-                                SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
+                                Date snnippet2 = document.getTimestamp("endTime").toDate();
+                                Boolean haveImg=document.getBoolean("img");
+                                SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
                                 title.setText(activitytitle);
                                 organizerID=document.getString("organizerID");
-                                StorageReference img=firebaseStorage.getReference();
-                                img.child(activitytitle).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Glide.with(signup.this).load(uri).into(activityPhoto);
+                                if(haveImg) {
+                                    StorageReference img = firebaseStorage.getReference();
+                                    img.child(activitytitle).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Glide.with(signup.this).load(uri).into(activityPhoto);
 
-                                    }
-                                });
-                                activityContent.setText("時間：" + ft.format(snnippet) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
+                                        }
+                                    });
+                                }
+                                activityContent.setText("開始時間：" + ft.format(snnippet) + "\n結束時間：" + ft.format(snnippet2) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
                                 if (!document.getString("organizerID").equals(currentUserID)) {
                                     deletebtn.setVisibility(View.GONE);
                                 }else{
