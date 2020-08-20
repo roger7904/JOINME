@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
+    android:layout_marginLeft="10dp"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="28dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="397dp"
         android:layout_height="match_parent"
         android:clickable="true"
         android:orientation="horizontal"
@@ -20,7 +22,7 @@
 
         <LinearLayout
             android:id="@+id/activityy"
-            android:layout_width="match_parent"
+            android:layout_width="410dp"
             android:layout_height="match_parent"
             android:background="#ffffff"
             android:clickable="true"
@@ -34,7 +36,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/shape_textview"
                 android:clickable="true"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
     </LinearLayout>
