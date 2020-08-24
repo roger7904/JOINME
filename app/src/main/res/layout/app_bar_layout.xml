@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="JOINME"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="32dp"
         android:layout_gravity="center"/>
 
 </androidx.appcompat.widget.Toolbar>
