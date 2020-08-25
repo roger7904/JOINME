@@ -27,13 +27,12 @@
             android:background="#ffffff"
             android:clickable="true"
             android:orientation="horizontal"
-            android:padding="10sp">
+            android:padding="3sp">
 
             <TextView
                 android:id="@+id/activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/shape_textview"
                 android:clickable="true"
                 android:textSize="18sp" />

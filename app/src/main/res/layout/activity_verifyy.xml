@@ -20,11 +20,10 @@
         android:id="@+id/verify_recycle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/chat_toolbar"
         android:layout_above="@+id/myLinearLayout"
+        android:layout_below="@+id/chat_toolbar"
         android:layout_marginBottom="6dp"
-        >
-    </androidx.recyclerview.widget.RecyclerView>
+        android:background="#e0e0e0"></androidx.recyclerview.widget.RecyclerView>
 
 
 </RelativeLayout>
