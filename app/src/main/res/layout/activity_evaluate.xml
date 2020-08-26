@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="#e0e0e0">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -50,7 +50,7 @@
                     android:id="@+id/rrecycleview"
                     android:layout_width="match_parent"
                     android:layout_height="540dp"
-                    android:layout_marginLeft="10dp" >
+                    android:layout_marginLeft="10dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
 
@@ -67,8 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@color/colorMain"
-                android:textSize="25dp"
-                android:text="一鍵評價" />
+                android:text="一鍵評價"
+                android:textSize="25dp" />
         </LinearLayout>
 
     </LinearLayout>

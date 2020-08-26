@@ -4,25 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e0e0e0"
     tools:context=".testsetting">
 
 
-<!--    <include-->
-<!--        layout="@layout/app_bar_layout"-->
-<!--        android:id="@+id/settings_toolbar"-->
-<!--        >-->
-<!--    </include>-->
+    <!--    <include-->
+    <!--        layout="@layout/app_bar_layout"-->
+    <!--        android:id="@+id/settings_toolbar"-->
+    <!--        >-->
+    <!--    </include>-->
 
-<!--    <de.hdodenhof.circleimageview.CircleImageView-->
-<!--        android:id="@+id/set_profile_image"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="300dp"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginTop="90dp"-->
-<!--        android:src="@drawable/head"-->
-<!--        app:civ_border_width="5dp"-->
-<!--        app:civ_border_color="@color/colorPrimary"/>-->
+    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
+    <!--        android:id="@+id/set_profile_image"-->
+    <!--        android:layout_width="300dp"-->
+    <!--        android:layout_height="300dp"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:layout_marginTop="90dp"-->
+    <!--        android:src="@drawable/head"-->
+    <!--        app:civ_border_width="5dp"-->
+    <!--        app:civ_border_color="@color/colorPrimary"/>-->
     <ImageView
         android:id="@+id/set_profile_image"
         android:layout_width="200dp"
@@ -31,87 +32,87 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:src="@drawable/head"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/set_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/set_profile_image"
-        android:inputType="textMultiLine"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_horizontal"
         android:hint="username"
+        android:inputType="textMultiLine"
+        android:padding="6dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="6dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/set_profile_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/set_user_name"
-        android:inputType="textMultiLine"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_horizontal"
         android:hint="status"
+        android:inputType="textMultiLine"
+        android:padding="6dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="6dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/set_profile_status"
-        android:inputType="textMultiLine"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_horizontal"
         android:hint="gender"
+        android:inputType="textMultiLine"
+        android:padding="6dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="6dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/gender"
-        android:inputType="textMultiLine"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_horizontal"
         android:hint="age"
+        android:inputType="textMultiLine"
+        android:padding="6dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="6dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/age"
-        android:inputType="textMultiLine"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_horizontal"
         android:hint="phone"
+        android:inputType="textMultiLine"
+        android:padding="6dp"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="6dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:textStyle="bold" />
 
 
     <Button
@@ -119,17 +120,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/phone"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center_horizontal"
         android:inputType="textMultiLine"
+        android:padding="6dp"
         android:text="Update"
         android:textAlignment="center"
-        android:textColor="@android:color/background_light"
-        android:textStyle="bold"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="6dp"
-        android:layout_marginTop="10dp"
         android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
         android:textSize="20sp"
-        android:gravity="center_horizontal" />
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -38,7 +38,7 @@
                         android:id="@+id/title"
                         android:layout_width="330dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="center"
+                        android:layout_gravity="center"
                         android:gravity="center_horizontal|center"
                         android:scrollbars="vertical"
                         android:text="活動標題"
@@ -48,7 +48,8 @@
                         android:id="@+id/favoritebtn"
                         android:layout_width="38dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/heart" />
+                        android:background="@drawable/heart"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
                 <LinearLayout
