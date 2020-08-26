@@ -4,27 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e0e0e0"
     tools:context=".verifyActivity">
 
 
     <include
         android:id="@+id/chat_toolbar"
+        layout="@layout/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        layout="@layout/app_bar_layout">
-    </include>
+        android:background="?attr/colorPrimary"></include>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_recycle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/chat_toolbar"
         android:layout_above="@+id/myLinearLayout"
-        android:layout_marginBottom="6dp"
-        >
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_below="@+id/chat_toolbar"
+        android:layout_marginBottom="6dp"></androidx.recyclerview.widget.RecyclerView>
 
 
 </RelativeLayout>
