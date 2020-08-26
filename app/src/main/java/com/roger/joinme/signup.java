@@ -70,7 +70,7 @@ public class signup extends AppCompatActivity {
     public TextView activityContent;
 
     public Bitmap actImg;
-    private String activitytitle,organizerID,activityType;
+    private String activitytitle,organizerID,activityType,organizerName;
     private FirebaseFirestore db;
     private FirebaseStorage firebaseStorage;
     private FirebaseAuth mAuth;
@@ -133,7 +133,24 @@ public class signup extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                activityContent.setText("開始時間：" + ft.format(snnippet) + "\n結束時間：" + ft.format(snnippet2) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + document.getString("organizerID"));
+
+                                final DocumentReference docRef = db.collection("user").document(organizerID).collection("profile")
+                                        .document(organizerID);
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot snapshot = task.getResult();
+                                            if (snapshot != null && snapshot.exists()) {
+                                                organizerName=snapshot.getString("name");
+                                            } else {
+
+                                            }
+                                        }
+                                    }
+                                });
+
+                                activityContent.setText("開始時間：" + ft.format(snnippet) + "\n結束時間：" + ft.format(snnippet2) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + organizerName);
                                 if (!document.getString("organizerID").equals(currentUserID)) {
                                     deletebtn.setVisibility(View.GONE);
                                 }else{
