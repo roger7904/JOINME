@@ -210,6 +210,7 @@ public class signup extends AppCompatActivity {
                                         db.collection("chat").document(activitytitle).delete();
                                         db.collection("chat").document(activitytitle).collection("participant").document().delete();
                                         db.collection("chat").document(activitytitle).collection("content").document().delete();
+                                        db.collection("user").document(currentUserID).collection("activity").document(activitytitle).delete();
                                     } else {
 
                                     }
@@ -260,26 +261,6 @@ public class signup extends AppCompatActivity {
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                final Map<String, Object> actbook = new HashMap<>();
-//                actbook.put("UserID",currentUserID);
-//                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                db.collection("activity")
-//                        .document(activitytitle)
-//                        .collection("participant")
-//                        .document(currentUserID)
-//                        .set(actbook)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                Log.d("TAG", "DocumentSnapshot successfully written!");
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w("TAG", "Error writing document", e);
-//                            }
-//                        });
                 HashMap<String, String> join = new HashMap<>();
                 join.put("UserID", currentUserID);
                 db.collection("join_act_request").document(activitytitle)

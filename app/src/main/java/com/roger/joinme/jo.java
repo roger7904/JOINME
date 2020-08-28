@@ -786,6 +786,7 @@ public class jo extends AppCompatActivity {
             final Map<String, Object> content = new HashMap<>();
             final Map<String, Object> participant = new HashMap<>();
             final Map<String, Object> joinact = new HashMap<>();
+            final Map<String, Object> userallact = new HashMap<>();
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             book.put("title", activityTitle.getText().toString());
@@ -807,6 +808,7 @@ public class jo extends AppCompatActivity {
             chat.put("newestcontent", currentUserName+"創建了此活動");
             chat.put("organizer", currentUserName);
             joinact.put("organizerID",currentUserID);
+            userallact.put("activityname",activityTitle.getText().toString());
             Calendar calForDate = Calendar.getInstance();
             SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
             currentDate = currentDateFormat.format(calForDate.getTime());
@@ -868,6 +870,8 @@ public class jo extends AppCompatActivity {
             db.collection("chat").document(activityTitle.getText().toString()).set(chat);
             db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
                     .document(currentUserID).set(participant);
+            db.collection("user").document(currentUserID).collection("activity")
+                    .document(activityTitle.getText().toString()).set(userallact);
 
         }
     };
