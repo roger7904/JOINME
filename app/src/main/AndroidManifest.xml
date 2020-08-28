@@ -140,9 +140,6 @@
             android:name=".friend"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".chatroom"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".jo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
