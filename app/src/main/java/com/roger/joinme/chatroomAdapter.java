@@ -17,26 +17,26 @@
 //
 //import com.bumptech.glide.Glide;
 //
-//public class chatroomAdapter extends RecyclerView.Adapter<userprofileAdapter.ViewHolder> {
+//public class chatroomAdapter extends RecyclerView.Adapter<chatroomAdapter.ViewHolder> {
 //    private Context context;
-//    private List<userprofile> userprofileList;
+//    private List<chatroom> chatroomList;
 //
 //
-//    public userprofileAdapter(Context context, List<userprofile> userprofileList){
+//    public chatroomAdapter(Context context, List<chatroom> chatroomList){
 //        this.context = context;
-//        this.userprofileList = userprofileList;
+//        this.chatroomList = chatroomList;
 //
 //    }
 //
 //    @Override
-//    public userprofileAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(context).inflate(R.layout.user_display_layout, parent, false);
+//    public chatroomAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        View view = LayoutInflater.from(context).inflate(R.layout.message_display_layout, parent, false);
 //        return new ViewHolder(view);
 //    }
 //
 //    @Override
-//    public void onBindViewHolder(userprofileAdapter.ViewHolder holder, int position) {
-//        userprofile userprofile = userprofileList.get(position);
+//    public void onBindViewHolder(chatroomAdapter.ViewHolder holder, int position) {
+//        chatroom chatroom = chatroomList.get(position);
 //        holder.textName.setText(userprofile.getName());
 //        holder.textStatus.setText(userprofile.getStatus());
 //
@@ -68,23 +68,21 @@
 //
 //    @Override
 //    public int getItemCount() {
-//        return userprofileList.size();
+//        return chatroomList.size();
 //    }
 //
 //    class ViewHolder extends RecyclerView.ViewHolder{
 //        ImageView circleImageViewid;
-//        ImageView useronlineimage;
-//        TextView textStatus, textName;
-//        Button btnaccept;
-//        Button btncancel;
+//        ImageView contentCount;
+//        TextView textContent, textName,textTime;
 //        ViewHolder(View itemView) {
 //            super(itemView);
 //            circleImageViewid= (ImageView) itemView.findViewById(R.id.users_profile_image);
-//            useronlineimage = (ImageView) itemView.findViewById(R.id.user_online_status);
-//            textStatus = (TextView) itemView.findViewById(R.id.user_status);
+//            contentCount = (ImageView) itemView.findViewById(R.id.content_count);
 //            textName = (TextView) itemView.findViewById(R.id.user_profile_name);
-//            btnaccept=(Button) itemView.findViewById(R.id.request_accept_btn);
-//            btncancel=(Button) itemView.findViewById(R.id.request_cancel_btn);
+//            textTime = (TextView) itemView.findViewById(R.id.time);
+//            textContent = (TextView) itemView.findViewById(R.id.user_status);
+//
 //        }
 //    }
 //}
