@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -218,6 +220,11 @@ public class GroupChatActivity extends AppCompatActivity
             messageTextBody.put("date", currentDate);
             messageTextBody.put("millisecond", ts);
 
+            Map newcontent = new HashMap();
+            newcontent.put("newestcontent", messageText);
+            newcontent.put("newestmillisecond", ts);
+
+            db.collection("chat").document(currentGroupName).set(newcontent, SetOptions.merge());
 
             db.collection("chat").document(currentGroupName).collection("content")
                     .document()
