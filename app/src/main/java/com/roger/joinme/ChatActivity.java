@@ -45,6 +45,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.core.OrderBy;
 import com.squareup.picasso.Picasso;
 
@@ -292,6 +293,15 @@ public class ChatActivity extends AppCompatActivity
 
             messageTextBody.put("millisecond", ts);
 
+
+            Map newcontent = new HashMap();
+            newcontent.put("newestcontent", messageText);
+            newcontent.put("newestmillisecond", ts);
+
+            db.collection("message").document(messageSenderID).collection("UserID")
+                    .document(messageReceiverID).set(newcontent,SetOptions.merge());
+            db.collection("message").document(messageReceiverID).collection("UserID")
+                    .document(messageSenderID).set(newcontent,SetOptions.merge());
 
             db.collection("message").document(messageSenderID).collection("UserID")
                     .document(messageReceiverID).collection("content").document()
