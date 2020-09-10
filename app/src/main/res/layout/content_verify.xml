@@ -110,7 +110,7 @@
                             android:textSize="18sp" />
 
                         <TextView
-                            android:id="@+id/userSex"
+                            android:id="@+id/userSexLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -130,7 +130,7 @@
                             android:textSize="18sp" />
 
                         <TextView
-                            android:id="@+id/userPhone"
+                            android:id="@+id/userPhoneLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"

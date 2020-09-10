@@ -2,8 +2,6 @@ package com.roger.joinme;
 
 import android.content.Context;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -256,7 +254,7 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
             textActivity = (TextView) itemView.findViewById(R.id.activityname);
             textGender = (TextView) itemView.findViewById(R.id.userGender);
             textAge = (TextView) itemView.findViewById(R.id.userAge);
-            textPhone = (TextView) itemView.findViewById(R.id.userPhone);
+            textPhone = (TextView) itemView.findViewById(R.id.userPhoneLay);
             btnaccept=(Button) itemView.findViewById(R.id.btn_accept);
             btncancel=(Button) itemView.findViewById(R.id.btn_reject);
         }

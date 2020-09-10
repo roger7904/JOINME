@@ -27,5 +27,5 @@
     <!--        android:layout_gravity="bottom|end"-->
     <!--        android:layout_margin="@dimen/fab_margin"-->
     <!--        app:srcCompat="@android:drawable/ic_dialog_email" />-->
-    <include layout="@layout/content_joinact" />
+<!--    <include layout="@layout/content_joinact" />-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
