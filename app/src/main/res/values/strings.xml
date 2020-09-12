@@ -44,6 +44,7 @@
     <string name="information">限時</string>
     <string name="actcontenct">鬥牛啦 時間：2020/04/31 18:00 地點：高雄大學路307號 備註：風雨球場</string>
     <string name="acttitle">鬥牛啦</string>
+    <string name="actDate">2020/01/01</string>
     <string name="actdetail">時間：2020/04/31 18:00 地點：高雄大學路307號 備註：風雨球場</string>
     <string name="sigin">報名</string>
     <string name="title_activity_maps">Map</string>
@@ -57,7 +58,8 @@
     <string name="title_activity_maps2">Map</string>
     <string name="facebook_app_id">576207433007230</string>
     <string name="fb_login_protocol_scheme">fb576207433007230</string>
-    <string name="notice">通知</string>
+    <string name="notice">通知</string>主辦的活動
+    <string name="activityHold">主辦的活動</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--    <string name="google_maps_key"></string>-->

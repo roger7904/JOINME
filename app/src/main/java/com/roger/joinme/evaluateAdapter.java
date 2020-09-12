@@ -3,47 +3,20 @@ package com.roger.joinme;
 import android.content.Context;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHolder> {
     private Context context;
@@ -176,7 +149,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
             circleImageViewid= (ImageView) itemView.findViewById(R.id.users_profile_image);
             textName = (TextView) itemView.findViewById(R.id.user_name);
             one=(Button) itemView.findViewById(R.id.one);
-            two=(Button) itemView.findViewById(R.id.two);
+            two=(Button) itemView.findViewById(R.id.one);
             three=(Button) itemView.findViewById(R.id.three);
             four=(Button) itemView.findViewById(R.id.four);
             five=(Button) itemView.findViewById(R.id.five);
