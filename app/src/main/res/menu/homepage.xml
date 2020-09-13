@@ -37,5 +37,11 @@
         android:title="驗證活動申請"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/personal_page"
+        android:orderInCategory="100"
+        android:title="個人頁面"
+        app:showAsAction="never" />
+
 
 </menu>

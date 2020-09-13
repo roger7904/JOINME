@@ -415,9 +415,17 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         if (item.getItemId() == R.id.verify_request) {
             SendUserToverify();
         }
+//        if (item.getItemId() == R.id.personal_page) {
+//            SendUserToPersonalPage();
+//        }
 
         return true;
     }
+
+//    private void SendUserToPersonalPage() {
+//        Intent Intent = new Intent(home.this, PersonalPage.class);
+//        startActivity(Intent);
+//    }
 
     private void SendUserToverify() {
         Intent findFriendsIntent = new Intent(home.this, verifyActivity.class);
