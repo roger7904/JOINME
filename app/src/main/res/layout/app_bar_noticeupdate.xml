@@ -7,13 +7,10 @@
     tools:context=".homepage">
 
 
-
     <include
         layout="@layout/content_noticeupdate"
         android:layout_width="414dp"
         android:layout_height="672dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
 
     <androidx.appcompat.widget.Toolbar
@@ -24,6 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextColor="#000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

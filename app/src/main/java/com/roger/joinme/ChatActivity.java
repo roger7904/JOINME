@@ -241,11 +241,8 @@ public class ChatActivity extends AppCompatActivity
                                     String date=dc.getDocument().getString("date");
                                     String name=dc.getDocument().getString("name");
 
-
                                     messagesList.add(new Messages(from,message,type,to,time,date,name));
-
                                     messageAdapter.notifyDataSetChanged();
-
                                     userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
                                     Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
                                     break;

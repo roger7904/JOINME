@@ -108,15 +108,15 @@ public class signup extends AppCompatActivity {
             }
         });
 
-        db.collection("activity").document(activitytitle).
-                get().
-                addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("activity").document(activitytitle)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                activityType=document.getString("activityType");
+                                activityType = document.getString("activityType");
                                 Date snnippet = document.getTimestamp("startTime").toDate();
                                 Date snnippet2 = document.getTimestamp("endTime").toDate();
                                 Boolean haveImg=document.getBoolean("img");
@@ -128,7 +128,7 @@ public class signup extends AppCompatActivity {
                                     img.child(activitytitle).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-                                            Glide.with(signup.this).load(uri).into(activityPhoto);
+                                            Glide.with(signup.this).load(uri).into(activityPhoto);  //主辦活動
 
                                         }
                                     });
@@ -257,7 +257,6 @@ public class signup extends AppCompatActivity {
             }
         });
 
-
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -361,7 +360,6 @@ public class signup extends AppCompatActivity {
         });
     }
 
-
     public class getBitmapFromUrl extends Thread {
         public void run() {
             try {
@@ -402,7 +400,4 @@ public class signup extends AppCompatActivity {
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
-
-
-
 }
