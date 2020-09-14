@@ -186,7 +186,7 @@ public class jo extends AppCompatActivity {
         });
         initPlace();
         initViews();
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, new String[]{"商家優惠", "球類", "限時", "KTV", "其他"});
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, new String[]{"商家優惠", "運動", "限時", "KTV", "其他"});
         setListeners();
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -280,51 +280,6 @@ public class jo extends AppCompatActivity {
     }
 
     private void setListeners() {
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, informationedit.class);
-                startActivity(intent);
-            }
-        });
-
-        homepage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, homepage.class);
-                startActivity(intent);
-            }
-        });
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        activitypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, allactivity.class);
-                startActivity(intent);
-            }
-        });
-
-        selfpage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(jo.this, selfpage.class);
-                startActivity(intent);
-            }
-        });
-
         imgtest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -337,8 +292,6 @@ public class jo extends AppCompatActivity {
 
             }
         });
-
-
 
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -378,10 +331,6 @@ public class jo extends AppCompatActivity {
                             t1.start();
                         }
                         t2.start();
-
-
-
-
 
                         System.out.print(uriString);
 
