@@ -21,11 +21,9 @@ public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.
     private Context context;
     private List<userprofile> userprofileList;
 
-
     public userprofileAdapter(Context context, List<userprofile> userprofileList){
         this.context = context;
         this.userprofileList = userprofileList;
-
     }
 
     @Override
