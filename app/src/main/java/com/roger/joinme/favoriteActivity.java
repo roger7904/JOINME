@@ -74,7 +74,7 @@ public class favoriteActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                             DocumentSnapshot d = task.getResult();
                                             if (task.isSuccessful()) {
-                                                if (!d.getString("imgUri").equals("")) {
+                                                if (Boolean.parseBoolean(d.getString("img"))) {
                                                     String name = d.getId();
                                                     String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
                                                     String place = d.getString("location");

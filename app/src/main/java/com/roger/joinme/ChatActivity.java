@@ -1,6 +1,7 @@
 package com.roger.joinme;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -89,6 +90,7 @@ public class ChatActivity extends AppCompatActivity
     private String RECEIVER_DEVICE;
 
     private String saveCurrentTime, saveCurrentDate,currentUserName;
+    private Integer count;
 
 
 
@@ -128,12 +130,12 @@ public class ChatActivity extends AppCompatActivity
         });
 
 
-        userName.setText(messageReceiverName);
+//        userName.setText(messageReceiverName);
 
-        Glide.with(this)
-                .load(messageReceiverImage)
-                .circleCrop()
-                .into(userImage);
+//        Glide.with(this)
+//                .load(messageReceiverImage)
+//                .circleCrop()
+//                .into(userImage);
 
 
         SendMessageButton.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +147,7 @@ public class ChatActivity extends AppCompatActivity
         });
 
 
-        DisplayLastSeen();
+//        DisplayLastSeen();
     }
 
 
@@ -155,18 +157,20 @@ public class ChatActivity extends AppCompatActivity
     {
         ChatToolBar = (Toolbar) findViewById(R.id.chat_toolbar);
         setSupportActionBar(ChatToolBar);
+        getSupportActionBar().setTitle(messageReceiverName);
+        ChatToolBar.setTitleTextColor(Color.BLACK);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(true);
-
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View actionBarView = layoutInflater.inflate(R.layout.custom_chat_bar, null);
-        actionBar.setCustomView(actionBarView);
-
-        userName = (TextView) findViewById(R.id.custom_profile_name);
-        userLastSeen = (TextView) findViewById(R.id.custom_user_last_seen);
-        userImage = (ImageView) findViewById(R.id.custom_profile_image);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayShowCustomEnabled(true);
+//
+//        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View actionBarView = layoutInflater.inflate(R.layout.custom_chat_bar, null);
+//        actionBar.setCustomView(actionBarView);
+//
+//        userName = (TextView) findViewById(R.id.custom_profile_name);
+//        userLastSeen = (TextView) findViewById(R.id.custom_user_last_seen);
+//        userImage = (ImageView) findViewById(R.id.custom_profile_image);
 
         SendMessageButton = (ImageButton) findViewById(R.id.send_message_btn);
         SendFilesButton = (ImageButton) findViewById(R.id.send_files_btn);
@@ -184,31 +188,31 @@ public class ChatActivity extends AppCompatActivity
 
 
 
-    private void DisplayLastSeen()
-    {
-        db.collection("user").document(messageReceiverID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                     @Override
-                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                         if (task.isSuccessful()) {
-                             DocumentSnapshot document = task.getResult();
-                             if (document.exists()) {
-                                 String state = document.getString("state");
-                                 String date = document.getString("date");
-                                 String time = document.getString("time");
-                                 if (state.equals("online"))
-                                 {
-                                     userLastSeen.setText("online");
-                                 }
-                                 else if (state.equals("offline"))
-                                 {
-                                     userLastSeen.setText("Last Seen: " + date + " " + time);
-                                 }
-                             }
-                         }
-                     }
-                 });
-    }
+//    private void DisplayLastSeen()
+//    {
+//        db.collection("user").document(messageReceiverID)
+//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                     @Override
+//                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                         if (task.isSuccessful()) {
+//                             DocumentSnapshot document = task.getResult();
+//                             if (document.exists()) {
+//                                 String state = document.getString("state");
+//                                 String date = document.getString("date");
+//                                 String time = document.getString("time");
+//                                 if (state.equals("online"))
+//                                 {
+//                                     userLastSeen.setText("online");
+//                                 }
+//                                 else if (state.equals("offline"))
+//                                 {
+//                                     userLastSeen.setText("Last Seen: " + date + " " + time);
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 });
+//    }
 
 
     @Override
@@ -295,63 +299,151 @@ public class ChatActivity extends AppCompatActivity
             newcontent.put("newestcontent", messageText);
             newcontent.put("newestmillisecond", ts);
 
-            db.collection("message").document(messageSenderID).collection("UserID")
-                    .document(messageReceiverID).set(newcontent,SetOptions.merge());
-            db.collection("message").document(messageReceiverID).collection("UserID")
-                    .document(messageSenderID).set(newcontent,SetOptions.merge());
 
-            db.collection("message").document(messageSenderID).collection("UserID")
-                    .document(messageReceiverID).collection("content").document()
-                    .set(messageTextBody).addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
+            DocumentReference docRef = db.collection("message").document("messageSenderID")
+                    .collection("UserID")
+                    .document(messageReceiverID);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists() && document.contains("contentcount")) {
+                            count=Integer.parseInt(document.getString("contentcount"));
+                            Map contentcount = new HashMap();
+                            contentcount.put("contentcount",count+1);
+
+                            db.collection("message").document(messageSenderID).collection("UserID")
+                                    .document(messageReceiverID).set(newcontent,SetOptions.merge());
                             db.collection("message").document(messageReceiverID).collection("UserID")
-                                    .document(messageSenderID).collection("content").document()
+                                    .document(messageSenderID).set(newcontent,SetOptions.merge());
+                            db.collection("message").document(messageSenderID).collection("UserID")
+                                    .document(messageReceiverID).set(contentcount,SetOptions.merge());
+
+                            db.collection("message").document(messageSenderID).collection("UserID")
+                                    .document(messageReceiverID).collection("content").document()
                                     .set(messageTextBody).addOnCompleteListener(new OnCompleteListener() {
                                 @Override
                                 public void onComplete(@NonNull Task task) {
                                     if (task.isSuccessful()) {
-                                            db.collection("user").document(messageReceiverID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot document = task.getResult();
-                                                        if (document.exists()) {
+                                        db.collection("message").document(messageReceiverID).collection("UserID")
+                                                .document(messageSenderID).collection("content").document()
+                                                .set(messageTextBody).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if (task.isSuccessful()) {
+                                                    db.collection("user").document(messageReceiverID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                DocumentSnapshot document = task.getResult();
+                                                                if (document.exists()) {
 
-                                                            RECEIVER_DEVICE = document.getString("device_token");
-                                                            JSONObject notification = new JSONObject();
-                                                            JSONObject notifcationBody = new JSONObject();
-                                                            try {
-                                                                notifcationBody.put("title", "您有新的訊息");
-                                                                notifcationBody.put("message", currentUserName+": "+messageText);
+                                                                    RECEIVER_DEVICE = document.getString("device_token");
+                                                                    JSONObject notification = new JSONObject();
+                                                                    JSONObject notifcationBody = new JSONObject();
+                                                                    try {
+                                                                        notifcationBody.put("title", "您有新的訊息");
+                                                                        notifcationBody.put("message", currentUserName+": "+messageText);
 
-                                                                notification.put("to", RECEIVER_DEVICE);
-                                                                notification.put("data", notifcationBody);
-                                                            } catch (JSONException e) {
-                                                                Log.e(TAG, "onCreate: " + e.getMessage());
+                                                                        notification.put("to", RECEIVER_DEVICE);
+                                                                        notification.put("data", notifcationBody);
+                                                                    } catch (JSONException e) {
+                                                                        Log.e(TAG, "onCreate: " + e.getMessage());
+                                                                    }
+                                                                    sendNotification(notification);
+                                                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                                } else {
+                                                                    Log.d(TAG, "No such document");
+                                                                }
+                                                            } else {
+                                                                Log.d(TAG, "get failed with ", task.getException());
                                                             }
-                                                            sendNotification(notification);
-                                                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                                        } else {
-                                                            Log.d(TAG, "No such document");
                                                         }
-                                                    } else {
-                                                        Log.d(TAG, "get failed with ", task.getException());
-                                                    }
+                                                    });
+                                                } else {
+
                                                 }
-                                            });
+                                            }
+                                        });
                                     } else {
 
                                     }
+                                    MessageInputText.setText("");
                                 }
                             });
                         } else {
+                            count=0;
+                            Map contentcount = new HashMap();
+                            contentcount.put("contentcount",count+1);
 
+                            db.collection("message").document(messageSenderID).collection("UserID")
+                                    .document(messageReceiverID).set(newcontent,SetOptions.merge());
+                            db.collection("message").document(messageReceiverID).collection("UserID")
+                                    .document(messageSenderID).set(newcontent,SetOptions.merge());
+                            db.collection("message").document(messageSenderID).collection("UserID")
+                                    .document(messageReceiverID).set(contentcount,SetOptions.merge());
+
+                            db.collection("message").document(messageSenderID).collection("UserID")
+                                    .document(messageReceiverID).collection("content").document()
+                                    .set(messageTextBody).addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful()) {
+                                        db.collection("message").document(messageReceiverID).collection("UserID")
+                                                .document(messageSenderID).collection("content").document()
+                                                .set(messageTextBody).addOnCompleteListener(new OnCompleteListener() {
+                                            @Override
+                                            public void onComplete(@NonNull Task task) {
+                                                if (task.isSuccessful()) {
+                                                    db.collection("user").document(messageReceiverID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                DocumentSnapshot document = task.getResult();
+                                                                if (document.exists()) {
+
+                                                                    RECEIVER_DEVICE = document.getString("device_token");
+                                                                    JSONObject notification = new JSONObject();
+                                                                    JSONObject notifcationBody = new JSONObject();
+                                                                    try {
+                                                                        notifcationBody.put("title", "您有新的訊息");
+                                                                        notifcationBody.put("message", currentUserName+": "+messageText);
+
+                                                                        notification.put("to", RECEIVER_DEVICE);
+                                                                        notification.put("data", notifcationBody);
+                                                                    } catch (JSONException e) {
+                                                                        Log.e(TAG, "onCreate: " + e.getMessage());
+                                                                    }
+                                                                    sendNotification(notification);
+                                                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                                } else {
+                                                                    Log.d(TAG, "No such document");
+                                                                }
+                                                            } else {
+                                                                Log.d(TAG, "get failed with ", task.getException());
+                                                            }
+                                                        }
+                                                    });
+                                                } else {
+
+                                                }
+                                            }
+                                        });
+                                    } else {
+
+                                    }
+                                    MessageInputText.setText("");
+                                }
+                            });
                         }
-                        MessageInputText.setText("");
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                });
+                }
+            });
+
+
         }
     }
 

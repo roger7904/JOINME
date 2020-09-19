@@ -66,23 +66,27 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/user_status"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:gravity="start"
-                    android:paddingLeft="8dp"
-                    android:text="user status"
-                    android:textAlignment="textStart"
-                    android:textSize="16sp" />
+                android:id="@+id/user_status"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:gravity="start"
+                android:paddingLeft="8dp"
+                android:text="user status"
+                android:textAlignment="textStart"
+                android:textSize="16sp" />
 
-                <ImageView
+                <TextView
                     android:id="@+id/content_count"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/star"
-                    android:visibility="visible" />
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/star"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
             </LinearLayout>
 
 
