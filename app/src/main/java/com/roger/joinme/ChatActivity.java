@@ -310,15 +310,16 @@ public class ChatActivity extends AppCompatActivity
                         DocumentSnapshot document = task.getResult();
                         if (document.exists() && document.contains("contentcount")) {
                             count=Integer.parseInt(document.getString("contentcount"));
-                            Map contentcount = new HashMap();
-                            contentcount.put("contentcount",count+1);
+                            System.out.println("count"+count);
+                            Map<String, String> contentcount = new HashMap<>();
+                            contentcount.put("contentcount",Integer.toString(count+1));
 
                             db.collection("message").document(messageSenderID).collection("UserID")
                                     .document(messageReceiverID).set(newcontent,SetOptions.merge());
                             db.collection("message").document(messageReceiverID).collection("UserID")
                                     .document(messageSenderID).set(newcontent,SetOptions.merge());
-                            db.collection("message").document(messageSenderID).collection("UserID")
-                                    .document(messageReceiverID).set(contentcount,SetOptions.merge());
+                            db.collection("message").document(messageReceiverID).collection("UserID")
+                                    .document(messageSenderID).set(contentcount,SetOptions.merge());
 
                             db.collection("message").document(messageSenderID).collection("UserID")
                                     .document(messageReceiverID).collection("content").document()

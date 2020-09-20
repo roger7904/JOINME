@@ -87,100 +87,117 @@ public class GroupsFragment extends Fragment {
                         for (DocumentChange dc : value.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
-                                    String name=dc.getDocument().getString("activity");
-                                    String newestcontent=dc.getDocument().getString("newestcontent");
-                                    String id=dc.getDocument().getId();
-                                    String time=dc.getDocument().getString("newestmillisecond");
-                                    String contentcount=dc.getDocument().getString("contentcount");
+                                    db.collection("user")
+                                            .document(currentUserID)
+                                            .collection("activity")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            if(document.getId().equals(dc.getDocument().getId())){
+                                                                String name=dc.getDocument().getString("activity");
+                                                                String newestcontent=dc.getDocument().getString("newestcontent");
+                                                                String id=dc.getDocument().getId();
+                                                                String time=dc.getDocument().getString("newestmillisecond");
+                                                                String contentcount=dc.getDocument().getString("contentcount");
 
-                                    DocumentReference docRef = db.collection("activity").document(name);
-                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    if (Boolean.parseBoolean(document.getString("img"))) {
-                                                        ImagesRef.child(id).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                            @Override
-                                                            public void onSuccess(Uri uri) {
-                                                                // Got the download URL for 'users/me/profile.png'
-                                                                chatroomList.add(new chatroom(name,newestcontent,uri,id,time,contentcount,"group"));
-                                                                chatroomadapter.notifyDataSetChanged();
+                                                                DocumentReference docRef = db.collection("activity").document(name);
+                                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            DocumentSnapshot document = task.getResult();
+                                                                            if (document.exists()) {
+                                                                                if (Boolean.parseBoolean(document.getString("img"))) {
+                                                                                    ImagesRef.child(id).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Uri uri) {
+                                                                                            // Got the download URL for 'users/me/profile.png'
+                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
+                                                                                            chatroomadapter.notifyDataSetChanged();
+                                                                                        }
+                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception exception) {
+                                                                                            // Handle any errors
+                                                                                        }
+                                                                                    });
+                                                                                }else if (document.getString("activityType").equals("商家優惠")) {
+                                                                                    ImagesRef.child("商家優惠.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Uri uri) {
+                                                                                            // Got the download URL for 'users/me/profile.png'
+                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
+                                                                                            chatroomadapter.notifyDataSetChanged();
+                                                                                        }
+                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception exception) {
+                                                                                            // Handle any errors
+                                                                                        }
+                                                                                    });
+                                                                                }else if (document.getString("activityType").equals("KTV")) {
+                                                                                    ImagesRef.child("KTV.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Uri uri) {
+                                                                                            // Got the download URL for 'users/me/profile.png'
+                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
+                                                                                            chatroomadapter.notifyDataSetChanged();
+                                                                                        }
+                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception exception) {
+                                                                                            // Handle any errors
+                                                                                        }
+                                                                                    });
+                                                                                }else if (document.getString("activityType").equals("限時")) {
+                                                                                    ImagesRef.child("限時.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Uri uri) {
+                                                                                            // Got the download URL for 'users/me/profile.png'
+                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
+                                                                                            chatroomadapter.notifyDataSetChanged();
+                                                                                        }
+                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception exception) {
+                                                                                            // Handle any errors
+                                                                                        }
+                                                                                    });
+                                                                                }else if (document.getString("activityType").equals("球類")) {
+                                                                                    ImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(Uri uri) {
+                                                                                            // Got the download URL for 'users/me/profile.png'
+                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
+                                                                                            chatroomadapter.notifyDataSetChanged();
+                                                                                        }
+                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception exception) {
+                                                                                            // Handle any errors
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            } else {
+
+                                                                            }
+                                                                        } else {
+
+                                                                        }
+                                                                    }
+                                                                });
+                                                                Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
+                                                                break;
                                                             }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception exception) {
-                                                                // Handle any errors
-                                                            }
-                                                        });
-                                                    }else if (document.getString("activityType").equals("商家優惠")) {
-                                                        ImagesRef.child("商家優惠.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                            @Override
-                                                            public void onSuccess(Uri uri) {
-                                                                // Got the download URL for 'users/me/profile.png'
-                                                                chatroomList.add(new chatroom(name,newestcontent,uri,id,time,contentcount,"group"));
-                                                                chatroomadapter.notifyDataSetChanged();
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception exception) {
-                                                                // Handle any errors
-                                                            }
-                                                        });
-                                                    }else if (document.getString("activityType").equals("KTV")) {
-                                                        ImagesRef.child("KTV.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                            @Override
-                                                            public void onSuccess(Uri uri) {
-                                                                // Got the download URL for 'users/me/profile.png'
-                                                                chatroomList.add(new chatroom(name,newestcontent,uri,id,time,contentcount,"group"));
-                                                                chatroomadapter.notifyDataSetChanged();
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception exception) {
-                                                                // Handle any errors
-                                                            }
-                                                        });
-                                                    }else if (document.getString("activityType").equals("限時")) {
-                                                        ImagesRef.child("限時.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                            @Override
-                                                            public void onSuccess(Uri uri) {
-                                                                // Got the download URL for 'users/me/profile.png'
-                                                                chatroomList.add(new chatroom(name,newestcontent,uri,id,time,contentcount,"group"));
-                                                                chatroomadapter.notifyDataSetChanged();
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception exception) {
-                                                                // Handle any errors
-                                                            }
-                                                        });
-                                                    }else if (document.getString("activityType").equals("球類")) {
-                                                        ImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                            @Override
-                                                            public void onSuccess(Uri uri) {
-                                                                // Got the download URL for 'users/me/profile.png'
-                                                                chatroomList.add(new chatroom(name,newestcontent,uri,id,time,contentcount,"group"));
-                                                                chatroomadapter.notifyDataSetChanged();
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception exception) {
-                                                                // Handle any errors
-                                                            }
-                                                        });
+                                                        }
+                                                    } else {
+
                                                     }
-                                                } else {
-
                                                 }
-                                            } else {
-
-                                            }
-                                        }
-                                    });
-                                    Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
-                                    break;
+                                            });
                                 case MODIFIED:
                                     Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
                                     break;

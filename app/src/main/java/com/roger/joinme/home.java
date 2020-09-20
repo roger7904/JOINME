@@ -282,7 +282,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     protected void onStart() {
         super.onStart();
 
-        if (currentUser == null || mAuth == null) {
+        if (FirebaseAuth.getInstance() == null || FirebaseAuth.getInstance().getCurrentUser() == null || FirebaseAuth.getInstance().getCurrentUser().getUid() == null) {
             SendUserToLoginActivity();
         } else {
             updateUserStatus("online");
@@ -336,7 +336,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         }
                     }
                 });
-
     }
 
     private void SendUserToSettingsActivity() {

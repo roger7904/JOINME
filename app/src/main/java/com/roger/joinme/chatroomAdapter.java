@@ -41,14 +41,15 @@ public class chatroomAdapter extends RecyclerView.Adapter<chatroomAdapter.ViewHo
         chatroom chatroom = chatroomList.get(position);
         holder.contentCount.setText(chatroom.getContentcount());
         holder.textName.setText(chatroom.getName());
+        holder.textContent.setText(chatroom.getNewestcontent());
 
         String saveCurrentTime, saveCurrentDate;
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd");
-        saveCurrentDate = currentDate.format(chatroom.getTime());
+//        SimpleDateFormat currentDate = new SimpleDateFormat("dd");
+//        saveCurrentDate = currentDate.format(chatroom.getTime());
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
-        saveCurrentTime = currentTime.format(chatroom.getTime());
-        holder.textTime.setText(saveCurrentDate+saveCurrentTime);
+        saveCurrentTime = currentTime.format(Integer.parseInt(chatroom.getTime()));
+        holder.textTime.setText(saveCurrentTime);
 
         Glide.with(holder.itemView.getContext())
                 .load(chatroom.getImage())
@@ -67,9 +68,7 @@ public class chatroomAdapter extends RecyclerView.Adapter<chatroomAdapter.ViewHo
                     holder.itemView.getContext().startActivity(chatIntent);
                 }else if(chatroom.getActivity().equals("group")){
                     Intent chatIntent = new Intent(holder.itemView.getContext(), GroupChatActivity.class);
-                    chatIntent.putExtra("visit_user_id", chatroom.getId());
-                    chatIntent.putExtra("visit_user_name", chatroom.getName());
-                    chatIntent.putExtra("visit_image", chatroom.getImage());
+                    chatIntent.putExtra("groupName", chatroom.getId());
                     holder.itemView.getContext().startActivity(chatIntent);
                 }
 
