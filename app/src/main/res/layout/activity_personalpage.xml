@@ -95,13 +95,6 @@
                             android:text="男"
                             android:textSize="18dp" />
 
-                        <TextView
-                            android:id="@+id/userLive"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="台北市"
-                            android:textSize="18dp" />
-
                     </LinearLayout>
 
                 </LinearLayout>
@@ -250,8 +243,8 @@
                     android:textStyle="bold" />
 
                 <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="401dp"
+                    android:layout_height="144dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
@@ -260,7 +253,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="vertical" >
+                        android:orientation="vertical">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/actRec"
@@ -281,8 +274,8 @@
                     android:textStyle="bold" />
 
                 <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="147dp"
+                    android:layout_width="401dp"
+                    android:layout_height="144dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"

@@ -45,7 +45,7 @@ public class personalpage extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StorageReference UserProfileImagesRef;
     private String currentUserID;
-    private TextView userProfileName, userProfileStatus;
+    private TextView userProfileName, userAge, userSex;
 
     public personalpage()
     {
@@ -91,8 +91,12 @@ public class personalpage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personalpage);
+        initViews();
+        initData();
+        setListeners();
 
         mAuth = FirebaseAuth.getInstance();
+        db=FirebaseFirestore.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
@@ -100,16 +104,14 @@ public class personalpage extends AppCompatActivity {
                 .document(currentUserID);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                System.out.println(currentUserID);
                 if (task.isSuccessful()) {
                     DocumentSnapshot snapshot = task.getResult();
                     if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
-                        String userImage = snapshot.getString("image");
                         String userName = snapshot.getString("name");
-                        String userstatus = snapshot.getString("status");
+                        String userage = snapshot.getString("age");
+                        String usersex = snapshot.getString("gender");
 
 //                        userProfileImage.setImageURI(Uri.fromFile(new File(userImage)));
                         UserProfileImagesRef.child(currentUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -128,16 +130,20 @@ public class personalpage extends AppCompatActivity {
                             }
                         });
                         userProfileName.setText(userName);
-                        userProfileStatus.setText(userstatus);
+                        userAge.setText(userage);
+                        userSex.setText(usersex);
                     } else if(snapshot != null && snapshot.exists() && snapshot.contains("name")){
                         String userName = snapshot.getString("name");
-                        String userstatus = snapshot.getString("status");
+                        String userage = snapshot.getString("age");
+                        String usersex = snapshot.getString("gender");
+
                         Glide.with(personalpage.this)
                                 .load(R.drawable.head)
                                 .circleCrop()
                                 .into(userProfileImage);
                         userProfileName.setText(userName);
-                        userProfileStatus.setText(userstatus);
+                        userAge.setText(userage);
+                        userSex.setText(usersex);
                     }
                 } else {
 
@@ -154,9 +160,10 @@ public class personalpage extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         activityPhoto = (ImageView) findViewById(R.id.activityphoto);
         recyclerView = (RecyclerView)findViewById(R.id.actHold);
-        userProfileImage = (CircleImageView) findViewById(R.id.users_profile_image);
+        userProfileImage = (CircleImageView)findViewById(R.id.users_profile_image);
         userProfileName = (TextView) findViewById(R.id.userName);
-        userProfileStatus = (TextView) findViewById(R.id.visit_profile_status);
+        userAge = (TextView) findViewById(R.id.userAge);
+        userSex = (TextView) findViewById(R.id.userSex);
     }
 
     private void setListeners() {

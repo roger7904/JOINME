@@ -9,9 +9,11 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -57,13 +59,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class testsetting extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
-    private EditText userName, userStatus,usergender,userage,userphone;
+    private EditText userName, userStatus,userage,userphone;
     private ImageView userProfileImage;
 
     private String currentUserID;
     private FirebaseAuth mAuth;
 //    private DatabaseReference RootRef;
     private FirebaseFirestore db;
+    private Spinner usergender;
 
     private static final int GalleryPick = 1;
     private StorageReference UserProfileImagesRef;
@@ -85,12 +88,12 @@ public class testsetting extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
-
         InitializeFields();
 
-
         userName.setVisibility(View.INVISIBLE);
-
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, new String[]{"男", "女"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        usergender.setAdapter(adapter);
 
         UpdateAccountSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,9 +103,7 @@ public class testsetting extends AppCompatActivity
             }
         });
 
-
         RetrieveUserInfo();
-
 
         userProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,18 +126,10 @@ public class testsetting extends AppCompatActivity
         userStatus = (EditText) findViewById(R.id.set_profile_status);
         userProfileImage = (ImageView) findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
-        usergender = (EditText) findViewById(R.id.gender);
+        usergender = (Spinner) findViewById(R.id.gender);
         userage = (EditText) findViewById(R.id.age);
         userphone = (EditText) findViewById(R.id.phone);
-
-//        SettingsToolBar = (Toolbar) findViewById(R.id.settings_toolbar);
-//        setSupportActionBar(SettingsToolBar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowCustomEnabled(true);
-//        getSupportActionBar().setTitle("Account Settings");
     }
-
-
 
 
     @Override
@@ -199,13 +192,11 @@ public class testsetting extends AppCompatActivity
     }
 
 
-
-
     private void UpdateSettings()
     {
         String setUserName = userName.getText().toString();
         String setStatus = userStatus.getText().toString();
-        String gender = usergender.getText().toString();
+        String gender = usergender.getSelectedItem().toString();
         String age = userage.getText().toString();
         String phone = userphone.getText().toString();
 
@@ -283,15 +274,15 @@ public class testsetting extends AppCompatActivity
 
                         userName.setText(retrieveUserName);
                         userStatus.setText(retrievesStatus);
-                        usergender.setText(gender);
+                        for(int i= 0; i < usergender.getAdapter().getCount(); i++)
+                        {
+                            if(usergender.getAdapter().getItem(i).toString().contains(gender))
+                            {
+                                usergender.setSelection(i);
+                            }
+                        }
                         userage.setText(age);
                         userphone.setText(phone);
-
-//                        Picasso.get()
-//                                .load(retrieveProfileImage)
-//                                .placeholder(R.drawable.head)
-//                                .resize(200,220)
-//                                .into(userProfileImage);
 
                         UserProfileImagesRef.child(currentUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
@@ -317,8 +308,13 @@ public class testsetting extends AppCompatActivity
                         String age = snapshot.getString("age");
                         String phone = snapshot.getString("phone");
 
-
-                        usergender.setText(gender);
+                        for(int i= 0; i < usergender.getAdapter().getCount(); i++)
+                        {
+                            if(usergender.getAdapter().getItem(i).toString().contains(gender))
+                            {
+                                usergender.setSelection(i);
+                            }
+                        }
                         userage.setText(age);
                         userphone.setText(phone);
 

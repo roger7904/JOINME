@@ -98,7 +98,7 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/gender"
                     android:layout_width="250dp"
                     android:layout_height="45dp"
