@@ -332,8 +332,6 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
-//                    System.out.println("fb登入~~~");
-//                    SendUserToMainActivity();
                     Toast.makeText(getApplicationContext(), "R.string.firebase_error_login", Toast.LENGTH_LONG).show();
                 }
                 loginButton.setVisibility(View.VISIBLE);
@@ -401,14 +399,6 @@ public class MainActivity extends FragmentActivity {
             }
         });
         loginPageBtn.setEnabled(false);
-//        loginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this,MapsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
     }
 

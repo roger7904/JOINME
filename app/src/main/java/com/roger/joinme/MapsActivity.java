@@ -86,18 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setListeners();
     }
 
-    //或許之後可以想辦法用thread做嗎?
-//    private Runnable checkozoom = new Runnable() {
-//
-//        @Override
-//        public void run() {
-//            SupportMapFragment mapFrag = ((SupportMapFragment) getSupportFragmentManager()
-//                    .findFragmentById(R.id.map));
-//            mapFrag.getMapAsync(this);
-//        }
-//    };
-
-            //監聽攝影機(使用者)是否開始移動
+        //監聽攝影機(使用者)是否開始移動
         @Override
         public void onCameraMoveStarted(int reason) {
 
