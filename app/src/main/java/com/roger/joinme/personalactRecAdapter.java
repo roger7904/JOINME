@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,30 +16,31 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class personholdactAdapter extends RecyclerView.Adapter<personholdactAdapter.ViewHolder> {
+public class personalactRecAdapter extends RecyclerView.Adapter<personalactRecAdapter.ViewHolder>{
+
     private Context context;
-    private List<personal> personalHoldActList;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUserID,currentUserName;
+    private List<personal> personalHoldRecActList;
 
-    public personholdactAdapter(Context context, List<personal> personalHoldActList){
+    public personalactRecAdapter(Context context, List<personal> personalHoldActList){
         this.context = context;
-        this.personalHoldActList = personalHoldActList;
+        this.personalHoldRecActList = personalHoldActList;
     }
 
-    public personholdactAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public personalactRecAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mAuth = FirebaseAuth.getInstance();
         db= FirebaseFirestore.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
-        View view = LayoutInflater.from(context).inflate(R.layout.item_act, parent, false);
-        return new ViewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_actrecord, parent, false);
+        return new personalactRecAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull personholdactAdapter.ViewHolder holder, int position) {
-        personal personal = personalHoldActList.get(position);
+    public void onBindViewHolder(@NonNull personalactRecAdapter.ViewHolder holder, int position) {
+        personal personal = personalHoldRecActList.get(position);
         holder.textName.setText(personal.getActivityname());
         holder.actLocation.setText(personal.getActivityLocation());
         Glide.with(holder.itemView.getContext())
@@ -51,7 +51,7 @@ public class personholdactAdapter extends RecyclerView.Adapter<personholdactAdap
 
     @Override
     public int getItemCount() {
-        return personalHoldActList.size();
+        return personalHoldRecActList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

@@ -64,7 +64,6 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
         evaluate evaluate = evaluateList.get(position);
         holder.textName.setText(evaluate.getName());
 
-
         Glide.with(holder.itemView.getContext())
                 .load(evaluate.getImage())
                 .circleCrop()

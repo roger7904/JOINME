@@ -32,8 +32,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout8"
-        android:layout_width="411dp"
-        android:layout_height="678dp"
+        android:layout_width="wrap_content"
+        android:layout_height="679dp"
         android:layout_marginTop="55dp"
         android:background="#e0e0e0"
         android:orientation="vertical"

@@ -13,8 +13,10 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="121dp"
+        android:layout_height="140dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/guideline12"
@@ -22,78 +24,28 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/friend1"
-            android:layout_width="109dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/friend"
+            android:layout_width="121dp"
+            android:layout_height="140dp"
             android:background="@drawable/shape_textview"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/users_profile_image2"
-                android:layout_width="91dp"
-                android:layout_height="82dp"
-                android:src="@drawable/head"
-                app:layout_constraintTop_toTopOf="@id/title" />
-
-            <TextView
-                android:id="@+id/textView38"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="roger"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/friend2"
-            android:layout_width="109dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape_textview"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/users_profile_image3"
+                android:id="@+id/friendImg"
                 android:layout_width="92dp"
                 android:layout_height="82dp"
                 android:src="@drawable/head"
                 app:layout_constraintTop_toTopOf="@id/title" />
 
             <TextView
-                android:id="@+id/textView40"
+                android:id="@+id/friendName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="tzuyen"
                 android:textSize="16dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/friend3"
-            android:layout_width="109dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/shape_textview"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/users_profile_image4"
-                android:layout_width="92dp"
-                android:layout_height="82dp"
-                android:src="@drawable/head"
-                app:layout_constraintTop_toTopOf="@id/title" />
-
-            <TextView
-                android:id="@+id/textView41"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="weilin"
-                android:textSize="16sp" />
 
         </LinearLayout>
 

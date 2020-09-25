@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,52 +16,49 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class personholdactAdapter extends RecyclerView.Adapter<personholdactAdapter.ViewHolder> {
+public class personalFriAdapter extends RecyclerView.Adapter<personalFriAdapter.ViewHolder>  {
     private Context context;
-    private List<personal> personalHoldActList;
+    private List<personal> personalFriList;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String currentUserID,currentUserName;
 
-    public personholdactAdapter(Context context, List<personal> personalHoldActList){
+    public personalFriAdapter(Context context, List<personal> personalFriList){
         this.context = context;
-        this.personalHoldActList = personalHoldActList;
+        this.personalFriList = personalFriList;
     }
 
-    public personholdactAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public personalFriAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mAuth = FirebaseAuth.getInstance();
         db= FirebaseFirestore.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
-        View view = LayoutInflater.from(context).inflate(R.layout.item_act, parent, false);
-        return new ViewHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_friend, parent, false);
+        return new personalFriAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull personholdactAdapter.ViewHolder holder, int position) {
-        personal personal = personalHoldActList.get(position);
-        holder.textName.setText(personal.getActivityname());
-        holder.actLocation.setText(personal.getActivityLocation());
+    public void onBindViewHolder(@NonNull personalFriAdapter.ViewHolder holder, int position) {
+        personal personal = personalFriList.get(position);
+        holder.textName.setText(personal.getName());
         Glide.with(holder.itemView.getContext())
                 .load(personal.getImage())
-//                .circleCrop()
+                .circleCrop()
                 .into(holder.circleImageViewid);
     }
 
     @Override
     public int getItemCount() {
-        return personalHoldActList.size();
+        return personalFriList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
         ImageView circleImageViewid;
         TextView textName;
-        TextView actLocation;
         ViewHolder(View itemView) {
             super(itemView);
-            circleImageViewid= (ImageView) itemView.findViewById(R.id.activityphoto4);
-            textName = (TextView) itemView.findViewById(R.id.actName);
-            actLocation = (TextView) itemView.findViewById(R.id.actLocation);
+            circleImageViewid= (ImageView) itemView.findViewById(R.id.friendImg);
+            textName = (TextView) itemView.findViewById(R.id.friendName);
         }
     }
 }

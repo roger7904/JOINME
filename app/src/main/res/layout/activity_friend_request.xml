@@ -14,25 +14,15 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar4"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="411dp"
         android:layout_height="678dp"
-        android:layout_marginTop="55dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="@id/guideline8"
         app:layout_constraintStart_toStartOf="@id/guideline8"
-        app:layout_constraintTop_toTopOf="@id/toolbar4">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_marginTop="50dp">
 
         <TextView
             android:id="@+id/Title"
@@ -45,7 +35,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="543dp"
             android:padding="5sp">
 
             <LinearLayout

@@ -10,48 +10,41 @@
         android:layout_width="411dp"
         android:layout_height="107dp"
         android:background="@drawable/shape_textview"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/guideline11"
+        app:layout_constraintStart_toStartOf="@id/guideline11"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintStart_toStartOf="@id/guideline11"
-        android:gravity="center">
+        tools:layout_constraintStart_toStartOf="@id/guideline11">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="367dp"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/activityphoto4"
                 android:layout_width="121dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 app:srcCompat="@drawable/head" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="187dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="5dp">
 
                 <TextView
                     android:id="@+id/actName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="TextView"
-                    android:gravity="center"
-                    android:textSize="20dp"/>
-
-                <TextView
-                    android:id="@+id/textView58"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/actDate"
                     android:textSize="20dp" />
 
                 <TextView
-                    android:id="@+id/textView54"
+                    android:id="@+id/actLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"

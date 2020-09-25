@@ -25,7 +25,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/activityphoto4"
@@ -36,28 +37,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="5dp">
 
                 <TextView
                     android:id="@+id/actName"
-                    android:layout_width="match_parent"
+                    android:layout_width="187dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="TextView"
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/textView58"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/actDate"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/textView54"
-                    android:layout_width="match_parent"
+                    android:id="@+id/actLocation"
+                    android:layout_width="187dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="高雄大學籃球場"

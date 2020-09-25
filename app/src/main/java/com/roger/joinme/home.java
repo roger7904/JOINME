@@ -844,6 +844,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
 //                Toast.makeText(this, "數據加載中",Toast.LENGTH_SHORT).show();
+
                 mClusterManager.clearItems();
                 mClusterManager.cluster();
                 FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -855,7 +856,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection("activity")
-                        .whereEqualTo("activityType", "ball")
+                        .whereEqualTo("activityType", "運動")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -865,20 +866,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
                                             lat = document.getGeoPoint("geopoint").getLatitude();
                                             lng = document.getGeoPoint("geopoint").getLongitude();
-//                                        System.out.println(document.getString("activityPhoto"));
-//                                        try {
-//                                            URL url = new URL(document.getString("activityPhoto"));
-//                                            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-//                                            connection.setDoInput(true);
-//                                            connection.connect();
-//                                            InputStream input = connection.getInputStream();
-//                                            Bitmap bitmap = BitmapFactory.decodeStream(input);
-////                                            BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.fromResource(bitmap);
-//                                        } catch (MalformedURLException e) {
-//                                            e.printStackTrace();
-//                                        } catch (IOException e) {
-//                                            e.printStackTrace();
-//                                        }
+
                                             //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                             Date snnippet = document.getTimestamp("startTime").toDate();
                                             SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
@@ -907,7 +895,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection("activity")
-                        .whereEqualTo("activityType", "eat")
+                        .whereEqualTo("activityType", "商家優惠")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -985,7 +973,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection("activity")
-                        .whereEqualTo("activityType", "information")
+                        .whereEqualTo("activityType", "限時")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override

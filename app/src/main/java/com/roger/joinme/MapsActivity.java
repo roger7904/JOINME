@@ -61,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button eatbtn;
     private Button viewbtn;
     private Button tripbtn;
+    private Button otherbtn;
     private static int count = 0;
     private LatLng[] locate = new LatLng[10000];
     public double userlat;
@@ -197,6 +198,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         eatbtn = (Button)findViewById(R.id.storebtn);
         viewbtn = (Button)findViewById(R.id.ktvbtn);
         tripbtn = (Button)findViewById(R.id.informationbtn);
+        otherbtn = (Button)findViewById(R.id.otherbtn);
     }
 
     //取得使用者當前位置 -1
@@ -427,7 +429,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection( "activity" )
-                        .whereEqualTo("activityType", "ball")
+                        .whereEqualTo("activityType", "運動")
                         .orderBy("startTime")
                         .limit(20)
                         .get()
@@ -454,7 +456,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection( "activity" )
-                        .whereEqualTo("activityType", "ball")
+                        .whereEqualTo("activityType", "商家優惠")
                         .orderBy("startTime")
                         .limit(20)
                         .get()
@@ -480,7 +482,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection( "activity" )
-                        .whereEqualTo("activityType", "ball")
+                        .whereEqualTo("activityType", "限時")
                         .orderBy("startTime")
                         .limit(20)
                         .get()
@@ -507,7 +509,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection( "activity" )
-                        .whereEqualTo("activityType", "ball")
+                        .whereEqualTo("activityType", "KTV")
 //                        .orderBy("startTime")
 //                        .limit(20)
                         .get()
@@ -523,6 +525,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                     }
                 });
+            }
+        });
+        otherbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //讀取資料庫資料
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                //抓集合
+                db.collection( "activity" )
+                        .whereEqualTo("activityType", "KTV")
+//                        .orderBy("startTime")
+//                        .limit(20)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        System.out.println(document.getString("location"));
+                                    }
+                                } else {
+                                    Log.w("TAG", "Error getting documents.",task.getException());
+                                }
+                            }
+                        });
             }
         });
     }
