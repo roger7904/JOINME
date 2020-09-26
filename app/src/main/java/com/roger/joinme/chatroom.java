@@ -3,15 +3,15 @@ package com.roger.joinme;
 import android.net.Uri;
 
 public class chatroom {
-    public String name, newestcontent,id,time,contentcount,activity;
-    public Uri image;
+    public String name, newestcontent,id,time,activity,image;
+    public Integer contentcount;
 
     public chatroom()
     {
 
     }
 
-    public chatroom(String name, String newestcontent, Uri image,String id,String contentcount,String time,String activity) {
+    public chatroom(String name, String newestcontent, String image,String id,Integer contentcount,String time,String activity) {
         this.name = name;
         this.newestcontent = newestcontent;
         this.image = image;
@@ -40,19 +40,19 @@ public class chatroom {
         this.newestcontent = newestcontent;
     }
 
-    public Uri getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Uri image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
-    public String getContentcount() {
+    public Integer getContentcount() {
         return contentcount;
     }
 
-    public void setContentcount(String contentcount) {
+    public void setContentcount(Integer contentcount) {
         this.contentcount = contentcount;
     }
 

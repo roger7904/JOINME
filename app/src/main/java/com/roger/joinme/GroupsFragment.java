@@ -101,7 +101,7 @@ public class GroupsFragment extends Fragment {
                                                                 String newestcontent=dc.getDocument().getString("newestcontent");
                                                                 String id=dc.getDocument().getId();
                                                                 String time=dc.getDocument().getString("newestmillisecond");
-                                                                String contentcount=dc.getDocument().getString("contentcount");
+                                                                Integer contentcount=dc.getDocument().getLong("contentcount").intValue();
 
                                                                 DocumentReference docRef = db.collection("activity").document(name);
                                                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -111,75 +111,20 @@ public class GroupsFragment extends Fragment {
                                                                             DocumentSnapshot document = task.getResult();
                                                                             if (document.exists()) {
                                                                                 if (Boolean.parseBoolean(document.getString("img"))) {
-                                                                                    ImagesRef.child(id).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Uri uri) {
-                                                                                            // Got the download URL for 'users/me/profile.png'
-                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
-                                                                                            chatroomadapter.notifyDataSetChanged();
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                        @Override
-                                                                                        public void onFailure(@NonNull Exception exception) {
-                                                                                            // Handle any errors
-                                                                                        }
-                                                                                    });
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"group"));
+                                                                                    chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("商家優惠")) {
-                                                                                    ImagesRef.child("商家優惠.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Uri uri) {
-                                                                                            // Got the download URL for 'users/me/profile.png'
-                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
-                                                                                            chatroomadapter.notifyDataSetChanged();
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                        @Override
-                                                                                        public void onFailure(@NonNull Exception exception) {
-                                                                                            // Handle any errors
-                                                                                        }
-                                                                                    });
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"商家優惠",id,contentcount,time,"group"));
+                                                                                    chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("KTV")) {
-                                                                                    ImagesRef.child("KTV.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Uri uri) {
-                                                                                            // Got the download URL for 'users/me/profile.png'
-                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
-                                                                                            chatroomadapter.notifyDataSetChanged();
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                        @Override
-                                                                                        public void onFailure(@NonNull Exception exception) {
-                                                                                            // Handle any errors
-                                                                                        }
-                                                                                    });
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"KTV",id,contentcount,time,"group"));
+                                                                                    chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("限時")) {
-                                                                                    ImagesRef.child("限時.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Uri uri) {
-                                                                                            // Got the download URL for 'users/me/profile.png'
-                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
-                                                                                            chatroomadapter.notifyDataSetChanged();
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                        @Override
-                                                                                        public void onFailure(@NonNull Exception exception) {
-                                                                                            // Handle any errors
-                                                                                        }
-                                                                                    });
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"限時",id,contentcount,time,"group"));
+                                                                                    chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("球類")) {
-                                                                                    ImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Uri uri) {
-                                                                                            // Got the download URL for 'users/me/profile.png'
-                                                                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"group"));
-                                                                                            chatroomadapter.notifyDataSetChanged();
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                        @Override
-                                                                                        public void onFailure(@NonNull Exception exception) {
-                                                                                            // Handle any errors
-                                                                                        }
-                                                                                    });
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"球類",id,contentcount,time,"group"));
+                                                                                    chatroomadapter.notifyDataSetChanged();
                                                                                 }
                                                                             } else {
 

@@ -277,6 +277,7 @@ public class ChatActivity extends AppCompatActivity
             SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
             saveCurrentDate = currentDate.format(calendar.getTime());
 
+            System.out.print(calendar.getTime());
             SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
             saveCurrentTime = currentTime.format(calendar.getTime());
 
@@ -309,10 +310,9 @@ public class ChatActivity extends AppCompatActivity
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists() && document.contains("contentcount")) {
-                            count=Integer.parseInt(document.getString("contentcount"));
-                            System.out.println("count"+count);
-                            Map<String, String> contentcount = new HashMap<>();
-                            contentcount.put("contentcount",Integer.toString(count+1));
+                            count=document.getLong("contentcount").intValue();
+                            Map<String, Number> contentcount = new HashMap<>();
+                            contentcount.put("contentcount",count+1);
 
                             db.collection("message").document(messageSenderID).collection("UserID")
                                     .document(messageReceiverID).set(newcontent,SetOptions.merge());

@@ -27,8 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firestore.v1.StructuredQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +66,9 @@ public class ChatFragment extends Fragment {
         chatroomList = new ArrayList<>();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
-        initView();
-        RetrieveAndDisplayContact();
 
+        RetrieveAndDisplayContact();
+        initView();
         // Inflate the layout for this fragment
         return chatFragmentView;
     }
@@ -91,38 +93,15 @@ public class ChatFragment extends Fragment {
                                     String newestcontent=dc.getDocument().getString("newestcontent");
                                     String id=dc.getDocument().getId();
                                     String time=dc.getDocument().getString("newestmillisecond");
-                                    String contentcount=dc.getDocument().getString("contentcount");
+                                    Integer contentcount=dc.getDocument().getLong("contentcount").intValue();
 
-                                    UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            // Got the download URL for 'users/me/profile.png'
-                                            chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"contact"));
-                                            chatroomadapter.notifyDataSetChanged();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception exception) {
-                                            // Handle any errors
-                                            UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                @Override
-                                                public void onSuccess(Uri uri) {
-                                                    // Got the download URL for 'users/me/profile.png'
-                                                    chatroomList.add(new chatroom(name,newestcontent,uri,id,contentcount,time,"contact"));
-                                                    chatroomadapter.notifyDataSetChanged();
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception exception) {
-                                                    // Handle any errors
-                                                }
-                                            });
-                                        }
-                                    });
+                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"contact"));
+                                    chatroomadapter.notifyDataSetChanged();
 
                                     Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
                                     break;
                                 case MODIFIED:
+//                                    chatroomadapter.notifyDataSetChanged();
                                     Log.d("TAG", "Modified Msg: " + dc.getDocument().toObject(Message.class));
                                     break;
                                 case REMOVED:
@@ -132,66 +111,6 @@ public class ChatFragment extends Fragment {
                         }
                     }
                 });
-//        db.collection("me").document(currentUserID).collection("friends")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                db.collection("user").document(document.getId()).collection("profile")
-//                                        .get()
-//                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                if (task.isSuccessful()) {
-//                                                    for (QueryDocumentSnapshot documentt : task.getResult()) {
-//                                                        if (documentt.contains("name") && documentt.contains("image")) {
-//                                                            String name = documentt.getString("name");
-//                                                            String status = documentt.getString("status");
-//                                                            String id = documentt.getString("currentUserID");
-//                                                            UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                                                @Override
-//                                                                public void onSuccess(Uri uri) {
-//                                                                    // Got the download URL for 'users/me/profile.png'
-//                                                                    userprofileList.add(new userprofile(
-//                                                                            name, status, uri, id,"friend"));
-//                                                                    userprofileadapter.notifyDataSetChanged();
-//                                                                }
-//                                                            }).addOnFailureListener(new OnFailureListener() {
-//                                                                @Override
-//                                                                public void onFailure(@NonNull Exception exception) {
-//                                                                    // Handle any errors
-//                                                                }
-//                                                            });
-//                                                        }
-//                                                        else if(documentt.contains("name")){
-//                                                            String name=documentt.getString("name");
-//                                                            String status=documentt.getString("status");
-//                                                            String id=documentt.getString("currentUserID");
-//                                                            UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                                                @Override
-//                                                                public void onSuccess(Uri uri) {
-//                                                                    // Got the download URL for 'users/me/profile.png'
-//                                                                    userprofileList.add(new userprofile(
-//                                                                            name, status, uri, id,"friend"));
-//                                                                    userprofileadapter.notifyDataSetChanged();
-//                                                                }
-//                                                            }).addOnFailureListener(new OnFailureListener() {
-//                                                                @Override
-//                                                                public void onFailure(@NonNull Exception exception) {
-//                                                                    // Handle any errors
-//                                                                }
-//                                                            });
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                        });
-//                            }
-//                        }
-//                    }
-//                });
     }
 
     public void initView(){
