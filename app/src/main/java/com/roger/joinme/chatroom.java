@@ -3,7 +3,7 @@ package com.roger.joinme;
 import android.net.Uri;
 
 public class chatroom {
-    public String name, newestcontent,id,time,activity,image;
+    public String name, newestcontent,id,time,activity,image,date;
     public Integer contentcount;
 
     public chatroom()
@@ -11,7 +11,7 @@ public class chatroom {
 
     }
 
-    public chatroom(String name, String newestcontent, String image,String id,Integer contentcount,String time,String activity) {
+    public chatroom(String name, String newestcontent, String image,String id,Integer contentcount,String time,String activity,String date) {
         this.name = name;
         this.newestcontent = newestcontent;
         this.image = image;
@@ -19,6 +19,7 @@ public class chatroom {
         this.contentcount=contentcount;
         this.time=time;
         this.activity=activity;
+        this.date=date;
     }
     public String getId() {
         return id;
@@ -70,5 +71,12 @@ public class chatroom {
 
     public void setActivity(String activity) {
         this.activity = activity;
+    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

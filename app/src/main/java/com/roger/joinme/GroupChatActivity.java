@@ -61,7 +61,7 @@ public class GroupChatActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime;
+    private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime,currentDate2,currentTime2;
 
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
@@ -207,6 +207,14 @@ public class GroupChatActivity extends AppCompatActivity
             SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
             currentTime = currentTimeFormat.format(calForTime.getTime());
 
+            Calendar calForDate2 = Calendar.getInstance();
+            SimpleDateFormat currentDateFormat2 = new SimpleDateFormat("MMM dd, yyyy");
+            currentDate2 = currentDateFormat2.format(calForDate2.getTime());
+
+            Calendar calForTime2 = Calendar.getInstance();
+            SimpleDateFormat currentTimeFormat2 = new SimpleDateFormat("hh:mm a");
+            currentTime2 = currentTimeFormat2.format(calForTime2.getTime());
+
             Long tsLong = System.currentTimeMillis()/1000;
             String ts = tsLong.toString();
 
@@ -223,6 +231,8 @@ public class GroupChatActivity extends AppCompatActivity
             Map newcontent = new HashMap();
             newcontent.put("newestcontent", messageText);
             newcontent.put("newestmillisecond", ts);
+            newcontent.put("time", currentTime);
+            newcontent.put("date", currentDate);
 
             db.collection("chat").document(currentGroupName).set(newcontent, SetOptions.merge());
 

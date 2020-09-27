@@ -102,6 +102,8 @@ public class GroupsFragment extends Fragment {
                                                                 String id=dc.getDocument().getId();
                                                                 String time=dc.getDocument().getString("newestmillisecond");
                                                                 Integer contentcount=dc.getDocument().getLong("contentcount").intValue();
+                                                                String date=dc.getDocument().getString("date");
+                                                                String date2=dc.getDocument().getString("time");
 
                                                                 DocumentReference docRef = db.collection("activity").document(name);
                                                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -111,19 +113,19 @@ public class GroupsFragment extends Fragment {
                                                                             DocumentSnapshot document = task.getResult();
                                                                             if (document.exists()) {
                                                                                 if (Boolean.parseBoolean(document.getString("img"))) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"group"));
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"group",date2+" "+date));
                                                                                     chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("商家優惠")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"商家優惠",id,contentcount,time,"group"));
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"商家優惠",id,contentcount,time,"group",date2+" "+date));
                                                                                     chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("KTV")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"KTV",id,contentcount,time,"group"));
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"KTV",id,contentcount,time,"group",date2+" "+date));
                                                                                     chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("限時")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"限時",id,contentcount,time,"group"));
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"限時",id,contentcount,time,"group",date2+" "+date));
                                                                                     chatroomadapter.notifyDataSetChanged();
                                                                                 }else if (document.getString("activityType").equals("球類")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"球類",id,contentcount,time,"group"));
+                                                                                    chatroomList.add(new chatroom(name,newestcontent,"球類",id,contentcount,time,"group",date2+" "+date));
                                                                                     chatroomadapter.notifyDataSetChanged();
                                                                                 }
                                                                             } else {

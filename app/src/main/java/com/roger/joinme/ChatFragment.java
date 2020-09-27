@@ -94,8 +94,10 @@ public class ChatFragment extends Fragment {
                                     String id=dc.getDocument().getId();
                                     String time=dc.getDocument().getString("newestmillisecond");
                                     Integer contentcount=dc.getDocument().getLong("contentcount").intValue();
+                                    String date=dc.getDocument().getString("date");
+                                    String date2=dc.getDocument().getString("time");
 
-                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"contact"));
+                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"contact",date2+" "+date));
                                     chatroomadapter.notifyDataSetChanged();
 
                                     Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));

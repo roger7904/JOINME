@@ -89,7 +89,7 @@ public class ChatActivity extends AppCompatActivity
 
     private String RECEIVER_DEVICE;
 
-    private String saveCurrentTime, saveCurrentDate,currentUserName;
+    private String saveCurrentTime, saveCurrentDate,currentUserName,saveCurrentTime2,saveCurrentDate2;
     private Integer count;
 
 
@@ -281,6 +281,12 @@ public class ChatActivity extends AppCompatActivity
             SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
             saveCurrentTime = currentTime.format(calendar.getTime());
 
+            SimpleDateFormat currentDate2 = new SimpleDateFormat("MM/dd");
+            saveCurrentDate2 = currentDate2.format(calendar.getTime());
+
+            SimpleDateFormat currentTime2 = new SimpleDateFormat("hh:mm a");
+            saveCurrentTime2 = currentTime2.format(calendar.getTime());
+
             Long tsLong = System.currentTimeMillis()/1000;
             String ts = tsLong.toString();
 
@@ -299,6 +305,8 @@ public class ChatActivity extends AppCompatActivity
             Map newcontent = new HashMap();
             newcontent.put("newestcontent", messageText);
             newcontent.put("newestmillisecond", ts);
+            newcontent.put("time", saveCurrentTime2);
+            newcontent.put("date", saveCurrentDate2);
 
 
             DocumentReference docRef = db.collection("message").document("messageSenderID")

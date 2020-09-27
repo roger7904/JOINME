@@ -53,15 +53,8 @@ public class chatroomAdapter extends RecyclerView.Adapter<chatroomAdapter.ViewHo
         holder.textName.setText(chatroom.getName());
         holder.textContent.setText(chatroom.getNewestcontent());
 
-        String saveCurrentTime, saveCurrentDate;
-        Calendar calendar = Calendar.getInstance();
-//        SimpleDateFormat currentDate = new SimpleDateFormat("dd");
-//        saveCurrentDate = currentDate.format(chatroom.getTime());
-        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
-        saveCurrentTime = currentTime.format(Integer.parseInt(chatroom.getTime())*1000);
-        holder.textTime.setText(saveCurrentTime);
-        System.out.println(Integer.parseInt(chatroom.getTime()));
-        System.out.println(saveCurrentTime);
+        holder.textTime.setText(chatroom.getDate());
+
 
         if(chatroom.getActivity().equals("contact")){
             UserProfileImagesRef.child(chatroom.getId() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
