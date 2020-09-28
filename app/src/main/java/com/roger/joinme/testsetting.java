@@ -90,7 +90,7 @@ public class testsetting extends AppCompatActivity
 
         InitializeFields();
 
-        userName.setVisibility(View.INVISIBLE);
+//        userName.setVisibility(View.INVISIBLE);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, new String[]{"男", "女"});
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         usergender.setAdapter(adapter);

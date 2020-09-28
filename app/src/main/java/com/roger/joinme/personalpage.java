@@ -307,7 +307,6 @@ public class personalpage extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess(Uri uri) {
                                                                 // Got the download URL for 'users/me/profile.png'
-                                                                System.out.println(userName);
                                                                 personalFriList.add(new personal(uri, currentUserID,"","",userName));
                                                                 personalFriAdapter.notifyDataSetChanged();
                                                             }

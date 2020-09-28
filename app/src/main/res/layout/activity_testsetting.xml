@@ -27,12 +27,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="613dp">
+        android:layout_height="667dp">
 
         <LinearLayout
             android:id="@+id/bkg"
-            android:layout_width="450dp"
-            android:layout_height="232dp"
+            android:layout_width="458dp"
+            android:layout_height="214dp"
             android:background="?attr/colorPrimary"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="@id/guideline7"
@@ -43,7 +43,7 @@
             android:id="@+id/update_settings_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_textviewlogin"
+            android:background="#ffff47"
             android:gravity="center_horizontal"
             android:inputType="textMultiLine"
             android:padding="6dp"
@@ -58,10 +58,10 @@
             app:layout_constraintStart_toStartOf="@id/guideline7" />
 
         <ScrollView
-            android:layout_width="411dp"
-            android:layout_height="324dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="408dp"
+            android:layout_height="331dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline7"
+            app:layout_constraintStart_toStartOf="@id/guideline7"
             app:layout_constraintTop_toBottomOf="@id/bkg">
 
             <LinearLayout
@@ -82,7 +82,8 @@
                     android:padding="6dp"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <EditText
                     android:id="@+id/phone"
