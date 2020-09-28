@@ -120,6 +120,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button noticebtn;
     private Button messagepagebtn;
     private Button settingbtn;
+    private Button refreshbtn;
     private static int count = 0;
     private LatLng[] locate = new LatLng[10000];
     public double userlat;
@@ -223,7 +224,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                                 @Override
                                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                     if (task.isSuccessful()) {
-                                                        System.out.println("aaaaaaaaaaaa");
                                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                                             String UserID = document.getId();
                                                             db.collection("user").document(UserID)
@@ -234,7 +234,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                                                         @Override
                                                                         public void onComplete(@NonNull Task task) {
                                                                             if (task.isSuccessful()) {
-                                                                                System.out.println("ttttttttt");
                                                                                 db.collection("user")
                                                                                         .document(UserID)
                                                                                         .get()
@@ -559,15 +558,33 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
                                     lat = document.getGeoPoint("geopoint").getLatitude();
                                     lng = document.getGeoPoint("geopoint").getLongitude();
-                                    if (document.getString("activityType").equals("ball")) {
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                                    } else if (document.getString("activityType").equals("eat")) {
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-                                    } else if (document.getString("activityType").equals("KTV")) {
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-                                    } else {
-                                        markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                                    }
+                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+
+                                    //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+                                    Date snnippet = document.getTimestamp("startTime").toDate();
+                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
+                                    offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
+                                    mClusterManager.addItem(offsetItem);
+                                    mMap.setOnInfoWindowClickListener(mClusterManager);
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void addItemType(String type){
+        db.collection("activity")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) && document.getString("activityType").equals(type)) {
+                                    lat = document.getGeoPoint("geopoint").getLatitude();
+                                    lng = document.getGeoPoint("geopoint").getLongitude();
+
                                     //將資料庫中timestamp型態轉為date後用simpledateformat儲存
                                     Date snnippet = document.getTimestamp("startTime").toDate();
                                     SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
@@ -591,6 +608,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         settingbtn = (Button) findViewById(R.id.settingBtn);
         messagebtn = (Button) findViewById(R.id.messageBtn);
         noticebtn = (Button) findViewById(R.id.noticeBtn);
+        refreshbtn = (Button) findViewById(R.id.refreshBtn);
     }
 
     //取得使用者當前位置 -1
@@ -779,9 +797,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        //氣泡視窗訊息
-//        Toast.makeText(this, "鬥牛啦\n"+"開始時間：2020/3/11 15:00"+"\n"+"結束時間：2020/3/11 17:00",
-//                Toast.LENGTH_LONG).show();
         Intent intent = new Intent();
         intent.setClass(home.this, signup.class);
         startActivity(intent);
@@ -792,22 +807,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     private void setListeners() {
-//        selfpage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(home.this, selfpage.class);
-//                startActivity(intent);
-//            }
-//        });
-//        homebtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(home.this, home.class);
-//                startActivity(intent);
-//            }
-//        });
+
         jobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -816,6 +816,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
+
         messagebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -824,6 +825,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
+
         noticebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -832,6 +834,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
+
         favoritebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -840,85 +843,26 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 startActivity(intent);
             }
         });
+
         ballbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(this, "數據加載中",Toast.LENGTH_SHORT).show();
-
                 mClusterManager.clearItems();
+                addItemType("運動");
                 mClusterManager.cluster();
-                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                        .setTimestampsInSnapshotsEnabled(true)
-                        .build();
-                firestore.setFirestoreSettings(settings);
-                //讀取資料庫資料
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                //抓集合
-                db.collection("activity")
-                        .whereEqualTo("activityType", "運動")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
-                                            lat = document.getGeoPoint("geopoint").getLatitude();
-                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                            Date snnippet = document.getTimestamp("startTime").toDate();
-                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
-                                            markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
-
-                                            mClusterManager.addItem(offsetItem);
-                                            mMap.setOnInfoWindowClickListener(mClusterManager);
-                                        }
-                                    }
-                                }
-                            }
-                        });
                 mMap.setOnCameraIdleListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
+
         storebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(this, "數據加載中",
-//                        Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                addItemType("商家優惠");
                 mClusterManager.cluster();
-                //讀取資料庫資料
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                //抓集合
-                db.collection("activity")
-                        .whereEqualTo("activityType", "商家優惠")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
-                                            lat = document.getGeoPoint("geopoint").getLatitude();
-                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                            Date snnippet = document.getTimestamp("startTime").toDate();
-                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
-                                            markerDescriptor = markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
-
-                                            mClusterManager.addItem(offsetItem);
-                                            mMap.setOnInfoWindowClickListener(mClusterManager);
-                                        }
-                                    }
-                                }
-                            }
-                        });
                 mMap.setOnCameraIdleListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
             }
@@ -926,77 +870,34 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         ktvbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(this, "數據加載中",
-//                        Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                addItemType("KTV");
                 mClusterManager.cluster();
-                //讀取資料庫資料
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                //抓集合
-                db.collection("activity")
-                        .whereEqualTo("activityType", "KTV")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
-                                            lat = document.getGeoPoint("geopoint").getLatitude();
-                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                            Date snnippet = document.getTimestamp("startTime").toDate();
-                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
-                                            markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
-
-                                            mClusterManager.addItem(offsetItem);
-                                            mMap.setOnInfoWindowClickListener(mClusterManager);
-                                        }
-                                    }
-                                }
-                            }
-                        });
                 mMap.setOnCameraIdleListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
+
         informationbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(this, "數據加載中",
-//                        Toast.LENGTH_SHORT).show();
                 mClusterManager.clearItems();
+                addItemType("限時");
                 mClusterManager.cluster();
-                //讀取資料庫資料
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                //抓集合
-                db.collection("activity")
-                        .whereEqualTo("activityType", "限時")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
-                                            lat = document.getGeoPoint("geopoint").getLatitude();
-                                            lng = document.getGeoPoint("geopoint").getLongitude();
 
-                                            //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                            Date snnippet = document.getTimestamp("startTime").toDate();
-                                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd hh :mm:ss ");
-                                            markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                                            MyItem offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
+                mMap.setOnCameraIdleListener(mClusterManager);
+                mMap.setOnMarkerClickListener(mClusterManager);
+            }
+        });
 
-                                            mClusterManager.addItem(offsetItem);
-                                            mMap.setOnInfoWindowClickListener(mClusterManager);
-                                        }
-                                    }
-                                }
-                            }
-                        });
+        refreshbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClusterManager.clearItems();
+                addItems();
+                mClusterManager.cluster();
+
                 mMap.setOnCameraIdleListener(mClusterManager);
                 mMap.setOnMarkerClickListener(mClusterManager);
             }
