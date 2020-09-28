@@ -225,13 +225,13 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.ViewHold
                 Map<String, Object> receiverdata2 = new HashMap<>();
                 receiverdata2.put("newestcontent", " ");
                 receiverdata2.put("newestmillisecond", ts);
-                receiverdata2.put("contentcount","0");
+                receiverdata2.put("contentcount",0);
                 receiverdata2.put("from",request.getName());
                 Map<String, Object> senderdata2 = new HashMap<>();
                 senderdata2.put("UserID", currentUserID);
                 senderdata2.put("newestcontent", " ");
                 senderdata2.put("newestmillisecond", ts);
-                senderdata2.put("contentcount","0");
+                senderdata2.put("contentcount",0);
                 senderdata2.put("from",currentUserName);
                 db.collection("message").document(currentUserID).
                         collection("UserID").document(request.getID())
