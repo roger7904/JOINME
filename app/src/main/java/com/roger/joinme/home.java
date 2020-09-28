@@ -121,6 +121,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button messagepagebtn;
     private Button settingbtn;
     private Button refreshbtn;
+    private Button otherbtn;
     private static int count = 0;
     private LatLng[] locate = new LatLng[10000];
     public double userlat;
@@ -547,6 +548,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     private void addItems() {
+        mClusterManager.clearItems();
 
         db.collection("activity")
                 .get()
@@ -571,9 +573,15 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         }
                     }
                 });
+
+        mClusterManager.cluster();
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
     }
 
     private void addItemType(String type){
+        mClusterManager.clearItems();
+
         db.collection("activity")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -596,6 +604,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         }
                     }
                 });
+
+        mClusterManager.cluster();
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
     }
 
     private void initViews() {
@@ -609,6 +621,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         messagebtn = (Button) findViewById(R.id.messageBtn);
         noticebtn = (Button) findViewById(R.id.noticeBtn);
         refreshbtn = (Button) findViewById(R.id.refreshBtn);
+        otherbtn = (Button) findViewById(R.id.otherbtn);
     }
 
     //取得使用者當前位置 -1
@@ -664,7 +677,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(true);
-
         }
     };
 
@@ -738,41 +750,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
-
-//        mMap.setOnCameraIdleListener(this);
-//        mMap.setOnCameraMoveStartedListener(this);
-//        mMap.setOnCameraMoveListener(this);
-//        mMap.setOnCameraMoveCanceledListener(this);
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
-
-        //讀取資料庫資料
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //抓集合
-//        db.collection( "activity" )
-//                .orderBy("startTime")
-//                .limit(20)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete ( @NonNull Task< QuerySnapshot > task ) {
-//                        if (task.isSuccessful()) {
-//                            for(int i=0;i<20;i++){
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    //抓取document名稱及內部欄位資料
-//                                    System.out.println(document.getId ());
-//                                    locate2[i] = getLocationFromAddress(document.getString("location"));
-//                                }
-//                            }
-//                        } else {
-//                            Log.w("TAG", "Error getting documents.",task.getException());
-//                        }
-//                    }
-//                });
-
-        //座標位置 之後從使用者輸入的地址抓經緯度 之後用陣列存位置120.277872,22.734315
-//        LatLng locate = new LatLng(22.734315,120.277872);
-//        LatLng locatee = new LatLng(22.44065,120.285000);
-
     }
 
     //地址轉經緯度method(很容易讀不到資料)
@@ -801,7 +778,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         intent.setClass(home.this, signup.class);
         startActivity(intent);
     }
-
 
     private void initData() {
     }
@@ -847,59 +823,42 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         ballbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClusterManager.clearItems();
                 addItemType("運動");
-                mClusterManager.cluster();
-
-                mMap.setOnCameraIdleListener(mClusterManager);
-                mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
 
         storebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClusterManager.clearItems();
                 addItemType("商家優惠");
-                mClusterManager.cluster();
-
-                mMap.setOnCameraIdleListener(mClusterManager);
-                mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
+
         ktvbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClusterManager.clearItems();
                 addItemType("KTV");
-                mClusterManager.cluster();
-
-                mMap.setOnCameraIdleListener(mClusterManager);
-                mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
 
         informationbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClusterManager.clearItems();
                 addItemType("限時");
-                mClusterManager.cluster();
+            }
+        });
 
-                mMap.setOnCameraIdleListener(mClusterManager);
-                mMap.setOnMarkerClickListener(mClusterManager);
+        otherbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItemType("其他");
             }
         });
 
         refreshbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClusterManager.clearItems();
                 addItems();
-                mClusterManager.cluster();
-
-                mMap.setOnCameraIdleListener(mClusterManager);
-                mMap.setOnMarkerClickListener(mClusterManager);
             }
         });
     }
