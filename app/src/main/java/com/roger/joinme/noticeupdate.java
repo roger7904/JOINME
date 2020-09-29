@@ -63,26 +63,8 @@ public class noticeupdate extends AppCompatActivity {
                                 String type = documentt.getString("type");
                                 if(documentt.contains("activityname")){
                                     String activityname = documentt.getString("activityname");
-                                    db.collection("activity").document(activityname)
-                                            .get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-
-                                                    itemList.add(new item(from,type,activityname));
-                                                    itemadapter.notifyDataSetChanged();
-                                                } else {
-
-                                                }
-                                            } else {
-
-                                            }
-                                        }
-                                    });
-
+                                    itemList.add(new item(from,type,activityname));
+                                    itemadapter.notifyDataSetChanged();
                                 }else{
                                     itemList.add(new item(from,type,"none"));
                                     itemadapter.notifyDataSetChanged();
