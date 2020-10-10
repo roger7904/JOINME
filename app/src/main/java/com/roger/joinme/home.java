@@ -662,7 +662,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
-
             mDefaultLocation = new LatLng(25.033493, 121.564101);
 
             if (!getDeviceLocation()) {
@@ -705,7 +704,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //是否給予JOINME讀取定位資訊
     public Boolean chechPermission() {
         String[] pm = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION};
-
         List<String> list = new ArrayList<>();
 
         for (int i = 0; i < pm.length; i++) {
