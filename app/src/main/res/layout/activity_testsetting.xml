@@ -127,19 +127,17 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/age"
+                <Button
+                    android:id="@+id/button5"
                     android:layout_width="250dp"
                     android:layout_height="45dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/shape_textview"
-                    android:gravity="center_horizontal"
-                    android:hint="年齡"
-                    android:inputType="textMultiLine"
-                    android:padding="6dp"
-                    android:textAlignment="center"
+                    android:onClick="showDayDialog"
+                    android:text="年齡"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold" />
+                    android:textColorHint="@color/colorPrimaryDark"
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
 

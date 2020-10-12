@@ -1,14 +1,17 @@
 package com.roger.joinme;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +24,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,6 +56,11 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,12 +70,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class testsetting extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
-    private EditText userName, userStatus,userage,userphone;
+    private EditText userName, userStatus,userphone;
+    private Button userage;
     private ImageView userProfileImage;
 
     private String currentUserID;
     private FirebaseAuth mAuth;
-//    private DatabaseReference RootRef;
     private FirebaseFirestore db;
     private Spinner usergender;
 
@@ -122,12 +133,12 @@ public class testsetting extends AppCompatActivity
     private void InitializeFields()
     {
         UpdateAccountSettings = (Button) findViewById(R.id.update_settings_button);
+        userage = (Button)findViewById(R.id.button5);
         userName = (EditText) findViewById(R.id.set_user_name);
         userStatus = (EditText) findViewById(R.id.set_profile_status);
         userProfileImage = (ImageView) findViewById(R.id.set_profile_image);
         loadingBar = new ProgressDialog(this);
         usergender = (Spinner) findViewById(R.id.gender);
-        userage = (EditText) findViewById(R.id.age);
         userphone = (EditText) findViewById(R.id.phone);
     }
 
@@ -191,6 +202,36 @@ public class testsetting extends AppCompatActivity
         }
     }
 
+    public void showDayDialog(final View view) {
+        View view2 = this.getCurrentFocus();
+        if (view2 != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view2.getWindowToken(), 0);
+        }
+        TimePickerView pvTime = new TimePickerBuilder(testsetting.this, new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                String age = "";
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String var = Integer.toString(cal.get(Calendar.MONTH) + 1) + Integer.toString(cal.get(Calendar.DAY_OF_MONTH));
+                Time t=new Time("GMT+8");
+                t.setToNow();
+                int year = t.year;
+                int month = t.month;
+                int day = t.monthDay;
+                String currentDate = String.valueOf(month) + String.valueOf(day);
+                if(Integer.valueOf(var)>Integer.valueOf(currentDate)){
+                    age = String.valueOf(year - cal.get(Calendar.YEAR));
+                }
+                if(view.getId()==R.id.button5){
+                    userage.setText(age);
+                }else{
+                }
+            }
+        }).build();
+        pvTime.show();
+    }
 
     private void UpdateSettings()
     {
@@ -257,7 +298,6 @@ public class testsetting extends AppCompatActivity
 
     private void RetrieveUserInfo()
     {
-
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
                 .document(currentUserID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
