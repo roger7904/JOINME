@@ -7,14 +7,24 @@
     tools:context=".verifyActivity">
 
 
-    <include
-        android:id="@+id/chat_toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        layout="@layout/app_bar_layout">
-    </include>
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleTextColor="#000000" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/verify_recycle"
@@ -22,6 +32,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/myLinearLayout"
         android:layout_below="@+id/chat_toolbar"
+        android:layout_marginTop="52dp"
         android:layout_marginBottom="6dp"
         android:background="#e0e0e0"></androidx.recyclerview.widget.RecyclerView>
 

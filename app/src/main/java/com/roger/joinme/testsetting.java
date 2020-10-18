@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -83,7 +84,6 @@ public class testsetting extends AppCompatActivity
     private StorageReference UserProfileImagesRef;
     private ProgressDialog loadingBar;
 
-    private Toolbar SettingsToolBar;
 
 
     @Override
@@ -91,7 +91,6 @@ public class testsetting extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testsetting);
-
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -221,11 +220,17 @@ public class testsetting extends AppCompatActivity
                 int month = t.month;
                 int day = t.monthDay;
                 String currentDate = String.valueOf(month) + String.valueOf(day);
-                if(Integer.valueOf(var)>Integer.valueOf(currentDate)){
+                if(Integer.valueOf(var)>=Integer.valueOf(currentDate)){
                     age = String.valueOf(year - cal.get(Calendar.YEAR));
+                }else{
+                    age = String.valueOf(year - cal.get(Calendar.YEAR) - 1);
                 }
                 if(view.getId()==R.id.button5){
-                    userage.setText(age);
+                    if(Integer.valueOf(age) >=7){
+                        userage.setText(age);
+                    }else{
+                        age = "";
+                    }
                 }else{
                 }
             }

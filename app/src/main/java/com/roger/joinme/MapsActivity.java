@@ -534,7 +534,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 //抓集合
                 db.collection( "activity" )
-                        .whereEqualTo("activityType", "KTV")
+                        .whereEqualTo("activityType", "其他")
 //                        .orderBy("startTime")
 //                        .limit(20)
                         .get()

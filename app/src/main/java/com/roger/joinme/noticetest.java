@@ -4,11 +4,13 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -40,6 +42,10 @@ public class noticetest extends AppCompatActivity {
         edtTitle = findViewById(R.id.edtTitle);
         edtMessage = findViewById(R.id.edtMessage);
         Button btnSend = findViewById(R.id.btnSend);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -125,7 +125,8 @@ public class jo extends AppCompatActivity {
     public String uriString;
     public boolean imguploaded = false;
     public TextView nowRestriction;
-    boolean[] flag_list= {false, false, false};
+    boolean[] flag_list= {false, false, false, false, false, false};
+    boolean flag = false;
     LinearLayout t1,t2;
     Button timebtn,timebtn2,aftertimebtn;
     boolean ifSpecifyTime=false,ifTimeSelected=false;
@@ -137,32 +138,16 @@ public class jo extends AppCompatActivity {
     Handler mLoadhandler;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createact);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-//                .setDrawerLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        //NavigationUI.setupWithNavController(navigationView, navController);
+
         db=FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -252,8 +237,6 @@ public class jo extends AppCompatActivity {
 
 
         activityTitle = (TextView) findViewById(R.id.editText6);
-//        activityLocation = (TextView) findViewById(R.id.editText10);
-//        peopleLimit = (TextView) findViewById(R.id.editText11);
         activityContent = (TextView) findViewById(R.id.editText12);
         submitbtn = (Button) findViewById(R.id.button40);
         imgtest = (ImageView) findViewById(R.id.imageView26);
@@ -272,8 +255,6 @@ public class jo extends AppCompatActivity {
         timebtn=(Button)findViewById(R.id.timebtn1);
         timebtn2=(Button)findViewById(R.id.timebtn2);
         aftertimebtn=(Button)findViewById(R.id.aftertimebtn);
-
-
     }
 
     private void initData() {
@@ -636,7 +617,7 @@ public class jo extends AppCompatActivity {
                 dialog = builder.create(); //建立對話方塊並存成 dialog
                 break;
             case 2:
-                String[] str_list={"限男","限女","逾時不候"};
+                String[] str_list={"限男","限女","逾時不候","禁菸","禁酒","禁帶外食"};
 
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
                 builder2.setTitle("請勾選") //設定標題文字
@@ -660,13 +641,24 @@ public class jo extends AppCompatActivity {
                             {
                                 // TODO Auto-generated method stub
                                 String temp="";
-                                for(int i=0; i<flag_list.length; i++)
-                                {
-                                    if(flag_list[i])
-                                        temp = temp + str_list[i]+" ";
+                                if(flag_list[0] && flag_list[1]){
+                                    flag_list[0] = false;
+                                    flag_list[1] = false;
+                                    flag = true;
+                                    for(int i=2; i<flag_list.length; i++)
+                                    {
+                                        if(flag_list[i])
+                                            temp = temp + str_list[i]+" ";
+                                    }
+                                    nowRestriction.setText("目前活動限制："+temp);
+                                }else{
+                                    for(int i=0; i<flag_list.length; i++)
+                                    {
+                                        if(flag_list[i])
+                                            temp = temp + str_list[i]+" ";
+                                    }
+                                    nowRestriction.setText("目前活動限制："+temp);
                                 }
-                                System.out.println(temp);
-                                nowRestriction.setText("目前活動限制："+temp);
                             }
                         });
                 dialog = builder2.create(); //建立對話方塊並存成 dialog
@@ -692,7 +684,6 @@ public class jo extends AppCompatActivity {
                 byte[] data = baos.toByteArray();
 
                 UploadTask uploadTask = pRef.putBytes(data);
-
 
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -753,6 +744,9 @@ public class jo extends AppCompatActivity {
             book.put("onlyMale",flag_list[0]);
             book.put("onlyFemale",flag_list[1]);
             book.put("Ontime",flag_list[2]);
+            book.put("noSmoking",flag_list[3]);
+            book.put("noWine",flag_list[4]);
+            book.put("noEatingOut",flag_list[5]);
             chat.put("activity", activityTitle.getText().toString());
             chat.put("newestcontent", currentUserName+"創建了此活動");
             chat.put("organizer", currentUserName);

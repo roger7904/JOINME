@@ -3,6 +3,7 @@ package com.roger.joinme;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,9 +47,12 @@ public class favoriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favoritee);
 
-        Toolbar toolbar = findViewById(R.id.chat_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("活動收藏");
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+//        Toolbar toolbar = findViewById(R.id.chat_toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setTitle("活動收藏");
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
