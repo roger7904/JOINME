@@ -41,7 +41,10 @@ public class personalpage extends AppCompatActivity {
     private Button chatView;
     private Button selfView;
     public ImageView activityPhoto;
-    public TextView title;
+    public TextView title,evaluation;
+    public TextView first,second,third,forth,fifth;
+    public int Count = 0;
+    public double Score = 0;
     private CircleImageView userProfileImage;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -343,6 +346,66 @@ public class personalpage extends AppCompatActivity {
         userProfileName = (TextView) findViewById(R.id.userName);
         userAge = (TextView) findViewById(R.id.userAge);
         userSex = (TextView) findViewById(R.id.userSex);
+        first = (TextView) findViewById(R.id.first);
+        second = (TextView) findViewById(R.id.second);
+        third = (TextView) findViewById(R.id.third);
+        forth = (TextView) findViewById(R.id.forth);
+        fifth = (TextView) findViewById(R.id.fifth);
+        evaluation = (TextView) findViewById(R.id.score);
+
+        db.collection("user").document(currentUserID)
+                .collection("evaluate")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                               if (task.isSuccessful()) {
+                                                   double score = 0;
+                                                   int count = 0;
+                                                   for (QueryDocumentSnapshot document : task.getResult()) {
+                                                       score = score + document.getDouble("star");
+                                                       count++;
+                                                       Score = score;
+                                                       Count = count;
+                                                   }
+                                               }
+                                           }
+                                       });
+        double finalescore = Score / Count;
+        evaluation.setText(String.valueOf(finalescore));
+        if(finalescore >= 4.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+        }else if(finalescore >= 3.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else if(finalescore >= 2.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else if(finalescore >= 1.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else if(finalescore >= 0.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else{
+            evaluation.setText("尚無評價");
+        }
 
         //主辦的活動
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.actHold);

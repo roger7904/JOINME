@@ -118,8 +118,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button messagebtn;
     private Button favoritebtn;
     private Button noticebtn;
-    private Button messagepagebtn;
-    private Button settingbtn;
+    private Button findFriendBtn,settingbtn,inviteFriendBtn,actInviteBtn;
+    private Button setProfileBtn;
     private Button refreshbtn;
     private Button otherbtn;
     private static int count = 0;
@@ -402,18 +402,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             mAuth.signOut();
             SendUserToLoginActivity();
         }
-        if (item.getItemId() == R.id.findfriend) {
-            SendUserToFindFriendsActivity();
-        }
-        if (item.getItemId() == R.id.main_settings_option) {
-            SendUserToSettingsActivity();
-        }
-        if (item.getItemId() == R.id.friend_request) {
-            SendUserTorequest();
-        }
-        if (item.getItemId() == R.id.verify_request) {
-            SendUserToverify();
-        }
+//        if (item.getItemId() == R.id.findfriend) {
+//            SendUserToFindFriendsActivity();
+//        }
+//        if (item.getItemId() == R.id.main_settings_option) {
+//            SendUserToSettingsActivity();
+//        }
+//        if (item.getItemId() == R.id.friend_request) {
+//            SendUserTorequest();
+//        }
+//        if (item.getItemId() == R.id.verify_request) {
+//            SendUserToverify();
+//        }
         if (item.getItemId() == R.id.personal_page) {
             SendUserToPersonalPage();
         }
@@ -622,6 +622,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         noticebtn = (Button) findViewById(R.id.noticeBtn);
         refreshbtn = (Button) findViewById(R.id.refreshBtn);
         otherbtn = (Button) findViewById(R.id.otherbtn);
+        findFriendBtn = (Button) findViewById(R.id.button21);
+        setProfileBtn = (Button) findViewById(R.id.button15);
+        inviteFriendBtn = (Button) findViewById(R.id.button30);
+        actInviteBtn = (Button) findViewById(R.id.button31);
     }
 
     //取得使用者當前位置 -1
@@ -857,6 +861,62 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItems();
+            }
+        });
+        settingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(findFriendBtn.getVisibility() == View.INVISIBLE){
+                    findFriendBtn.setVisibility(View.VISIBLE);
+                    setProfileBtn.setVisibility(View.VISIBLE);
+                    inviteFriendBtn.setVisibility(View.VISIBLE);
+                    actInviteBtn.setVisibility(View.VISIBLE);
+                    findFriendBtn.setEnabled(true);
+                    setProfileBtn.setEnabled(true);
+                    inviteFriendBtn.setEnabled(true);
+                    actInviteBtn.setEnabled(true);
+                }else{
+                    findFriendBtn.setVisibility(View.INVISIBLE);
+                    setProfileBtn.setVisibility(View.INVISIBLE);
+                    inviteFriendBtn.setVisibility(View.INVISIBLE);
+                    actInviteBtn.setVisibility(View.INVISIBLE);
+                    findFriendBtn.setEnabled(false);
+                    setProfileBtn.setEnabled(false);
+                    inviteFriendBtn.setEnabled(false);
+                    actInviteBtn.setEnabled(false);
+                }
+            }
+        });
+        findFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, FindFriendsActivity.class);
+                startActivity(intent);
+            }
+        });
+        setProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, testsetting.class);
+                startActivity(intent);
+            }
+        });
+        inviteFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, friend_request.class);
+                startActivity(intent);
+            }
+        });
+        actInviteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, verifyActivity.class);
+                startActivity(intent);
             }
         });
     }

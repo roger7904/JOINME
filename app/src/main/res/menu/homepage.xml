@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/action_settings"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="@string/action_settings"-->
+<!--        app:showAsAction="never" />-->
 
     <item
     android:id="@+id/action_logout"
@@ -13,29 +13,29 @@
     android:title="登出"
     app:showAsAction="never" />
 
-    <item
-    android:id="@+id/findfriend"
-    android:orderInCategory="100"
-    android:title="尋找好友"
-    app:showAsAction="never" />
+<!--    <item-->
+<!--    android:id="@+id/findfriend"-->
+<!--    android:orderInCategory="100"-->
+<!--    android:title="尋找好友"-->
+<!--    app:showAsAction="never" />-->
 
-    <item
-        android:id="@+id/main_settings_option"
-        android:orderInCategory="100"
-        android:title="設定個人資料"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/main_settings_option"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="設定個人資料"-->
+<!--        app:showAsAction="never" />-->
 
-    <item
-        android:id="@+id/friend_request"
-        android:orderInCategory="100"
-        android:title="好友邀請"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/friend_request"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="好友邀請"-->
+<!--        app:showAsAction="never" />-->
 
-    <item
-        android:id="@+id/verify_request"
-        android:orderInCategory="100"
-        android:title="驗證活動申請"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/verify_request"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="驗證活動申請"-->
+<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/personal_page"
