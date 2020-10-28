@@ -112,7 +112,7 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
                     Map<String, Object> participant = new HashMap<>();
                     participant.put("UserID", verify.getId());
                     Map<String, Object> a = new HashMap<>();
-                    a.put("activity", verify.getActivity());
+                    a.put("activityname", verify.getActivity());
                     db.collection("activity").document(verify.getActivity()).
                             collection("participant").document(verify.getId()).set(participant)
                             .addOnCompleteListener(new OnCompleteListener() {

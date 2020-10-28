@@ -59,7 +59,7 @@ public class noticeupdate extends AppCompatActivity {
         initView();
 
         db.collection("user").document(currentUserID).collection("notification")
-                .orderBy("millisecond", Query.Direction.ASCENDING)
+                .orderBy("millisecond", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
