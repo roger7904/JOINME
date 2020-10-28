@@ -438,7 +438,8 @@ public class personalpage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(personalpage.this, chatting.class);
+                //TODO tzuyen:補上Intent變數
+                intent.setClass(personalpage.this, ChatActivity.class);
                 startActivity(intent);
             }
         });

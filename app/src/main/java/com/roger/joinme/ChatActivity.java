@@ -181,9 +181,6 @@ public class ChatActivity extends AppCompatActivity
         linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setLayoutManager(linearLayoutManager);
         userMessagesList.setAdapter(messageAdapter);
-
-
-
     }
 
 

@@ -137,7 +137,8 @@
                     android:text="年齡"
                     android:textColor="@color/colorPrimaryDark"
                     android:textColorHint="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:visibility="visible" />
             </LinearLayout>
         </ScrollView>
 
