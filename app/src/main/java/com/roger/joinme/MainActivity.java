@@ -362,7 +362,6 @@ public class MainActivity extends FragmentActivity {
         login=(Button)findViewById(R.id.login);
         register=(Button)findViewById(R.id.register);
         ForgetPasswordLink=(Button)findViewById(R.id.forgetpassword);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
         UserEmail = (EditText)findViewById(R.id.account);
         UserPassword = (EditText)findViewById(R.id.passwd);
         loadingBar = new ProgressDialog(this);

@@ -48,8 +48,9 @@
                         android:id="@+id/favoritebtn"
                         android:layout_width="38dp"
                         android:layout_height="32dp"
+                        android:layout_gravity="center"
                         android:background="@drawable/heart"
-                        android:layout_gravity="center"/>
+                        tools:freezesText="true" />
                 </LinearLayout>
 
                 <LinearLayout

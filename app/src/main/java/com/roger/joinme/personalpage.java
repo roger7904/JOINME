@@ -135,6 +135,60 @@ public class personalpage extends AppCompatActivity {
             }
         });
 
+        db.collection("user").document(currentUserID)
+                .collection("evaluate")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            double score = 0;
+                            int count = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                 score = score + document.getDouble("star");
+                                 count++;
+                                 Score = score;
+                                 Count = count;
+                            }
+                        }
+                    }
+                });
+        double finalescore = Score / Count;
+        evaluation.setText(String.valueOf(finalescore));
+        if(finalescore >= 4.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+        }else if(finalescore >= 3.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else if(finalescore >= 2.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else if(finalescore >= 1.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else if(finalescore >= 0.5){
+            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+            second.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+        }else{
+            evaluation.setText("尚無評價");
+        }
+
         //主辦的活動
         db.collection("user").document(currentUserID).collection("activity")
                 .get()
@@ -353,59 +407,6 @@ public class personalpage extends AppCompatActivity {
         fifth = (TextView) findViewById(R.id.fifth);
         evaluation = (TextView) findViewById(R.id.score);
 
-        db.collection("user").document(currentUserID)
-                .collection("evaluate")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                               if (task.isSuccessful()) {
-                                                   double score = 0;
-                                                   int count = 0;
-                                                   for (QueryDocumentSnapshot document : task.getResult()) {
-                                                       score = score + document.getDouble("star");
-                                                       count++;
-                                                       Score = score;
-                                                       Count = count;
-                                                   }
-                                               }
-                                           }
-                                       });
-        double finalescore = Score / Count;
-        evaluation.setText(String.valueOf(finalescore));
-        if(finalescore >= 4.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.brightstar));
-        }else if(finalescore >= 3.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else if(finalescore >= 2.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else if(finalescore >= 1.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else if(finalescore >= 0.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else{
-            evaluation.setText("尚無評價");
-        }
 
         //主辦的活動
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.actHold);
