@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -827,6 +828,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("運動");
+                ballbtn.setBackground(getResources().getDrawable(R.drawable.ballclick));
+                storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
+                ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
+                informationbtn.setBackground(getResources().getDrawable(R.drawable.timelimit));
+                otherbtn.setBackground(getResources().getDrawable(R.drawable.others));
             }
         });
 
@@ -834,6 +840,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("商家優惠");
+                ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
+                storebtn.setBackground(getResources().getDrawable(R.drawable.storeclick));
+                ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
+                informationbtn.setBackground(getResources().getDrawable(R.drawable.timelimit));
+                otherbtn.setBackground(getResources().getDrawable(R.drawable.others));
             }
         });
 
@@ -841,6 +852,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("KTV");
+                ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
+                storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
+                ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktvclick));
+                informationbtn.setBackground(getResources().getDrawable(R.drawable.timelimit));
+                otherbtn.setBackground(getResources().getDrawable(R.drawable.others));
             }
         });
 
@@ -848,6 +864,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("限時");
+                ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
+                storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
+                ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
+                informationbtn.setBackground(getResources().getDrawable(R.drawable.infoclick));
+                otherbtn.setBackground(getResources().getDrawable(R.drawable.others));
             }
         });
 
@@ -855,6 +876,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("其他");
+                ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
+                storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
+                ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
+                informationbtn.setBackground(getResources().getDrawable(R.drawable.timelimit));
+                otherbtn.setBackground(getResources().getDrawable(R.drawable.otherclick));
             }
         });
 
@@ -862,6 +888,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItems();
+                ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
+                storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
+                ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
+                informationbtn.setBackground(getResources().getDrawable(R.drawable.timelimit));
+                otherbtn.setBackground(getResources().getDrawable(R.drawable.others));
             }
         });
         settingbtn.setOnClickListener(new View.OnClickListener() {
