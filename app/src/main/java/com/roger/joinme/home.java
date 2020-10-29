@@ -118,7 +118,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button messagebtn;
     private Button favoritebtn;
     private Button noticebtn;
-    private Button findFriendBtn,settingbtn,inviteFriendBtn,actInviteBtn;
+    private Button findFriendBtn,settingbtn,inviteFriendBtn,actInviteBtn,logoutBtn;
     private Button setProfileBtn;
     private Button refreshbtn;
     private Button otherbtn;
@@ -396,12 +396,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if (item.getItemId() == R.id.action_logout) {
-            updateUserStatus("offline");
-            LoginManager.getInstance().logOut();
-            mAuth.signOut();
-            SendUserToLoginActivity();
-        }
+//        if (item.getItemId() == R.id.action_logout) {
+//            updateUserStatus("offline");
+//            LoginManager.getInstance().logOut();
+//            mAuth.signOut();
+//            SendUserToLoginActivity();
+//        }
 //        if (item.getItemId() == R.id.findfriend) {
 //            SendUserToFindFriendsActivity();
 //        }
@@ -626,6 +626,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setProfileBtn = (Button) findViewById(R.id.button15);
         inviteFriendBtn = (Button) findViewById(R.id.button30);
         actInviteBtn = (Button) findViewById(R.id.button31);
+        logoutBtn = (Button) findViewById(R.id.button32);
     }
 
     //取得使用者當前位置 -1
@@ -871,19 +872,23 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     setProfileBtn.setVisibility(View.VISIBLE);
                     inviteFriendBtn.setVisibility(View.VISIBLE);
                     actInviteBtn.setVisibility(View.VISIBLE);
+                    logoutBtn.setVisibility(View.VISIBLE);
                     findFriendBtn.setEnabled(true);
                     setProfileBtn.setEnabled(true);
                     inviteFriendBtn.setEnabled(true);
                     actInviteBtn.setEnabled(true);
+                    logoutBtn.setEnabled(true);
                 }else{
                     findFriendBtn.setVisibility(View.INVISIBLE);
                     setProfileBtn.setVisibility(View.INVISIBLE);
                     inviteFriendBtn.setVisibility(View.INVISIBLE);
                     actInviteBtn.setVisibility(View.INVISIBLE);
+                    logoutBtn.setVisibility(View.INVISIBLE);
                     findFriendBtn.setEnabled(false);
                     setProfileBtn.setEnabled(false);
                     inviteFriendBtn.setEnabled(false);
                     actInviteBtn.setEnabled(false);
+                    logoutBtn.setEnabled(false);
                 }
             }
         });
@@ -917,6 +922,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, verifyActivity.class);
                 startActivity(intent);
+            }
+        });
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(home.this, MainActivity.class);
+                startActivity(intent);
+                updateUserStatus("offline");
+                LoginManager.getInstance().logOut();
+                mAuth.signOut();
+                SendUserToLoginActivity();
             }
         });
     }

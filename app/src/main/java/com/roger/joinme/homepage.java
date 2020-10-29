@@ -82,7 +82,7 @@ public class homepage extends AppCompatActivity {
         selfpage=(Button)findViewById(R.id.btn_to_selfpage);
         activitypage=(Button)findViewById(R.id.btn_to_jo);
         friendpage=(Button)findViewById(R.id.btn_to_notice);
-        logout=(Button)findViewById(R.id.btn_logout);
+//        logout=(Button)findViewById(R.id.btn_logout);
         chatroom=(ImageButton)findViewById(R.id.imgbtn_chatroom);
         favorite=(ImageButton)findViewById(R.id.imgbtn_favorite);
         jo=(ImageButton)findViewById(R.id.imgbtn_jo);
@@ -114,14 +114,14 @@ public class homepage extends AppCompatActivity {
             }
         });
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(homepage.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(homepage.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         activitypage.setOnClickListener(new View.OnClickListener() {
             @Override

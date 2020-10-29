@@ -79,6 +79,7 @@ public class signup extends AppCompatActivity {
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
     final private String contentType = "application/json";
+    private StorageReference UserActImageRef;
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -87,11 +88,18 @@ public class signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
         firebaseStorage=FirebaseStorage.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         activitytitle = getIntent().getExtras().get("activitytitle").toString();
+        UserActImageRef = FirebaseStorage.getInstance().getReference();
+
+        initViews();
+        initData();
+        setListeners();
+
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
                 .document(currentUserID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -129,7 +137,21 @@ public class signup extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             Glide.with(signup.this).load(uri).into(activityPhoto);  //主辦活動
-
+                                        }
+                                    });
+                                }else{
+                                    String activityType = document.getString("activityType");
+                                    UserActImageRef.child(activityType + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Glide.with(signup.this)
+                                                    .load(uri)
+                                                    .into(activityPhoto);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            // Handle any errors
                                         }
                                     });
                                 }
@@ -162,10 +184,6 @@ public class signup extends AppCompatActivity {
                         }
                     }
                 });
-
-        initViews();
-        initData();
-        setListeners();
     }
 
     @Override
