@@ -208,6 +208,9 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.ViewHold
                                                                                                         }
                                                                                                     }
                                                                                                 });
+
+                                                                                        Intent profileIntent = new Intent(holder.itemView.getContext(), home.class);
+                                                                                        holder.itemView.getContext().startActivity(profileIntent);
                                                                                     }
                                                                                 }
                                                                             });

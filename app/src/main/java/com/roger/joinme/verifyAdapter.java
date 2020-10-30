@@ -2,6 +2,7 @@ package com.roger.joinme;
 
 import android.content.Context;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,6 +199,8 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
                                     }
                                 }
                             });
+                    Intent profileIntent = new Intent(holder.itemView.getContext(), home.class);
+                    holder.itemView.getContext().startActivity(profileIntent);
                 }
             });
 

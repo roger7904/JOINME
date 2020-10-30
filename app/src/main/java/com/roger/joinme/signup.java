@@ -350,6 +350,8 @@ public class signup extends AppCompatActivity {
                         });
                 signupbtn.setText("已申請報名");
                 signupbtn.setEnabled(false);
+                Intent settingsIntent = new Intent(signup.this, home.class);
+                startActivity(settingsIntent);
             }
         });
 
