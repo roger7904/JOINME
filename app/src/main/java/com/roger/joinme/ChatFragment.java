@@ -83,7 +83,6 @@ public class ChatFragment extends Fragment {
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-
                             return;
                         }
                         for (DocumentChange dc : value.getDocumentChanges()) {
