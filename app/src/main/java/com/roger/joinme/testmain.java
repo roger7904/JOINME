@@ -50,43 +50,4 @@ public class testmain extends AppCompatActivity
         myTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         myTabLayout.setupWithViewPager(myViewPager);
     }
-
-
-//    private void RequestNewGroup()
-//    {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
-//        builder.setTitle("Enter Group Name :");
-//
-//        final EditText groupNameField = new EditText(MainActivity.this);
-//        groupNameField.setHint("e.g Coding Cafe");
-//        builder.setView(groupNameField);
-//
-//        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i)
-//            {
-//                String groupName = groupNameField.getText().toString();
-//
-//                if (TextUtils.isEmpty(groupName))
-//                {
-//                    Toast.makeText(MainActivity.this, "Please write Group Name...", Toast.LENGTH_SHORT).show();
-//                }
-//                else
-//                {
-//                    CreateNewGroup(groupName);
-//                }
-//            }
-//        });
-//
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i)
-//            {
-//                dialogInterface.cancel();
-//            }
-//        });
-//
-//        builder.show();
-//    }
-
 }

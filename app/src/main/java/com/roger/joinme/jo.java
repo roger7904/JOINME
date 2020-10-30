@@ -725,9 +725,13 @@ public class jo extends AppCompatActivity {
             final Map<String, Object> chat = new HashMap<>();
             final Map<String, Object> content = new HashMap<>();
             final Map<String, Object> participant = new HashMap<>();
+            final Map<String, Object> participantgroup = new HashMap<>();
             final Map<String, Object> joinact = new HashMap<>();
             final Map<String, Object> userallact = new HashMap<>();
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
 
             book.put("title", activityTitle.getText().toString());
             book.put("postContent", activityContent.getText().toString());
@@ -750,6 +754,7 @@ public class jo extends AppCompatActivity {
             chat.put("activity", activityTitle.getText().toString());
             chat.put("newestcontent", currentUserName+"創建了此活動");
             chat.put("organizer", currentUserName);
+            chat.put("newestmillisecond",ts);
             joinact.put("organizerID",currentUserID);
             userallact.put("activityname",activityTitle.getText().toString());
             Calendar calForDate = Calendar.getInstance();
@@ -760,6 +765,8 @@ public class jo extends AppCompatActivity {
             SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
             currentTime = currentTimeFormat.format(calForTime.getTime());
             participant.put("UserID", currentUserID);
+            participantgroup.put("UserID", currentUserID);
+            participantgroup.put("contentcount", 0);
 
             //查看map內容
 
@@ -812,7 +819,7 @@ public class jo extends AppCompatActivity {
                     });
             db.collection("chat").document(activityTitle.getText().toString()).set(chat);
             db.collection("chat").document(activityTitle.getText().toString()).collection("participant")
-                    .document(currentUserID).set(participant);
+                    .document(currentUserID).set(participantgroup);
             db.collection("user").document(currentUserID).collection("activity")
                     .document(activityTitle.getText().toString()).set(userallact);
 

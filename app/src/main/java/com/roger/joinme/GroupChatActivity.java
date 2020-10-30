@@ -70,6 +70,7 @@ public class GroupChatActivity extends AppCompatActivity
 
     private String RECEIVER_DEVICE;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -233,6 +234,27 @@ public class GroupChatActivity extends AppCompatActivity
             newcontent.put("newestmillisecond", ts);
             newcontent.put("time", currentTime);
             newcontent.put("date", currentDate);
+
+            db.collection("chat").document(currentGroupName)
+                    .collection("participant")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if(!document.getId().equals(currentUserID)){
+                                        Integer count;
+                                        count=document.getLong("contentcount").intValue();
+                                        Map<String, Number> contentcount = new HashMap<>();
+                                        contentcount.put("contentcount",count+1);
+                                    }
+                                }
+                            } else {
+
+                            }
+                        }
+                    });
 
             db.collection("chat").document(currentGroupName).set(newcontent, SetOptions.merge());
 

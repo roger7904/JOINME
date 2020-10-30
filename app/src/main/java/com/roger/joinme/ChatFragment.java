@@ -66,7 +66,7 @@ public class ChatFragment extends Fragment {
         chatroomList = new ArrayList<>();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
-
+        Log.d("group","123");
         RetrieveAndDisplayContact();
         initView();
         // Inflate the layout for this fragment

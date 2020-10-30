@@ -111,6 +111,11 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
 
                     Map<String, Object> participant = new HashMap<>();
                     participant.put("UserID", verify.getId());
+
+                    Map<String, Object> participantgroup = new HashMap<>();
+                    participantgroup.put("UserID", verify.getId());
+                    participantgroup.put("contentcount",0);
+
                     Map<String, Object> a = new HashMap<>();
                     a.put("activityname", verify.getActivity());
                     db.collection("activity").document(verify.getActivity()).
@@ -124,7 +129,7 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
                                 }
                             });
                     db.collection("chat").document(verify.getActivity()).
-                            collection("participant").document(verify.getId()).set(participant)
+                            collection("participant").document(verify.getId()).set(participantgroup)
                             .addOnCompleteListener(new OnCompleteListener() {
                                 @Override
                                 public void onComplete(@NonNull Task task) {

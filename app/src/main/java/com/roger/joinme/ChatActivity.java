@@ -90,7 +90,7 @@ public class ChatActivity extends AppCompatActivity
     private String RECEIVER_DEVICE;
 
     private String saveCurrentTime, saveCurrentDate,currentUserName,saveCurrentTime2,saveCurrentDate2;
-    private Integer count;
+
 
 
 
@@ -104,7 +104,6 @@ public class ChatActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         messageSenderID = mAuth.getCurrentUser().getUid();
         db=FirebaseFirestore.getInstance();
-
 
         messageReceiverID = getIntent().getExtras().get("visit_user_id").toString();
         messageReceiverName = getIntent().getExtras().get("visit_user_name").toString();
@@ -130,14 +129,6 @@ public class ChatActivity extends AppCompatActivity
         });
 
 
-//        userName.setText(messageReceiverName);
-
-//        Glide.with(this)
-//                .load(messageReceiverImage)
-//                .circleCrop()
-//                .into(userImage);
-
-
         SendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -146,11 +137,7 @@ public class ChatActivity extends AppCompatActivity
             }
         });
 
-
-//        DisplayLastSeen();
     }
-
-
 
 
     private void IntializeControllers()
@@ -159,23 +146,9 @@ public class ChatActivity extends AppCompatActivity
         setSupportActionBar(ChatToolBar);
         getSupportActionBar().setTitle(messageReceiverName);
         ChatToolBar.setTitleTextColor(Color.BLACK);
-
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setDisplayShowCustomEnabled(true);
-//
-//        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View actionBarView = layoutInflater.inflate(R.layout.custom_chat_bar, null);
-//        actionBar.setCustomView(actionBarView);
-//
-//        userName = (TextView) findViewById(R.id.custom_profile_name);
-//        userLastSeen = (TextView) findViewById(R.id.custom_user_last_seen);
-//        userImage = (ImageView) findViewById(R.id.custom_profile_image);
-
         SendMessageButton = (ImageButton) findViewById(R.id.send_message_btn);
         SendFilesButton = (ImageButton) findViewById(R.id.send_files_btn);
         MessageInputText = (EditText) findViewById(R.id.input_message);
-
         messageAdapter = new MessageAdapter(this,messagesList);
         userMessagesList = (RecyclerView) findViewById(R.id.private_messages_list_of_users);
         linearLayoutManager = new LinearLayoutManager(this);
@@ -184,39 +157,10 @@ public class ChatActivity extends AppCompatActivity
     }
 
 
-
-//    private void DisplayLastSeen()
-//    {
-//        db.collection("user").document(messageReceiverID)
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                     @Override
-//                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                         if (task.isSuccessful()) {
-//                             DocumentSnapshot document = task.getResult();
-//                             if (document.exists()) {
-//                                 String state = document.getString("state");
-//                                 String date = document.getString("date");
-//                                 String time = document.getString("time");
-//                                 if (state.equals("online"))
-//                                 {
-//                                     userLastSeen.setText("online");
-//                                 }
-//                                 else if (state.equals("offline"))
-//                                 {
-//                                     userLastSeen.setText("Last Seen: " + date + " " + time);
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 });
-//    }
-
-
     @Override
     protected void onStart()
     {
         super.onStart();
-
         db.collection("message")
                 .document(messageSenderID)
                 .collection("UserID")
@@ -281,7 +225,7 @@ public class ChatActivity extends AppCompatActivity
             SimpleDateFormat currentDate2 = new SimpleDateFormat("MM/dd");
             saveCurrentDate2 = currentDate2.format(calendar.getTime());
 
-            SimpleDateFormat currentTime2 = new SimpleDateFormat("hh:mm a");
+            SimpleDateFormat currentTime2 = new SimpleDateFormat("hh:mm 79a");
             saveCurrentTime2 = currentTime2.format(calendar.getTime());
 
             Long tsLong = System.currentTimeMillis()/1000;
@@ -295,16 +239,13 @@ public class ChatActivity extends AppCompatActivity
             //messageTextBody.put("messageID", messagePushID);
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
-
             messageTextBody.put("millisecond", ts);
-
 
             Map newcontent = new HashMap();
             newcontent.put("newestcontent", messageText);
             newcontent.put("newestmillisecond", ts);
             newcontent.put("time", saveCurrentTime2);
             newcontent.put("date", saveCurrentDate2);
-
 
             DocumentReference docRef = db.collection("message").document("messageSenderID")
                     .collection("UserID")
@@ -315,6 +256,7 @@ public class ChatActivity extends AppCompatActivity
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists() && document.contains("contentcount")) {
+                            Integer count;
                             count=document.getLong("contentcount").intValue();
                             Map<String, Number> contentcount = new HashMap<>();
                             contentcount.put("contentcount",count+1);
@@ -379,6 +321,7 @@ public class ChatActivity extends AppCompatActivity
                                 }
                             });
                         } else {
+                            Integer count;
                             count=0;
                             Map contentcount = new HashMap();
                             contentcount.put("contentcount",count+1);

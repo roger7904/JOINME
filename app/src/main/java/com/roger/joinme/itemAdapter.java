@@ -2,10 +2,12 @@ package com.roger.joinme;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +53,10 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(itemAdapter.ViewHolder holder, int position) {
         item item = itemList.get(position);
-//        holder.
+
+        holder.test.setBackgroundColor(Color.GRAY);
+        holder.activity.setBackgroundColor(Color.GRAY);
+
         final DocumentReference docRef = db.collection("user").document(item.getFrom()).collection("profile")
                 .document(item.getFrom());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -170,9 +175,11 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView activity;
+        LinearLayout test;
         ViewHolder(View itemView) {
             super(itemView);
             activity = (TextView) itemView.findViewById(R.id.activity);
+            test=(LinearLayout) itemView.findViewById(R.id.activityy);
         }
     }
 }

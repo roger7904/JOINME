@@ -68,14 +68,13 @@ public class GroupsFragment extends Fragment {
 
         initView();
         RetrieveAndDisplayContact();
-
         // Inflate the layout for this fragment
         return groupFragmentView;
     }
 
     private void RetrieveAndDisplayContact() {
         db.collection("chat")
-                .orderBy("newestmillisecond", Query.Direction.DESCENDING)
+//                .orderBy("newestmillisecond", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -87,6 +86,7 @@ public class GroupsFragment extends Fragment {
                         for (DocumentChange dc : value.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
+                                    Log.d("group","456");
                                     db.collection("user")
                                             .document(currentUserID)
                                             .collection("activity")
@@ -97,37 +97,56 @@ public class GroupsFragment extends Fragment {
                                                     if (task.isSuccessful()) {
                                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                                             if(document.getId().equals(dc.getDocument().getId())){
+                                                                System.out.print("group");
                                                                 String name=dc.getDocument().getString("activity");
                                                                 String newestcontent=dc.getDocument().getString("newestcontent");
                                                                 String id=dc.getDocument().getId();
                                                                 String time=dc.getDocument().getString("newestmillisecond");
-                                                                Integer contentcount=dc.getDocument().getLong("contentcount").intValue();
+
                                                                 String date=dc.getDocument().getString("date");
                                                                 String date2=dc.getDocument().getString("time");
 
-                                                                DocumentReference docRef = db.collection("activity").document(name);
+                                                                DocumentReference docRef = db.collection("chat").document(name)
+                                                                        .collection("participant")
+                                                                        .document(currentUserID);
                                                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                                     @Override
                                                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                                         if (task.isSuccessful()) {
                                                                             DocumentSnapshot document = task.getResult();
                                                                             if (document.exists()) {
-                                                                                if (Boolean.parseBoolean(document.getString("img"))) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"group",date2+" "+date));
-                                                                                    chatroomadapter.notifyDataSetChanged();
-                                                                                }else if (document.getString("activityType").equals("商家優惠")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"商家優惠",id,contentcount,time,"group",date2+" "+date));
-                                                                                    chatroomadapter.notifyDataSetChanged();
-                                                                                }else if (document.getString("activityType").equals("KTV")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"KTV",id,contentcount,time,"group",date2+" "+date));
-                                                                                    chatroomadapter.notifyDataSetChanged();
-                                                                                }else if (document.getString("activityType").equals("限時")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"限時",id,contentcount,time,"group",date2+" "+date));
-                                                                                    chatroomadapter.notifyDataSetChanged();
-                                                                                }else if (document.getString("activityType").equals("球類")) {
-                                                                                    chatroomList.add(new chatroom(name,newestcontent,"球類",id,contentcount,time,"group",date2+" "+date));
-                                                                                    chatroomadapter.notifyDataSetChanged();
-                                                                                }
+                                                                                Integer contentcount=document.getLong("contentcount").intValue();
+                                                                                DocumentReference docRef2 = db.collection("activity").document(name);
+                                                                                docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                        if (task.isSuccessful()) {
+                                                                                            DocumentSnapshot document = task.getResult();
+                                                                                            if (document.exists()) {
+                                                                                                if (document.getBoolean("img")) {
+                                                                                                    chatroomList.add(new chatroom(name,newestcontent,id,id,contentcount,time,"group",date2+" "+date));
+                                                                                                    chatroomadapter.notifyDataSetChanged();
+                                                                                                }else if (document.getString("activityType").equals("商家優惠")) {
+                                                                                                    chatroomList.add(new chatroom(name,newestcontent,"商家優惠",id,contentcount,time,"group",date2+" "+date));
+                                                                                                    chatroomadapter.notifyDataSetChanged();
+                                                                                                }else if (document.getString("activityType").equals("KTV")) {
+                                                                                                    chatroomList.add(new chatroom(name,newestcontent,"KTV",id,contentcount,time,"group",date2+" "+date));
+                                                                                                    chatroomadapter.notifyDataSetChanged();
+                                                                                                }else if (document.getString("activityType").equals("限時")) {
+                                                                                                    chatroomList.add(new chatroom(name,newestcontent,"限時",id,contentcount,time,"group",date2+" "+date));
+                                                                                                    chatroomadapter.notifyDataSetChanged();
+                                                                                                }else if (document.getString("activityType").equals("球類")) {
+                                                                                                    chatroomList.add(new chatroom(name,newestcontent,"球類",id,contentcount,time,"group",date2+" "+date));
+                                                                                                    chatroomadapter.notifyDataSetChanged();
+                                                                                                }
+                                                                                            } else {
+
+                                                                                            }
+                                                                                        } else {
+
+                                                                                        }
+                                                                                    }
+                                                                                });
                                                                             } else {
 
                                                                             }
@@ -136,6 +155,8 @@ public class GroupsFragment extends Fragment {
                                                                         }
                                                                     }
                                                                 });
+
+
                                                                 Log.d("TAG", "New Msg: " + dc.getDocument().toObject(Message.class));
                                                                 break;
                                                             }
