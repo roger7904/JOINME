@@ -270,7 +270,7 @@ public class GroupChatActivity extends AppCompatActivity
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        String participantID = document.getString("userID");
+                                        String participantID = document.getString("UserID");
                                         if(!participantID.equals(currentUserID)) {
                                             db.collection("user").document(participantID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
