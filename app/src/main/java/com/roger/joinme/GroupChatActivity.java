@@ -48,7 +48,6 @@ import java.util.Map;
 
 public class GroupChatActivity extends AppCompatActivity
 {
-
     private final List<Messages> messagesList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private MessageAdapter messageAdapter;

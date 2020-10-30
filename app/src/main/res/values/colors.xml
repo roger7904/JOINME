@@ -8,6 +8,7 @@
     <color name="colorButton">#5b73d5</color>
     <color name="colorButtonText">#496176</color>
     <color name="colorChatButton">#FFFFFF</color>
+    <color name="colorlightGray">#BEBEBE</color>
     <color name="colorGray">#D8D8D8</color>
 
 </resources>

@@ -1,18 +1,20 @@
 package com.roger.joinme;
 
 public class item {
-    private String from;
-    private String type,activityname;
+    private String from,id;
+    private String type,activityname,lookornot;
 
 //    public item() {
 //        super();
 //    }
 
-    public item(String from, String type,String activityname) {
+    public item(String from, String type,String activityname,String lookornot,String id) {
         super();
         this.from = from;
         this.type = type;
         this.activityname = activityname;
+        this.lookornot=lookornot;
+        this.id=id;
     }
 
     public String getFrom() {
@@ -37,5 +39,19 @@ public class item {
 
     public void setActivityname(String activityname) {
         this.activityname = activityname;
+    }
+    public String getLookornot() {
+        return lookornot;
+    }
+
+    public void setLookornot(String lookornot) {
+        this.lookornot = lookornot;
+    }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

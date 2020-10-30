@@ -11,7 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
     private Context context;
@@ -53,9 +56,14 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(itemAdapter.ViewHolder holder, int position) {
         item item = itemList.get(position);
+        if(item.getLookornot().equals("look")){
+            holder.test.setBackgroundColor(Color.WHITE);
+            holder.activity.setBackgroundColor(Color.WHITE);
+        }else{
+            holder.test.setBackgroundColor(context.getResources().getColor(R.color.colorlightGray));
+            holder.activity.setBackgroundColor(context.getResources().getColor(R.color.colorlightGray));
+        }
 
-        holder.test.setBackgroundColor(Color.GRAY);
-        holder.activity.setBackgroundColor(Color.GRAY);
 
         final DocumentReference docRef = db.collection("user").document(item.getFrom()).collection("profile")
                 .document(item.getFrom());
@@ -68,13 +76,28 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                         fromname=snapshot.getString("name");
                         if(item.getType().equals("accept")){
                             holder.activity.setText(fromname+"接受了你的交友邀請");
-
+                            holder.activity.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view)
+                                {
+                                    Map<String, Object> a = new HashMap<>();
+                                    a.put("islook","look");
+                                    db.collection("user").document(currentUserID).collection("notification")
+                                            .document(item.getId()).set(a, SetOptions.merge());
+                                    Intent profileIntent = new Intent(holder.itemView.getContext(), noticeupdate.class);
+                                    holder.itemView.getContext().startActivity(profileIntent);
+                                }
+                            });
                         }else if(item.getType().equals("request")){
                             holder.activity.setText(fromname+"對你寄出了交友邀請");
                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view)
                                 {
+                                    Map<String, Object> a = new HashMap<>();
+                                    a.put("islook","look");
+                                    db.collection("user").document(currentUserID).collection("notification")
+                                            .document(item.getId()).set(a, SetOptions.merge());
 //                    String visit_user_id = request.getID();
                                     Intent profileIntent = new Intent(holder.itemView.getContext(), friend_request.class);
 //                    profileIntent.putExtra("visit_user_id", visit_user_id);
@@ -83,12 +106,28 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                             });
                         }else if(item.getType().equals("act_accept")){
                             holder.activity.setText(fromname+"核准了您的入團申請");
+                            holder.activity.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view)
+                                {
+                                    Map<String, Object> a = new HashMap<>();
+                                    a.put("islook","look");
+                                    db.collection("user").document(currentUserID).collection("notification")
+                                            .document(item.getId()).set(a, SetOptions.merge());
+                                    Intent profileIntent = new Intent(holder.itemView.getContext(), noticeupdate.class);
+                                    holder.itemView.getContext().startActivity(profileIntent);
+                                }
+                            });
                         }else if(item.getType().equals("joinact")){
                             holder.activity.setText(fromname+"對您辦的活動提出了加入申請");
                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view)
                                 {
+                                    Map<String, Object> a = new HashMap<>();
+                                    a.put("islook","look");
+                                    db.collection("user").document(currentUserID).collection("notification")
+                                            .document(item.getId()).set(a, SetOptions.merge());
 //                    String visit_user_id = request.getID();
                                     Intent profileIntent = new Intent(holder.itemView.getContext(), verifyActivity.class);
 //                    profileIntent.putExtra("visit_user_id", visit_user_id);
@@ -110,6 +149,10 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                                 @Override
                                                 public void onClick(View view)
                                                 {
+                                                    Map<String, Object> a = new HashMap<>();
+                                                    a.put("islook","look");
+                                                    db.collection("user").document(currentUserID).collection("notification")
+                                                            .document(item.getId()).set(a, SetOptions.merge());
                                                     Intent profileIntent = new Intent(holder.itemView.getContext(), evaluateActivity.class);
                                                     profileIntent.putExtra("activityname", activityname);
                                                     holder.itemView.getContext().startActivity(profileIntent);
@@ -130,6 +173,10 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                                             @Override
                                                             public void onClick(View view)
                                                             {
+                                                                Map<String, Object> a = new HashMap<>();
+                                                                a.put("islook","look");
+                                                                db.collection("user").document(currentUserID).collection("notification")
+                                                                        .document(item.getId()).set(a, SetOptions.merge());
                                                                 if(snapshot.contains("evaluate_to_organizer")){
                                                                     Toast.makeText(holder.itemView.getContext(), "已經成功對舉辦者評價", Toast.LENGTH_LONG).show();
                                                                 }else{
@@ -154,6 +201,17 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                 }
                             });
 
+                        }else {
+                            holder.activity.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view)
+                                {
+                                    Map<String, Object> a = new HashMap<>();
+                                    a.put("islook","look");
+                                    db.collection("user").document(currentUserID).collection("notification")
+                                            .document(item.getId()).set(a, SetOptions.merge());
+                                }
+                            });
                         }
 
                     } else {
@@ -162,10 +220,6 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                 }
             }
         });
-
-
-
-
     }
 
     @Override

@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class noticeupdate extends AppCompatActivity {
 
     private List<item> itemList;
-
     private String currentUserID;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -52,9 +51,7 @@ public class noticeupdate extends AppCompatActivity {
         currentUserID = mAuth.getCurrentUser().getUid();
         db = FirebaseFirestore.getInstance();
 
-
         itemList = new ArrayList<>();
-//        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
         initView();
 
@@ -68,21 +65,31 @@ public class noticeupdate extends AppCompatActivity {
                             for (QueryDocumentSnapshot documentt : task.getResult()) {
                                 String from = documentt.getString("from");
                                 String type = documentt.getString("type");
-                                if(documentt.contains("activityname")){
-                                    String activityname = documentt.getString("activityname");
-                                    itemList.add(new item(from,type,activityname));
-                                    itemadapter.notifyDataSetChanged();
+                                if(documentt.contains("islook")){
+                                    if(documentt.contains("activityname")){
+                                        String activityname = documentt.getString("activityname");
+                                        itemList.add(new item(from,type,activityname,"look",documentt.getId()));
+                                        itemadapter.notifyDataSetChanged();
+                                    }else{
+                                        itemList.add(new item(from,type,"none","look",documentt.getId()));
+                                        itemadapter.notifyDataSetChanged();
+                                    }
                                 }else{
-                                    itemList.add(new item(from,type,"none"));
-                                    itemadapter.notifyDataSetChanged();
+                                    if(documentt.contains("activityname")){
+                                        String activityname = documentt.getString("activityname");
+                                        itemList.add(new item(from,type,activityname,"not",documentt.getId()));
+                                        itemadapter.notifyDataSetChanged();
+                                    }else{
+                                        itemList.add(new item(from,type,"none","not",documentt.getId()));
+                                        itemadapter.notifyDataSetChanged();
+                                    }
                                 }
+
 
                             }
                         }
                     }
                 });
-
-
     }
 
     public void initView(){
@@ -91,6 +98,4 @@ public class noticeupdate extends AppCompatActivity {
         itemadapter = new itemAdapter(this, itemList);
         recyclerView.setAdapter(itemadapter);
     }
-
-
 }
