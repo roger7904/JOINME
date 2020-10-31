@@ -148,7 +148,7 @@ public class jo extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        db=FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -317,6 +317,10 @@ public class jo extends AppCompatActivity {
 
                         submitbtn.setEnabled(false);
                         submitbtn.setText("創建成功");
+
+                        Intent settingsIntent = new Intent(jo.this, home.class);
+                        startActivity(settingsIntent);
+
                     } else {
                         Toast.makeText(jo.this, "活動起訖時間填寫錯誤", Toast.LENGTH_LONG).show();
                     }

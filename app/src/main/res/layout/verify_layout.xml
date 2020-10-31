@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="#00DB00"
                     android:text="V批准"
                     android:textColor="#FFFFFF"
                     android:textSize="24sp" />
@@ -111,7 +111,7 @@
                     android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#00000000"
+                    android:background="#FF0000"
                     android:text="X拒絕"
                     android:textColor="#ffffff"
                     android:textSize="24sp" />

@@ -3,6 +3,7 @@ package com.roger.joinme;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -218,12 +219,13 @@ public class ProfileActivity extends AppCompatActivity
                         {
                             Current_State = "request_sent";
                             SendMessageRequestButton.setText("Cancel Add Request");
+                            SendMessageRequestButton.setBackgroundColor(Color.RED);
                         }
                         else if (request_type.equals("received"))
                         {
                             Current_State = "request_received";
                             SendMessageRequestButton.setText("Accept Add Request");
-
+                            SendMessageRequestButton.setBackgroundColor(Color.GREEN);
                             DeclineMessageRequestButton.setVisibility(View.VISIBLE);
                             DeclineMessageRequestButton.setEnabled(true);
 
@@ -249,6 +251,7 @@ public class ProfileActivity extends AppCompatActivity
                                     if (document.exists()) {
                                         Current_State = "friends";
                                         SendMessageRequestButton.setText("Remove this Friend");
+                                        SendMessageRequestButton.setBackgroundColor(Color.RED);
                                     } else {
 
                                     }
@@ -372,6 +375,7 @@ public class ProfileActivity extends AppCompatActivity
                                                                             SendMessageRequestButton.setEnabled(true);
                                                                             Current_State = "friends";
                                                                             SendMessageRequestButton.setText("Remove this Friend");
+                                                                            SendMessageRequestButton.setBackgroundColor(Color.RED);
 
                                                                             DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
                                                                             DeclineMessageRequestButton.setEnabled(false);
@@ -483,6 +487,7 @@ public class ProfileActivity extends AppCompatActivity
                                                 SendMessageRequestButton.setEnabled(true);
                                                 Current_State = "new";
                                                 SendMessageRequestButton.setText("Add Friend");
+                                                SendMessageRequestButton.setBackgroundColor(Color.GREEN);
 
                                                 DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
                                                 DeclineMessageRequestButton.setEnabled(false);
@@ -548,6 +553,7 @@ public class ProfileActivity extends AppCompatActivity
                                                                     SendMessageRequestButton.setEnabled(true);
                                                                     Current_State = "request_sent";
                                                                     SendMessageRequestButton.setText("Cancel Add Request");
+                                                                    SendMessageRequestButton.setBackgroundColor(Color.RED);
                                                                 }
                                                             }
                                                         });

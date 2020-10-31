@@ -61,6 +61,7 @@
         android:textSize="20sp"
         android:text="Add Friend"
         android:textAllCaps="false"
+        android:background="#00DB00"
         />
 
 
