@@ -136,6 +136,8 @@ public class jo extends AppCompatActivity {
     private FirebaseUser currentUser;
     private ProgressDialog mloadingDialog;
     Handler mLoadhandler;
+    public boolean ifEventExists=false;
+    public String abc="abc";
 
 
 
@@ -277,7 +279,51 @@ public class jo extends AppCompatActivity {
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                db.collection("activity").document(activityTitle.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+//                            System.out.println(activityTitle.getText().toString());
+                            if (document.exists()) {
+                                Toast.makeText(jo.this, "有重複活動存在", Toast.LENGTH_LONG).show();
+                            }
+                            if(!document.exists()){
+                                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || limitBtn.getText().toString().equals("選擇")||!ifTimeSelected) {
+                                    Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
+                                }else{
+                                    if (sts.compareTo(ets) < 0) {
+                                        //初始化Places API
+//                        mLoadhandler=new Handler(){
+//                            @Override
+//                            public void handleMessage(Message msg)
+//                            {
+//                                mloadingDialog.dismiss();
+//                            }
+//                        };
+//                        mloadingDialog = ProgressDialog.show(jo.this , "" , "Uploading. Please wait...." , true);
+                                        Thread t1=new Thread(uploadcover);
+                                        Thread t2=new Thread(uploadtoDB);
+                                        if(imguploaded){
+                                            t1.start();
+                                        }
+                                        t2.start();
 
+//                        System.out.print(uriString);
+
+                                        submitbtn.setEnabled(false);
+                                        submitbtn.setText("創建成功");
+
+                                        Intent settingsIntent = new Intent(jo.this, home.class);
+                                        startActivity(settingsIntent);
+
+                                    } else {
+                                        Toast.makeText(jo.this, "活動起訖時間填寫錯誤", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+                        }
+                    }});
                 if(ifSpecifyTime){
                     try {
                         sts = new Timestamp(stringToDate(true));
@@ -292,39 +338,8 @@ public class jo extends AppCompatActivity {
                     ifTimeSelected=true;
                 }
 
-                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || limitBtn.getText().toString().equals("選擇")||!ifTimeSelected) {
-                    Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
-                } else {
 
-                    if (sts.compareTo(ets) < 0) {
-                        //初始化Places API
-//                        mLoadhandler=new Handler(){
-//                            @Override
-//                            public void handleMessage(Message msg)
-//                            {
-//                                mloadingDialog.dismiss();
-//                            }
-//                        };
-//                        mloadingDialog = ProgressDialog.show(jo.this , "" , "Uploading. Please wait...." , true);
-                        Thread t1=new Thread(uploadcover);
-                        Thread t2=new Thread(uploadtoDB);
-                        if(imguploaded){
-                            t1.start();
-                        }
-                        t2.start();
 
-                        System.out.print(uriString);
-
-                        submitbtn.setEnabled(false);
-                        submitbtn.setText("創建成功");
-
-                        Intent settingsIntent = new Intent(jo.this, home.class);
-                        startActivity(settingsIntent);
-
-                    } else {
-                        Toast.makeText(jo.this, "活動起訖時間填寫錯誤", Toast.LENGTH_LONG).show();
-                    }
-                }
             }
 
 
@@ -437,7 +452,7 @@ public class jo extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             uriString = uri.toString();
-                            System.out.println(uriString);
+//                            System.out.println(uriString);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -591,11 +606,11 @@ public class jo extends AppCompatActivity {
             if (a == true) {
                 dateStr = (String) button5.getText() + " " + (String) sbtn.getText() + ":00";
                 date = sdf.parse(dateStr);
-                System.out.println(date.toString());
+//                System.out.println(date.toString());
             } else {
                 dateStr = (String) eDate.getText() + " " + (String) ebtn.getText() + ":00";
                 date = sdf.parse(dateStr);
-                System.out.println(date.toString());
+//                System.out.println(date.toString());
         }
         return date;
     }
@@ -703,7 +718,7 @@ public class jo extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 uriString = uri.toString();
-                                System.out.println(uriString);
+//                                System.out.println(uriString);
                                 mLoadhandler.sendEmptyMessage(0);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
