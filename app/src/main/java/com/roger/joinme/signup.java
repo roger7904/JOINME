@@ -154,24 +154,23 @@ public class signup extends AppCompatActivity {
                                         }
                                     });
                                 }
-                                System.out.println(organizerID);
-
-                                final DocumentReference docRef = db.collection("user").document(organizerID).collection("profile").document(organizerID);
+                                final DocumentReference docRef = db.collection("user").document(organizerID).collection("profile")
+                                        .document(organizerID);
                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot snapshot = task.getResult();
-                                            if (snapshot.exists()) {
+                                            if (snapshot != null && snapshot.exists()) {
                                                 organizerName=snapshot.getString("name");
                                                 activityContent.setText("類別：" + document.getString("activityType") + "\n開始時間：" + ft.format(snnippet) + "\n結束時間：" + ft.format(snnippet2) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + organizerName);
+
                                             } else {
 
                                             }
                                         }
                                     }
                                 });
-
 
                                 if (!document.getString("organizerID").equals(currentUserID)) {
                                     deletebtn.setVisibility(View.GONE);
