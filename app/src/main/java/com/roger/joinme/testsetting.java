@@ -228,9 +228,14 @@ public class testsetting extends AppCompatActivity
                     age = String.valueOf(year - cal.get(Calendar.YEAR) - 1);
                 }
                 if(view.getId()==R.id.button5){
-                    if(Integer.valueOf(age) >=7){
+                    if(Integer.valueOf(age) >=7 || Integer.valueOf(age) <= 117){
                         userage.setText(age);
                     }else{
+                        if(Integer.valueOf(age) < 7){
+                            Toast.makeText(testsetting.this, "年齡不可低於7歲", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(testsetting.this, "年齡不可高於117歲", Toast.LENGTH_SHORT).show();
+                        }
                         age = "";
                     }
                 }else{
@@ -248,28 +253,28 @@ public class testsetting extends AppCompatActivity
         String age = userage.getText().toString();
         String phone = userphone.getText().toString();
 
-
-        if (TextUtils.isEmpty(setUserName))
-        {
-            Toast.makeText(this, "請填寫姓名", Toast.LENGTH_SHORT).show();
+        if(setUserName.equals("") || setStatus.equals("") || gender.equals("") || age.equals("") || phone.equals("")){
+            if (TextUtils.isEmpty(setUserName))
+            {
+                Toast.makeText(this, "請填寫姓名", Toast.LENGTH_SHORT).show();
+            }
+            if (TextUtils.isEmpty(setStatus))
+            {
+                Toast.makeText(this, "請填寫狀態", Toast.LENGTH_SHORT).show();
+            }
+            if (TextUtils.isEmpty(gender))
+            {
+                Toast.makeText(this, "請填寫性別", Toast.LENGTH_SHORT).show();
+            }
+            if (TextUtils.isEmpty(age))
+            {
+                Toast.makeText(this, "請填寫年齡", Toast.LENGTH_SHORT).show();
+            }
+            if (TextUtils.isEmpty(phone))
+            {
+                Toast.makeText(this, "請填寫手機", Toast.LENGTH_SHORT).show();
+            }
         }
-        if (TextUtils.isEmpty(setStatus))
-        {
-            Toast.makeText(this, "請填寫狀態", Toast.LENGTH_SHORT).show();
-        }
-        if (TextUtils.isEmpty(gender))
-        {
-            Toast.makeText(this, "請填寫性別", Toast.LENGTH_SHORT).show();
-        }
-        if (TextUtils.isEmpty(age))
-        {
-            Toast.makeText(this, "請填寫年齡", Toast.LENGTH_SHORT).show();
-        }
-        if (TextUtils.isEmpty(phone))
-        {
-            Toast.makeText(this, "請填寫手機", Toast.LENGTH_SHORT).show();
-        }
-
         else
         {
             HashMap<String, Object> profileMap = new HashMap<>();

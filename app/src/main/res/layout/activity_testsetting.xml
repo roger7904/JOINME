@@ -58,8 +58,8 @@
             app:layout_constraintStart_toStartOf="@id/guideline7" />
 
         <ScrollView
-            android:layout_width="408dp"
-            android:layout_height="331dp"
+            android:layout_width="404dp"
+            android:layout_height="323dp"
             app:layout_constraintEnd_toEndOf="@id/guideline7"
             app:layout_constraintStart_toStartOf="@id/guideline7"
             app:layout_constraintTop_toBottomOf="@id/bkg">
@@ -78,8 +78,8 @@
                     android:background="@drawable/shape_textview"
                     android:gravity="center_horizontal"
                     android:hint="姓名"
-                    android:maxLength="7"
                     android:inputType="textMultiLine"
+                    android:maxLength="7"
                     android:padding="6dp"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimaryDark"

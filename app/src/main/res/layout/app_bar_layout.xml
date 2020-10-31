@@ -6,14 +6,4 @@
     android:layout_height="match_parent"
     android:background="@color/colorMain"
     android:layout_gravity="center_horizontal"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="JOINME"
-        android:textColor="#000000"
-        android:textSize="24dp" />
-
-</androidx.appcompat.widget.Toolbar>
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
