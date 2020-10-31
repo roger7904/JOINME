@@ -148,7 +148,7 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
             circleImageViewid= (ImageView) itemView.findViewById(R.id.users_profile_image);
             textName = (TextView) itemView.findViewById(R.id.user_name);
             one=(Button) itemView.findViewById(R.id.one);
-            two=(Button) itemView.findViewById(R.id.one);
+            two=(Button) itemView.findViewById(R.id.two);
             three=(Button) itemView.findViewById(R.id.three);
             four=(Button) itemView.findViewById(R.id.four);
             five=(Button) itemView.findViewById(R.id.five);
