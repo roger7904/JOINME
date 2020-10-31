@@ -95,7 +95,6 @@ public class signup extends AppCompatActivity {
         currentUserID = mAuth.getCurrentUser().getUid();
         activitytitle = getIntent().getExtras().get("activitytitle").toString();
         UserActImageRef = FirebaseStorage.getInstance().getReference();
-
         initViews();
         initData();
         setListeners();
@@ -178,12 +177,38 @@ public class signup extends AppCompatActivity {
                                 }else{
                                     signupbtn.setVisibility(View.GONE);
                                 }
+
                             } else {
                             }
                         } else {
                         }
                     }
                 });
+        db.collection("join_act_request").document(activitytitle).collection("UserID").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        signupbtn.setText("您已申請該活動");
+                        signupbtn.setEnabled(false);
+                    }
+                }
+            }
+        });
+
+        db.collection("activity").document(activitytitle).collection("participant").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        signupbtn.setText("您已加入該活動");
+                        signupbtn.setEnabled(false);
+                    }
+                }
+            }
+        });
     }
 
     @Override
