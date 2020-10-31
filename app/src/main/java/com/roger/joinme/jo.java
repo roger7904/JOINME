@@ -111,7 +111,7 @@ public class jo extends AppCompatActivity {
     private int sHour, sMin, eHour, eMin;  //起訖時間
     public TextView activityTitle, peopleLimit, activityContent;
     private ImageView imgtest;
-    public String userSelectLocation;
+    public String userSelectLocation="";
     public static final int ACTIVITY_FILE_CHOOSER = 1;
     private LatLng placelocation;
     private TimePickerView pTime;
@@ -292,7 +292,7 @@ public class jo extends AppCompatActivity {
                     ifTimeSelected=true;
                 }
 
-                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || limitBtn.getText().toString().equals("")||!ifTimeSelected) {
+                if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || limitBtn.getText().toString().equals("選擇")||!ifTimeSelected) {
                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                 } else {
 
