@@ -188,6 +188,8 @@ public class testsetting extends AppCompatActivity
                                     .document(currentUserID).set(imgdata,SetOptions.merge());
                             RetrieveUserInfo();
                             loadingBar.dismiss();
+                            Intent settingsIntent = new Intent(testsetting.this, testsetting.class);
+                            startActivity(settingsIntent);
                         }
                         else
                         {
