@@ -75,7 +75,7 @@ public class organizerevaluateActivity extends AppCompatActivity
     private void InitializeFields()
     {
         one=(Button) findViewById(R.id.one);
-        two=(Button) findViewById(R.id.one);
+        two=(Button) findViewById(R.id.two);
         three=(Button) findViewById(R.id.three);
         four=(Button) findViewById(R.id.four);
         five=(Button) findViewById(R.id.five);
