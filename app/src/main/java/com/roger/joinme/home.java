@@ -48,6 +48,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -277,6 +278,14 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         }
                     }
                 });
+//        CollectionReference colRef = db.collection("activity");
+//    // Update the timestamp field with the value from the server
+//        Map<String,Object> updates = new HashMap<>();
+//        updates.put("timestamp", FieldValue.serverTimestamp());
+//
+//        colRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+//
+//        });
     }
 
     @Override

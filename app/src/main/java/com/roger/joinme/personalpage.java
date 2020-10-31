@@ -50,7 +50,7 @@ public class personalpage extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private StorageReference UserProfileImagesRef,UserActImageRef;
     private String currentUserID;
-    private TextView userProfileName, userAge, userSex;
+    private TextView userProfileName, userAge, userSex, userStatus;
     private personholdactAdapter personholdactadapter;
     private personalactRecAdapter personalactRecadapter;
     private personalFriAdapter personalFriAdapter;
@@ -95,11 +95,11 @@ public class personalpage extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot snapshot = task.getResult();
+                    String userName = snapshot.getString("name");
+                    String userage = snapshot.getString("age");
+                    String usersex = snapshot.getString("gender");
+                    String userstatus = snapshot.getString("status");
                     if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
-                        String userName = snapshot.getString("name");
-                        String userage = snapshot.getString("age");
-                        String usersex = snapshot.getString("gender");
-
                         UserProfileImagesRef.child(currentUserID + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
@@ -115,22 +115,17 @@ public class personalpage extends AppCompatActivity {
                                 // Handle any errors
                             }
                         });
-                        userProfileName.setText(userName);
-                        userAge.setText(userage);
-                        userSex.setText(usersex);
-                    } else if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
-                        String userName = snapshot.getString("name");
-                        String userage = snapshot.getString("age");
-                        String usersex = snapshot.getString("gender");
 
+                    } else if (snapshot != null && snapshot.exists() && snapshot.contains("name")) {
                         Glide.with(personalpage.this)
                                 .load(R.drawable.head)
                                 .circleCrop()
                                 .into(userProfileImage);
-                        userProfileName.setText(userName);
-                        userAge.setText(userage);
-                        userSex.setText(usersex);
                     }
+                    userProfileName.setText(userName);
+                    userAge.setText(userage);
+                    userSex.setText(usersex);
+                    userStatus.setText(userstatus);
                 }
             }
         });
@@ -398,6 +393,7 @@ public class personalpage extends AppCompatActivity {
         activityPhoto = (ImageView) findViewById(R.id.activityphoto);
         userProfileImage = (CircleImageView)findViewById(R.id.users_profile_image);
         userProfileName = (TextView) findViewById(R.id.userName);
+        userStatus = (TextView) findViewById(R.id.Status);
         userAge = (TextView) findViewById(R.id.userAge);
         userSex = (TextView) findViewById(R.id.userSex);
         first = (TextView) findViewById(R.id.first);

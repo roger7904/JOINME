@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +67,7 @@ public class MainActivity extends FragmentActivity {
     private Button register;
     private Button ForgetPasswordLink;
     public Button loginPageBtn;
-
+    public ImageView activityPhoto;
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
@@ -176,6 +177,7 @@ public class MainActivity extends FragmentActivity {
         UserPassword = (EditText)findViewById(R.id.passwd);
         loadingBar = new ProgressDialog(this);
         loginPageBtn = (Button)findViewById(R.id.loginPage);
+        activityPhoto = (ImageView) findViewById(R.id.imageView);
     }
 
     private void initData()
