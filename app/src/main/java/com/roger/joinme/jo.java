@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -148,7 +149,16 @@ public class jo extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(jo.this, home.class);
+                startActivity(intent);
+            }
+        });
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -686,6 +696,23 @@ public class jo extends AppCompatActivity {
                 break;
         }
         return dialog;
+    }
+
+    //鎖手機的返回鍵
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+                event.startTracking();
+            }else{
+                onBackPressed();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public  boolean onKeyUp(int keyCode, KeyEvent event){
+        return super.onKeyUp(keyCode, event);
     }
 
     Runnable uploadcover = new Runnable() {

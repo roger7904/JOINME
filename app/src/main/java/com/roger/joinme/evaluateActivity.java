@@ -2,7 +2,9 @@ package com.roger.joinme;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -57,7 +59,17 @@ public class evaluateActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(evaluateActivity.this, home.class);
+                startActivity(intent);
+            }
+        });
+
 
         activityname = getIntent().getExtras().get("activityname").toString();
 
@@ -130,6 +142,23 @@ public class evaluateActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    //鎖手機的返回鍵
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+                event.startTracking();
+            }else{
+                onBackPressed();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public  boolean onKeyUp(int keyCode, KeyEvent event){
+        return super.onKeyUp(keyCode, event);
     }
 
     private void setListeners() {

@@ -1,12 +1,15 @@
 package com.roger.joinme;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -56,6 +59,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.appcompat.widget.Toolbar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity
@@ -83,6 +87,19 @@ public class ProfileActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(ProfileActivity.this, home.class);
+                startActivity(intent);
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
@@ -118,7 +135,22 @@ public class ProfileActivity extends AppCompatActivity
         RetrieveUserInfo();
     }
 
+    //鎖手機的返回鍵
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+                event.startTracking();
+            }else{
+                onBackPressed();
+            }
+        }
+        return false;
+    }
 
+    @Override
+    public  boolean onKeyUp(int keyCode, KeyEvent event){
+        return super.onKeyUp(keyCode, event);
+    }
 
     private void RetrieveUserInfo()
     {

@@ -169,6 +169,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         if (chechPermission()) {
             init();
         }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

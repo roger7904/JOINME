@@ -1,8 +1,12 @@
 package com.roger.joinme;
 
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
@@ -49,10 +53,16 @@ public class favoriteActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-//        Toolbar toolbar = findViewById(R.id.chat_toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("活動收藏");
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(favoriteActivity.this, home.class);
+                startActivity(intent);
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -177,6 +187,23 @@ public class favoriteActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    //鎖手機的返回鍵
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+                event.startTracking();
+            }else{
+                onBackPressed();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public  boolean onKeyUp(int keyCode, KeyEvent event){
+        return super.onKeyUp(keyCode, event);
     }
 
     public void initView(){

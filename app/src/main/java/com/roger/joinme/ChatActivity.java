@@ -1,11 +1,14 @@
 package com.roger.joinme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -100,7 +103,6 @@ public class ChatActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-
         mAuth = FirebaseAuth.getInstance();
         messageSenderID = mAuth.getCurrentUser().getUid();
         db=FirebaseFirestore.getInstance();
@@ -138,7 +140,6 @@ public class ChatActivity extends AppCompatActivity
         });
 
     }
-
 
     private void IntializeControllers()
     {
