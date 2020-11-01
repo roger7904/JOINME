@@ -172,7 +172,8 @@ public class evaluateActivity extends AppCompatActivity {
                                                                             @Override
                                                                             public void onComplete(@NonNull Task task) {
                                                                                 if (task.isSuccessful()) {
-
+                                                                                    Intent settingsIntent = new Intent(evaluateActivity.this, home.class);
+                                                                                    startActivity(settingsIntent);
                                                                                 }
                                                                             }
                                                                         });

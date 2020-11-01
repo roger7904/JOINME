@@ -209,6 +209,8 @@ public class personalevaluateActivity extends AppCompatActivity
                                                     startActivity(Intent);
                                                     Toast.makeText(personalevaluateActivity.this,
                                                             "評價完成", Toast.LENGTH_SHORT).show();
+                                                    Intent settingsIntent = new Intent(personalevaluateActivity.this, home.class);
+                                                    startActivity(settingsIntent);
                                                 }
                                             }
                                         });
