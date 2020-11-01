@@ -1,6 +1,8 @@
 package com.roger.joinme;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,18 @@ public class personalFriAdapter extends RecyclerView.Adapter<personalFriAdapter.
     public void onBindViewHolder(@NonNull personalFriAdapter.ViewHolder holder, int position) {
         personal personal = personalFriList.get(position);
         holder.textName.setText(personal.getName());
+        holder.circleImageViewid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                String userID = personal.getID();
+//                Intent myIntent = new Intent();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("info", userID);
+//                myIntent.putExtras(bundle);
+//                myIntent.setClass(personalpage.this, personalpage.class);
+//                startActivity(myIntent);
+            }
+        });
         Glide.with(holder.itemView.getContext())
                 .load(personal.getImage())
                 .circleCrop()

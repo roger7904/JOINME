@@ -332,7 +332,6 @@ public class ChatActivity extends AppCompatActivity
                                     .document(messageSenderID).set(newcontent,SetOptions.merge());
                             db.collection("message").document(messageSenderID).collection("UserID")
                                     .document(messageReceiverID).set(contentcount,SetOptions.merge());
-
                             db.collection("message").document(messageSenderID).collection("UserID")
                                     .document(messageReceiverID).collection("content").document()
                                     .set(messageTextBody).addOnCompleteListener(new OnCompleteListener() {
@@ -391,7 +390,6 @@ public class ChatActivity extends AppCompatActivity
                     }
                 }
             });
-
 
         }
     }

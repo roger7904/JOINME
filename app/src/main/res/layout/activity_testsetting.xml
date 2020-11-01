@@ -82,7 +82,7 @@
                     android:maxLength="7"
                     android:padding="6dp"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="#000000"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
@@ -97,7 +97,7 @@
                     android:inputType="textMultiLine"
                     android:padding="6dp"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="#000000"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -111,7 +111,7 @@
                     android:inputType="textMultiLine"
                     android:padding="6dp"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="#000000"
                     android:textStyle="bold" />
 
                 <EditText
@@ -125,7 +125,7 @@
                     android:inputType="textMultiLine"
                     android:padding="6dp"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="#000000"
                     android:textStyle="bold" />
 
                 <Button
@@ -136,8 +136,7 @@
                     android:background="@drawable/shape_textview"
                     android:onClick="showDayDialog"
                     android:text="年齡"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textColorHint="@color/colorPrimaryDark"
+                    android:textColor="#000000"
                     android:textSize="18sp"
                     android:visibility="visible" />
             </LinearLayout>

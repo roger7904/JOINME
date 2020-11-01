@@ -460,8 +460,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     private void SendUserToPersonalPage() {
-        Intent Intent = new Intent(home.this, personalpage.class);
-        startActivity(Intent);
+        Intent myIntent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString("visit_user_id", currentUserID);
+        myIntent.putExtras(bundle);
+        myIntent.setClass(home.this, personalpage.class);
+        startActivity(myIntent);
     }
 
     private void SendUserToverify() {

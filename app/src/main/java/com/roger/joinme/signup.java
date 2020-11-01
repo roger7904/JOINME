@@ -163,8 +163,19 @@ public class signup extends AppCompatActivity {
                                             DocumentSnapshot snapshot = task.getResult();
                                             if (snapshot != null && snapshot.exists()) {
                                                 organizerName=snapshot.getString("name");
+                                                String userID = snapshot.getString("currentUserID");
                                                 activityContent.setText("類別：" + document.getString("activityType") + "\n開始時間：" + ft.format(snnippet) + "\n結束時間：" + ft.format(snnippet2) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + organizerName);
-
+                                                activityContent.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        Intent myIntent = new Intent();
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("visit_user_id", userID);
+                                                        myIntent.putExtras(bundle);
+                                                        myIntent.setClass(signup.this, personalpage.class);
+                                                        startActivity(myIntent);
+                                                    }
+                                                });
                                             } else {
 
                                             }
