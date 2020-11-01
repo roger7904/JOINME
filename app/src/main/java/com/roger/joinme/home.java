@@ -121,7 +121,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private Button jobtn;
     private Button messagebtn;
     private Button favoritebtn;
-    private Button noticebtn;
+    private TextView noticebtn;
     private Button findFriendBtn,settingbtn,inviteFriendBtn,actInviteBtn,logoutBtn;
     private Button setProfileBtn;
     private Button refreshbtn;
@@ -167,6 +167,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         if (chechPermission()) {
             init();
         }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -183,7 +184,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         maplistener = 0;
         getDBlistener();
 
-
+        notice_count.bringToFront();
 
         db.collection("activity")
                 .get()
@@ -661,7 +662,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         favoritebtn = (Button) findViewById(R.id.collectBtn);
         settingbtn = (Button) findViewById(R.id.settingBtn);
         messagebtn = (Button) findViewById(R.id.messageBtn);
-        noticebtn = (Button) findViewById(R.id.noticeBtn);
+        noticebtn = (TextView) findViewById(R.id.noticeBtn);
         refreshbtn = (Button) findViewById(R.id.refreshBtn);
         otherbtn = (Button) findViewById(R.id.otherbtn);
         findFriendBtn = (Button) findViewById(R.id.button21);
@@ -723,7 +724,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mMap.getUiSettings().setZoomControlsEnabled(true);
+            //隱藏放大縮小按鈕
+            mMap.getUiSettings().setZoomControlsEnabled(false);
         }
     };
 
