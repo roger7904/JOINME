@@ -46,13 +46,13 @@ public class personalFriAdapter extends RecyclerView.Adapter<personalFriAdapter.
         holder.circleImageViewid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String userID = personal.getID();
-//                Intent myIntent = new Intent();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("info", userID);
-//                myIntent.putExtras(bundle);
-//                myIntent.setClass(personalpage.this, personalpage.class);
-//                startActivity(myIntent);
+                String userID = personal.getID();
+                Intent myIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("visit_user_id", userID);
+                myIntent.putExtras(bundle);
+                myIntent.setClass(holder.circleImageViewid.getContext(), personalpage.class);
+                context.startActivity(myIntent);
             }
         });
         Glide.with(holder.itemView.getContext())
