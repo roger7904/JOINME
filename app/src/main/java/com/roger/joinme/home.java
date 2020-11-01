@@ -147,6 +147,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private FirebaseUser currentUser;
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
+    private static double camera_position_lat = 0.0;
+    private static double camera_position_lng = 0.0;
 
     private TextView notice_count;
 
@@ -167,7 +169,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         if (chechPermission()) {
             init();
         }
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -286,14 +287,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                         }
                     }
                 });
-//        CollectionReference colRef = db.collection("activity");
-//    // Update the timestamp field with the value from the server
-//        Map<String,Object> updates = new HashMap<>();
-//        updates.put("timestamp", FieldValue.serverTimestamp());
-//
-//        colRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-//
-//        });
     }
 
     @Override
@@ -562,8 +555,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void setUpClusterer() {
         // Position the map.
-        //抓使用者定位  mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(22.732375, 120.276439), 10));
+        camera_position_lat = mMap.getCameraPosition().target.latitude;
+        camera_position_lng = mMap.getCameraPosition().target.longitude;
+        float zoom = mMap.getCameraPosition().zoom;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(camera_position_lat + 0.0000001, camera_position_lng + 0.0000001), zoom));
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
