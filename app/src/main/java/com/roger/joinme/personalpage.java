@@ -68,6 +68,8 @@ public class personalpage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personalpage);
 
+        currentUserID = getIntent().getExtras().get("visit_user_id").toString();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -82,7 +84,6 @@ public class personalpage extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
         UserActImageRef = FirebaseStorage.getInstance().getReference();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
@@ -345,12 +346,13 @@ public class personalpage extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                     String userName = document.getString("name");
+                                                    String userID = document.getString("currentUserID");
                                                     if (document.contains("image")) {
                                                         UserProfileImagesRef.child(friends + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                             @Override
                                                             public void onSuccess(Uri uri) {
                                                                 // Got the download URL for 'users/me/profile.png'
-                                                                personalFriList.add(new personal(uri, currentUserID,"","",userName));
+                                                                personalFriList.add(new personal(uri, userID,"","",userName));
                                                                 personalFriAdapter.notifyDataSetChanged();
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
@@ -364,7 +366,7 @@ public class personalpage extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess(Uri uri) {
                                                                 // Got the download URL for 'users/me/profile.png'
-                                                                personalFriList.add(new personal(uri, currentUserID,"","",userName));
+                                                                personalFriList.add(new personal(uri, userID,"","",userName));
                                                                 personalFriAdapter.notifyDataSetChanged();
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
@@ -433,10 +435,18 @@ public class personalpage extends AppCompatActivity {
         chatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                //TODO tzuyen:補上Intent變數
-                intent.setClass(personalpage.this, ChatActivity.class);
-                startActivity(intent);
+                Intent myIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("visit_user_id", "");
+                bundle.putString("visit_user_name", "");
+                bundle.putString("visit_image", "");
+                myIntent.putExtras(bundle);
+                myIntent.setClass(personalpage.this, ChatActivity.class);
+                startActivity(myIntent);
+//                Intent intent = new Intent();
+//                //TODO tzuyen:補上Intent變數
+//                intent.setClass(personalpage.this, ChatActivity.class);
+//                startActivity(intent);
             }
         });
     }
