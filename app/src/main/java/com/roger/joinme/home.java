@@ -182,7 +182,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         initViews();
         setListeners();
         maplistener = 0;
-        getDBlistener();
 
         notice_count.bringToFront();
 
@@ -305,7 +304,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             SendUserToLoginActivity();
         } else {
             updateUserStatus("online");
-
+            getDBlistener();
             VerifyUserExistance();
 
             currentUserID = mAuth.getCurrentUser().getUid();
@@ -330,6 +329,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     });
 
         }
+
     }
 
 //    @Override
@@ -505,22 +505,20 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
                     switch (doc.getType()) {
                         case ADDED:
-                            mClusterManager.clearItems();
-                            mClusterManager.cluster();
                             maplistener = 1;
+                            System.out.println("Add");
                             break;
                         case REMOVED:
-                            mClusterManager.clearItems();
-                            mClusterManager.cluster();
                             maplistener = 1;
+                            System.out.println("REMOVED");
                             break;
                     }
                 }
-                if (maplistener == 1) {
-                    addItems();
-                }
             }
         });
+        if(maplistener == 1){
+            addItems();
+        }
     }
 
     //監聽攝影機(使用者)是否開始移動
@@ -620,6 +618,9 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mClusterManager.cluster();
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
+        setUpClusterer();
+        final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
     }
 
     private void addItemType(String type){
@@ -651,6 +652,9 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mClusterManager.cluster();
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
+        setUpClusterer();
+        final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
     }
 
     private void initViews() {
@@ -725,7 +729,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             //隱藏放大縮小按鈕
-            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
         }
     };
 
@@ -798,6 +802,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
+        addItems();
     }
 
     //地址轉經緯度method(很容易讀不到資料)
