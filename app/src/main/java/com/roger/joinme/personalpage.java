@@ -49,12 +49,13 @@ public class personalpage extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private StorageReference UserProfileImagesRef,UserActImageRef;
-    private String currentUserID;
+    private String currentUserID,UserID;
     private TextView userProfileName, userAge, userSex, userStatus;
     private personholdactAdapter personholdactadapter;
     private personalactRecAdapter personalactRecadapter;
     private personalFriAdapter personalFriAdapter;
     private List<personal> personalList,personalRecList,personalFriList;
+    public String cussrentUserName, cussrentUserImg;
 //    String activityLocation;
 
     public personalpage()
@@ -70,6 +71,25 @@ public class personalpage extends AppCompatActivity {
 
         currentUserID = getIntent().getExtras().get("visit_user_id").toString();
 
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        UserID = mAuth.getCurrentUser().getUid();
+        UserActImageRef = FirebaseStorage.getInstance().getReference();
+        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+
+        final DocumentReference docRefff = db.collection("user").document(currentUserID).collection("profile")
+                .document(currentUserID);
+        docRefff.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    cussrentUserName = snapshot.getString("name");
+                    cussrentUserImg = currentUserID + ".jpg";
+                }
+            }
+        });
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -82,13 +102,12 @@ public class personalpage extends AppCompatActivity {
         initData();
         setListeners();
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        UserActImageRef = FirebaseStorage.getInstance().getReference();
-        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+        if(currentUserID.equals(UserID)){
+            chatView.setVisibility(View.INVISIBLE);
+            chatView.setEnabled(false);
+        }
 
         //個人列表上方user資訊
-
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
                 .document(currentUserID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -437,16 +456,12 @@ public class personalpage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent myIntent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putString("visit_user_id", "");
-                bundle.putString("visit_user_name", "");
-                bundle.putString("visit_image", "");
+                bundle.putString("visit_user_id", currentUserID);
+                bundle.putString("visit_user_name", cussrentUserName);
+                bundle.putString("visit_image", cussrentUserImg);
                 myIntent.putExtras(bundle);
                 myIntent.setClass(personalpage.this, ChatActivity.class);
                 startActivity(myIntent);
-//                Intent intent = new Intent();
-//                //TODO tzuyen:補上Intent變數
-//                intent.setClass(personalpage.this, ChatActivity.class);
-//                startActivity(intent);
             }
         });
     }
