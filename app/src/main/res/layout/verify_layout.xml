@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#e0e0e0">
+    android:background="#e0e0e0"
+    android:gravity="center_horizontal">
 
     <LinearLayout
         android:layout_width="338dp"
         android:layout_height="272dp"
-        android:layout_marginLeft="30sp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10sp"
-        android:background="@drawable/verifybtn"
+        android:background="@drawable/verify"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="5sp">
@@ -101,9 +101,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
                     android:layout_weight="1"
-                    android:background="#00DB00"
+                    android:background="#00000000"
                     android:text="V批准"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
                 <Button
@@ -111,9 +111,9 @@
                     android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FF0000"
+                    android:background="#00000000"
                     android:text="X拒絕"
-                    android:textColor="#ffffff"
+                    android:textColor="#000000"
                     android:textSize="24sp" />
 
             </LinearLayout>

@@ -43,10 +43,8 @@
             android:textSize="36sp" />
 
         <ScrollView
-            android:layout_width="369dp"
-            android:layout_height="536dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_width="match_parent"
+            android:layout_height="536dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
