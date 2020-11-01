@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MapsActivity"
-            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
 
         <ImageView
@@ -155,6 +155,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.96" />
 
+
         <Button
             android:id="@+id/noticeBtn"
             android:layout_width="45dp"
@@ -166,6 +167,21 @@
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.94" />
+
+        <TextView
+            app:layout_constraintBottom_toTopOf="@+id/noticeBtn"
+            app:layout_constraintStart_toEndOf="@+id/noticeBtn"
+            android:id="@+id/notice_count"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/red"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:text="5"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+
 
         <Button
             android:id="@+id/collectBtn"

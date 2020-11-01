@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -85,6 +86,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -146,6 +148,10 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
 
+    private TextView notice_count;
+
+    private int n;
+
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
     final private String contentType = "application/json";
@@ -176,6 +182,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setListeners();
         maplistener = 0;
         getDBlistener();
+
+
 
         db.collection("activity")
                 .get()
@@ -300,6 +308,26 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             VerifyUserExistance();
 
             currentUserID = mAuth.getCurrentUser().getUid();
+            n=0;
+            db.collection("user").document(currentUserID)
+                    .collection("notification")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if(!document.contains("islook")){
+                                        n=n+1;
+                                        notice_count.setText(String.valueOf(n));
+                                    }
+                                }
+                            } else {
+
+                            }
+                        }
+                    });
+
         }
     }
 
@@ -637,6 +665,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         inviteFriendBtn = (Button) findViewById(R.id.button30);
         actInviteBtn = (Button) findViewById(R.id.button31);
         logoutBtn = (Button) findViewById(R.id.button32);
+        notice_count=(TextView) findViewById(R.id.notice_count);
     }
 
     //取得使用者當前位置 -1

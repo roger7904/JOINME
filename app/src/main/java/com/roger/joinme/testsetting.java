@@ -127,8 +127,6 @@ public class testsetting extends AppCompatActivity
         });
     }
 
-
-
     private void InitializeFields()
     {
         UpdateAccountSettings = (Button) findViewById(R.id.update_settings_button);
@@ -169,7 +167,6 @@ public class testsetting extends AppCompatActivity
                 loadingBar.show();
 
                 Uri resultUri = result.getUri();
-
 
                 StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
 
