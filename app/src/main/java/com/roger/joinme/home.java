@@ -500,19 +500,19 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     switch (doc.getType()) {
                         case ADDED:
                             maplistener = 1;
-                            System.out.println("Add");
+//                            addItems();
                             break;
                         case REMOVED:
                             maplistener = 1;
-                            System.out.println("REMOVED");
                             break;
                     }
                 }
+                if(maplistener == 1){
+                    addItems();
+                    maplistener = 0;
+                }
             }
         });
-        if(maplistener == 1){
-            addItems();
-        }
     }
 
     //監聽攝影機(使用者)是否開始移動
@@ -570,7 +570,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
         // Add cluster items (markers) to the cluster manager.
-//        addItems();
         mClusterManager.setOnClusterItemInfoWindowClickListener(
                 new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
                     @Override
@@ -798,7 +797,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
-        addItems();
+//        addItems();
     }
 
     //地址轉經緯度method(很容易讀不到資料)

@@ -424,8 +424,7 @@ public class signup extends AppCompatActivity {
                                 }
                             }
                         });
-
-                favoritebtn.setText("已加入收藏");
+                favoritebtn.setBackground(getResources().getDrawable(R.drawable.savestar));
                 favoritebtn.setEnabled(false);
             }
         });

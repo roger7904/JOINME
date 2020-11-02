@@ -167,53 +167,53 @@ public class personalpage extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        double score = 0;
+                        int count = 0;
                         if (task.isSuccessful()) {
-                            double score = 0;
-                            int count = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                  score = score + document.getDouble("star");
                                  count++;
-                                 Score = score;
-                                 Count = count;
                             }
                         }
+                        double finalescore = score / count;
+                        evaluation.setText(String.valueOf(finalescore));
+                        if(finalescore >= 4.5){
+                            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            fifth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                        }else if(finalescore >= 3.5){
+                            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                        }else if(finalescore >= 2.5){
+                            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                        }else if(finalescore >= 1.5){
+                            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                        }else if(finalescore >= 0.5){
+                            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
+                            second.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
+                        }else{
+                            evaluation.setText("尚無評價");
+                        }
                     }
+
                 });
-        double finalescore = Score / Count;
-        evaluation.setText(String.valueOf(finalescore));
-        if(finalescore >= 4.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.brightstar));
-        }else if(finalescore >= 3.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else if(finalescore >= 2.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else if(finalescore >= 1.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else if(finalescore >= 0.5){
-            first.setBackground(getResources().getDrawable(R.drawable.brightstar));
-            second.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            third.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            forth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-            fifth.setBackground(getResources().getDrawable(R.drawable.darkstar));
-        }else{
-            evaluation.setText("尚無評價");
-        }
+
 
         //主辦的活動
         db.collection("user").document(currentUserID).collection("activity")

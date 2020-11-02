@@ -82,10 +82,12 @@
             android:label="@string/title_activity_homepage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".register" />
-        <activity android:name=".friend_request" />
+        <activity android:name=".friend_request"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".noticetest" />
-        <activity android:name=".testsetting" />
+        <activity android:name=".testsetting"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".testmain" />
         <activity android:name=".forgetpwd" />
         <activity android:name=".FindFriendsActivity"
@@ -108,7 +110,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".GroupChatActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".verifyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
