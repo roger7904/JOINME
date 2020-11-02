@@ -8,20 +8,27 @@
     tools:context=".GroupChatActivity">
 
 
-    <include
-        android:id="@+id/chat_toolbar"
-        layout="@layout/app_bar_layout"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/chattool"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"></include>
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <include
+            android:id="@+id/chat_toolbar"
+            layout="@layout/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"></include>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/private_messages_list_of_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/myLinearLayout"
-        android:layout_below="@+id/chat_toolbar"
+        android:layout_below="@id/chattool"
         android:layout_marginBottom="6dp"></androidx.recyclerview.widget.RecyclerView>
 
 

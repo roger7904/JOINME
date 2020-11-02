@@ -36,6 +36,8 @@ public class chatting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+
+
 //        FloatingActionButton fab = findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -60,6 +62,8 @@ public class chatting extends AppCompatActivity {
         initViews();
         setListeners();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -84,11 +84,13 @@
         <activity android:name=".register" />
         <activity android:name=".friend_request"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".noticetest" />
         <activity android:name=".testsetting"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".testmain" />
+        <activity android:name=".testmain"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".forgetpwd" />
         <activity android:name=".FindFriendsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
