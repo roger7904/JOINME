@@ -2,6 +2,7 @@ package com.roger.joinme;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
@@ -171,6 +172,7 @@ public class GroupChatActivity extends AppCompatActivity
     private void InitializeFields()
     {
         Toolbar toolbar = findViewById(R.id.chat_toolbar);
+        toolbar.setTitleTextColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(currentGroupName);
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
