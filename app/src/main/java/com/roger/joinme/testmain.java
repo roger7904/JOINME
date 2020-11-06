@@ -61,6 +61,7 @@ public class testmain extends AppCompatActivity
 
         myTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         myTabLayout.setupWithViewPager(myViewPager);
+        myTabLayout.setTabTextColors(Color.parseColor("#000000"),Color.parseColor("#000000"));
 
     }
 
