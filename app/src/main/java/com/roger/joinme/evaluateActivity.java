@@ -59,17 +59,6 @@ public class evaluateActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(evaluateActivity.this, home.class);
-                startActivity(intent);
-            }
-        });
-
 
         activityname = getIntent().getExtras().get("activityname").toString();
 
@@ -149,6 +138,9 @@ public class evaluateActivity extends AppCompatActivity {
         if(keyCode == KeyEvent.KEYCODE_BACK){
             if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
                 event.startTracking();
+                Intent intent = new Intent();
+                intent.setClass(evaluateActivity.this, home.class);
+                startActivity(intent);
             }else{
                 onBackPressed();
             }

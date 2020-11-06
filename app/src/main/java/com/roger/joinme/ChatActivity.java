@@ -152,16 +152,7 @@ public class ChatActivity extends AppCompatActivity
         setSupportActionBar(ChatToolBar);
         getSupportActionBar().setTitle(messageReceiverName);
         ChatToolBar.setTitleTextColor(Color.BLACK);
-        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ChatToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(ChatActivity.this, testmain.class);
-                startActivity(intent);
-            }
-        });
+
         SendMessageButton = (ImageButton) findViewById(R.id.send_message_btn);
         SendFilesButton = (ImageButton) findViewById(R.id.send_files_btn);
         MessageInputText = (EditText) findViewById(R.id.input_message);
@@ -177,6 +168,9 @@ public class ChatActivity extends AppCompatActivity
         if(keyCode == KeyEvent.KEYCODE_BACK){
             if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
                 event.startTracking();
+                Intent intent = new Intent();
+                intent.setClass(ChatActivity.this, testmain.class);
+                startActivity(intent);
             }else{
                 onBackPressed();
             }

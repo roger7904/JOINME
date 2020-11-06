@@ -44,16 +44,6 @@ public class testmain extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.BLACK);
-        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(testmain.this, home.class);
-                startActivity(intent);
-            }
-        });
 
         myViewPager = (ViewPager) findViewById(R.id.main_tabs_pager);
         myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
@@ -70,6 +60,9 @@ public class testmain extends AppCompatActivity
         if(keyCode == KeyEvent.KEYCODE_BACK){
             if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
                 event.startTracking();
+                Intent intent = new Intent();
+                intent.setClass(testmain.this, home.class);
+                startActivity(intent);
             }else{
                 onBackPressed();
             }
