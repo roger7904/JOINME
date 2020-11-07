@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -58,6 +59,7 @@ public class personalpage extends AppCompatActivity {
     private personalFriAdapter personalFriAdapter;
     private List<personal> personalList,personalRecList,personalFriList;
     public String cussrentUserName, cussrentUserImg;
+    public LinearLayout evaluatePage;
 //    String activityLocation;
 
     public personalpage()
@@ -424,7 +426,7 @@ public class personalpage extends AppCompatActivity {
         forth = (TextView) findViewById(R.id.forth);
         fifth = (TextView) findViewById(R.id.fifth);
         evaluation = (TextView) findViewById(R.id.score);
-
+        evaluatePage = (LinearLayout) findViewById(R.id.evaluatePage);
 
         //主辦的活動
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.actHold);
@@ -463,6 +465,14 @@ public class personalpage extends AppCompatActivity {
                 myIntent.putExtras(bundle);
                 myIntent.setClass(personalpage.this, ChatActivity.class);
                 startActivity(myIntent);
+            }
+        });
+        evaluatePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(personalpage.this, totalEvaluteActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -94,9 +94,6 @@ public class ChatActivity extends AppCompatActivity
 
     private String saveCurrentTime, saveCurrentDate,currentUserName,saveCurrentTime2,saveCurrentDate2;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,7 +70,9 @@ public class signup extends AppCompatActivity {
     public Button signupbtn, deletebtn, favoritebtn;
     public TextView title;
     public ImageView activityPhoto;
-    public TextView activityContent;
+    public TextView activityContent,activityStartTime,activityEndTime,activityPlace,activityPost,activityOrgName;
+    public static double camera_Position_Lat;
+    public static double camera_Position_Lng;
 
     public Bitmap actImg;
     private String activitytitle,organizerID,activityType,organizerName;
@@ -83,7 +86,6 @@ public class signup extends AppCompatActivity {
     final private String contentType = "application/json";
     private StorageReference UserActImageRef;
 
-
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -93,6 +95,7 @@ public class signup extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.BLACK);
 
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
@@ -169,8 +172,29 @@ public class signup extends AppCompatActivity {
                                             if (snapshot != null && snapshot.exists()) {
                                                 organizerName=snapshot.getString("name");
                                                 String userID = snapshot.getString("currentUserID");
-                                                activityContent.setText("類別：" + document.getString("activityType") + "\n開始時間：" + ft.format(snnippet) + "\n結束時間：" + ft.format(snnippet2) + "\n" + "地點：" + document.getString("location") + "\n" + "備註：" + document.getString("postContent") + "\n" + "發起人：" + organizerName);
-                                                activityContent.setOnClickListener(new View.OnClickListener() {
+                                                activityContent.setText("類別：" + document.getString("activityType"));
+                                                activityStartTime.setText("開始時間：" + ft.format(snnippet));
+                                                activityEndTime.setText("結束時間：" + ft.format(snnippet2));
+                                                activityPlace.setText("地點：" + document.getString("location"));
+                                                activityPost.setText("備註：" + document.getString("postContent"));
+                                                activityOrgName.setText("發起人：" + organizerName);
+                                                System.out.println(document.getGeoPoint("geopoint").getLatitude() + "   tetttt");
+                                                activityPlace.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                                                Uri.parse("http://maps.google.com/maps?daddr="
+                                                                        + document.getGeoPoint("geopoint").getLatitude()+ "," + document.getGeoPoint("geopoint").getLongitude()
+                                                                        +"&language=zh-tw")
+                                                        );
+
+                                                        intent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
+                                                        startActivity(intent);
+                                                    }
+                                                });
+
+
+                                                activityOrgName.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         Intent myIntent = new Intent();
@@ -244,6 +268,11 @@ public class signup extends AppCompatActivity {
         activityContent = (TextView) findViewById(R.id.activityContent);
         deletebtn = (Button) findViewById(R.id.deletebtn);
         favoritebtn = (Button) findViewById(R.id.favoritebtn);
+        activityStartTime = (TextView) findViewById(R.id.activityStartTime);
+        activityEndTime = (TextView) findViewById(R.id.activityEndTime);
+        activityPlace = (TextView) findViewById(R.id.activityPlace);
+        activityPost = (TextView) findViewById(R.id.activityPost);
+        activityOrgName = (TextView) findViewById(R.id.activityOrgName);
     }
 
     private void setListeners() {

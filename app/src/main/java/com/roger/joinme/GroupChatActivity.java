@@ -175,9 +175,9 @@ public class GroupChatActivity extends AppCompatActivity
     private void InitializeFields()
     {
         Toolbar toolbar = findViewById(R.id.chat_toolbar);
-        toolbar.setTitleTextColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(currentGroupName);
+        toolbar.setTitleTextColor(Color.BLACK);
 
         SendMessageButton = (ImageButton) findViewById(R.id.send_message_button);
         userMessageInput = (EditText) findViewById(R.id.input_group_message);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,8 +60,8 @@ public class personholdactAdapter extends RecyclerView.Adapter<personholdactAdap
         ViewHolder(View itemView) {
             super(itemView);
             circleImageViewid= (ImageView) itemView.findViewById(R.id.activityphoto4);
-            textName = (TextView) itemView.findViewById(R.id.actName);
-            actLocation = (TextView) itemView.findViewById(R.id.actLocation);
+            textName = (TextView) itemView.findViewById(R.id.Name);
+            actLocation = (TextView) itemView.findViewById(R.id.Content);
         }
     }
 }

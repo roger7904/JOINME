@@ -41,7 +41,7 @@
                 android:layout_marginLeft="5dp">
 
                 <TextView
-                    android:id="@+id/actName"
+                    android:id="@+id/Name"
                     android:layout_width="187dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -49,7 +49,7 @@
                     android:textSize="20dp"/>
 
                 <TextView
-                    android:id="@+id/actLocation"
+                    android:id="@+id/Content"
                     android:layout_width="187dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"

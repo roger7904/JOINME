@@ -149,8 +149,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     private FirebaseUser currentUser;
     //test
     private AppBarConfiguration mAppBarConfiguration; //宣告
-    private static double camera_position_lat = 0.0;
-    private static double camera_position_lng = 0.0;
+    public static double camera_position_lat;
+    public static double camera_position_lng;
 
     private TextView notice_count;
 
@@ -713,7 +713,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
             mDefaultLocation = new LatLng(25.033493, 121.564101);
-
             if (!getDeviceLocation()) {
                 //mMap.addMarker(new MarkerOptions().position(mDefaultLocation).title("Marker in Taipei 101"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(mDefaultLocation));
@@ -726,7 +725,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             //隱藏放大縮小按鈕
-            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
         }
     };
 

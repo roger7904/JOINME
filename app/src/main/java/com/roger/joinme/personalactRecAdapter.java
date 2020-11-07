@@ -61,8 +61,8 @@ public class personalactRecAdapter extends RecyclerView.Adapter<personalactRecAd
         ViewHolder(View itemView) {
             super(itemView);
             circleImageViewid= (ImageView) itemView.findViewById(R.id.activityphoto4);
-            textName = (TextView) itemView.findViewById(R.id.actName);
-            actLocation = (TextView) itemView.findViewById(R.id.actLocation);
+            textName = (TextView) itemView.findViewById(R.id.Name);
+            actLocation = (TextView) itemView.findViewById(R.id.Content);
         }
     }
 }

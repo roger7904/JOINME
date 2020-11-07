@@ -36,7 +36,7 @@
 
                     <TextView
                         android:id="@+id/title"
-                        android:layout_width="330dp"
+                        android:layout_width="300dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center_horizontal|center"
@@ -46,8 +46,8 @@
 
                     <Button
                         android:id="@+id/favoritebtn"
-                        android:layout_width="38dp"
-                        android:layout_height="32dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:background="@drawable/heart"
                         tools:freezesText="true" />
@@ -70,9 +70,52 @@
                     <TextView
                         android:id="@+id/activityContent"
                         android:layout_width="match_parent"
-                        android:layout_height="194dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
                         android:scrollbars="vertical"
                         android:text="活動內容"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/activityStartTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/activityEndTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/activityPlace"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="TextView"
+                        android:textColor="#5599FF"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/activityPost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/activityOrgName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="TextView"
+                        android:textColor="#5599FF"
                         android:textSize="20sp" />
 
                 </LinearLayout>
