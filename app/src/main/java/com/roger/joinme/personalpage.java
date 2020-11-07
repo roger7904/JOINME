@@ -41,7 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class personalpage extends AppCompatActivity {
-    private Button chatView;
+    private Button chatView,addFriend;
     private Button selfView;
     public ImageView activityPhoto;
     public TextView title,evaluation;
@@ -108,6 +108,8 @@ public class personalpage extends AppCompatActivity {
         if(currentUserID.equals(UserID)){
             chatView.setVisibility(View.INVISIBLE);
             chatView.setEnabled(false);
+            addFriend.setVisibility(View.INVISIBLE);
+            addFriend.setEnabled(false);
         }
 
         //個人列表上方user資訊
@@ -427,6 +429,7 @@ public class personalpage extends AppCompatActivity {
         fifth = (TextView) findViewById(R.id.fifth);
         evaluation = (TextView) findViewById(R.id.score);
         evaluatePage = (LinearLayout) findViewById(R.id.evaluatePage);
+        addFriend = (Button) findViewById(R.id.addFriend);
 
         //主辦的活動
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.actHold);
@@ -473,6 +476,15 @@ public class personalpage extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(personalpage.this, totalEvaluteActivity.class);
                 startActivity(intent);
+            }
+        });
+        addFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String visit_user_id = currentUserID;
+                Intent profileIntent = new Intent(personalpage.this , ProfileActivity.class);
+                profileIntent.putExtra("visit_user_id", visit_user_id);
+                startActivity(profileIntent);
             }
         });
     }

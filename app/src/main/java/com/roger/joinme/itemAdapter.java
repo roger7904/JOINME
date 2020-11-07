@@ -75,7 +75,12 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                     if (snapshot != null && snapshot.exists()) {
                         fromname=snapshot.getString("name");
                         if(item.getType().equals("accept")){
-                            holder.activity.setText(fromname+"接受了你的交友邀請");
+                            String content = fromname+"接受了你的交友邀請";
+                            if((content.length()) > 20){
+                                holder.activity.setText(fromname+"接受...");
+                            }else{
+                                holder.activity.setText(content);
+                            }
                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view)
@@ -89,7 +94,12 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                 }
                             });
                         }else if(item.getType().equals("request")){
-                            holder.activity.setText(fromname+"對你寄出了交友邀請");
+                            String content = fromname+"對你寄出了交友邀請";
+                            if((content.length()) > 20){
+                                holder.activity.setText(fromname+"對你寄出...");
+                            }else{
+                                holder.activity.setText(content);
+                            }
                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view)
@@ -105,7 +115,12 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                 }
                             });
                         }else if(item.getType().equals("act_accept")){
-                            holder.activity.setText(fromname+"核准了您的入團申請");
+                            String content = fromname+"核准了您的入團申請";
+                            if(content.length() > 20){
+                                holder.activity.setText(fromname+"核准了...");
+                            }else{
+                                holder.activity.setText(content);
+                            }
                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view)
@@ -119,7 +134,12 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                 }
                             });
                         }else if(item.getType().equals("joinact")){
-                            holder.activity.setText(fromname+"對您辦的活動提出了加入申請");
+                            String content = fromname+"對您辦的活動提出了加入申請";
+                            if(content.length() > 20){
+                                holder.activity.setText(fromname+"對您提出...");
+                            }else{
+                                holder.activity.setText(content);
+                            }
                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view)
@@ -136,6 +156,7 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                             });
                         }else if(item.getType().equals("evaluate")){
                             String activityname=item.getActivityname();
+                            System.out.println(activityname + "testtt");
                             final DocumentReference docRef = db.collection("activity").document(activityname);
                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -143,8 +164,14 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot snapshot = task.getResult();
                                         String UserID=snapshot.getString("organizerID");
+                                        System.out.println(UserID+"   test");
                                         if(snapshot.getString("organizerID").equals(currentUserID)){
-                                            holder.activity.setText("您舉辦的活動"+activityname+"已經結束，點此處對活動成員評價");
+                                            String content = "您舉辦的活動"+activityname+"已經結束，點此處對活動成員評價";
+                                            if(content.length() > 20){
+                                                holder.activity.setText("您舉辦的活動"+activityname+"已結束，點此...");
+                                            }else{
+                                                holder.activity.setText(content);
+                                            }
                                             holder.activity.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view)
@@ -168,7 +195,13 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     if (task.isSuccessful()) {
                                                         DocumentSnapshot snapshot = task.getResult();
-                                                        holder.activity.setText("您參與的活動"+activityname+"已經結束，點此處對活動舉辦者評價");
+                                                        String content = "您參與的活動"+activityname+"已經結束，點此處對活動舉辦者評價";
+                                                        if(content.length() > 20){
+                                                            holder.activity.setText("您參與的活動"+activityname+"已經結束，點此...");
+                                                        }else{
+                                                            holder.activity.setText(content);
+                                                        }
+
                                                         holder.activity.setOnClickListener(new View.OnClickListener() {
                                                             @Override
                                                             public void onClick(View view)
