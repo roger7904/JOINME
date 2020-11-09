@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,6 +161,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             public void onClick(View view)
             {
 
+            }
+        });
+
+        messageViewHolder.receiverProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userID = messages.getFrom();
+                Intent myIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("visit_user_id", userID);
+                myIntent.putExtras(bundle);
+                myIntent.setClass(messageViewHolder.receiverProfileImage.getContext(), personalpage.class);
+                context.startActivity(myIntent);
             }
         });
     }

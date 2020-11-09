@@ -156,7 +156,6 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                             });
                         }else if(item.getType().equals("evaluate")){
                             String activityname=item.getActivityname();
-                            System.out.println(activityname + "testtt");
                             final DocumentReference docRef = db.collection("activity").document(activityname);
                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -164,7 +163,6 @@ public class itemAdapter extends RecyclerView.Adapter<itemAdapter.ViewHolder> {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot snapshot = task.getResult();
                                         String UserID=snapshot.getString("organizerID");
-                                        System.out.println(UserID+"   test");
                                         if(snapshot.getString("organizerID").equals(currentUserID)){
                                             String content = "您舉辦的活動"+activityname+"已經結束，點此處對活動成員評價";
                                             if(content.length() > 20){

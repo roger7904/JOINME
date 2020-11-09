@@ -132,7 +132,7 @@ public class ProfileActivity extends AppCompatActivity
             if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
                 event.startTracking();
                 Intent intent = new Intent();
-                intent.setClass(ProfileActivity.this, home.class);
+                intent.setClass(ProfileActivity.this, FindFriendsActivity.class);
                 startActivity(intent);
             }else{
                 onBackPressed();
@@ -159,6 +159,7 @@ public class ProfileActivity extends AppCompatActivity
                         String userImage = snapshot.getString("image");
                         String userName = snapshot.getString("name");
                         String userstatus = snapshot.getString("status");
+                        String userID2 = snapshot.getString("currentUserID");
 
 //                        userProfileImage.setImageURI(Uri.fromFile(new File(userImage)));
                         UserProfileImagesRef.child(receiverUserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -188,12 +189,22 @@ public class ProfileActivity extends AppCompatActivity
 
                         userProfileName.setText(userName);
                         userProfileStatus.setText(userstatus);
-
-
+                        userProfileImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent myIntent = new Intent();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("visit_user_id", userID2);
+                                myIntent.putExtras(bundle);
+                                myIntent.setClass( ProfileActivity.this, personalpage.class);
+                                startActivity(myIntent);
+                            }
+                        });
                         ManageChatRequests();
                     } else if(snapshot != null && snapshot.exists() && snapshot.contains("name")){
                         String userName = snapshot.getString("name");
                         String userstatus = snapshot.getString("status");
+                        String userID2 = snapshot.getString("currentUserID");
                         Glide.with(ProfileActivity.this)
                                 .load(R.drawable.head)
                                 .circleCrop()
@@ -201,9 +212,21 @@ public class ProfileActivity extends AppCompatActivity
                         userProfileName.setText(userName);
                         userProfileStatus.setText(userstatus);
 
+                        userProfileImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent myIntent = new Intent();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("visit_user_id", userID2);
+                                myIntent.putExtras(bundle);
+                                myIntent.setClass( ProfileActivity.this, personalpage.class);
+                                startActivity(myIntent);
+                            }
+                        });
 
                         ManageChatRequests();
                     }
+
                 } else {
 
                 }

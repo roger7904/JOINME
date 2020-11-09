@@ -1,7 +1,9 @@
 package com.roger.joinme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,6 +92,19 @@ public class totalEvaluateAdapter extends RecyclerView.Adapter<totalEvaluateAdap
                 .load(totalEvaluate.getImage())
 //                .circleCrop()
                 .into(holder.circleImageViewid);
+
+        holder.circleImageViewid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userID = totalEvaluate.getID();
+                Intent myIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("visit_user_id", userID);
+                myIntent.putExtras(bundle);
+                myIntent.setClass(holder.circleImageViewid.getContext(), personalpage.class);
+                context.startActivity(myIntent);
+            }
+        });
     }
 
     @Override

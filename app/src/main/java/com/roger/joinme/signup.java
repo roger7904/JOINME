@@ -70,7 +70,7 @@ public class signup extends AppCompatActivity {
     public Button signupbtn, deletebtn, favoritebtn;
     public TextView title;
     public ImageView activityPhoto;
-    public TextView activityContent,activityStartTime,activityEndTime,activityPlace,activityPost,activityOrgName;
+    public TextView activityContent,activityStartTime,activityEndTime,activityPlace,activityPost,activityOrgName,actRestriction;
     public static double camera_Position_Lat;
     public static double camera_Position_Lng;
 
@@ -175,10 +175,32 @@ public class signup extends AppCompatActivity {
                                                 activityContent.setText("類別：" + document.getString("activityType"));
                                                 activityStartTime.setText("開始時間：" + ft.format(snnippet));
                                                 activityEndTime.setText("結束時間：" + ft.format(snnippet2));
-                                                activityPlace.setText("地點：" + document.getString("location"));
+                                                activityPlace.setText(document.getString("location"));
                                                 activityPost.setText("備註：" + document.getString("postContent"));
-                                                activityOrgName.setText("發起人：" + organizerName);
-                                                System.out.println(document.getGeoPoint("geopoint").getLatitude() + "   tetttt");
+                                                activityOrgName.setText(organizerName);
+                                                if(document.getBoolean("notification")){
+                                                    String noEatingout = "";
+                                                    String noSmoking = "";
+                                                    String noWine = "";
+                                                    String onlyFemale = "";
+                                                    String onlyMale = "";
+                                                    if(document.getBoolean("noEatingOut")){
+                                                        noEatingout = "禁帶外食";
+                                                    }
+                                                    if(document.getBoolean("noSmoking")){
+                                                        noSmoking = "禁菸";
+                                                    }
+                                                    if(document.getBoolean("noWine")){
+                                                        noWine = "禁酒";
+                                                    }
+                                                    if(document.getBoolean("onlyFemale")){
+                                                        onlyFemale = "限男";
+                                                    }
+                                                    if(document.getBoolean("onlyMale")){
+                                                        onlyMale = "限女";
+                                                    }
+                                                    actRestriction.setText("活動限制：" + noEatingout + noSmoking + noWine + onlyFemale + onlyMale);
+                                                }
                                                 activityPlace.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
@@ -273,6 +295,7 @@ public class signup extends AppCompatActivity {
         activityPlace = (TextView) findViewById(R.id.activityPlace);
         activityPost = (TextView) findViewById(R.id.activityPost);
         activityOrgName = (TextView) findViewById(R.id.activityOrgName);
+        actRestriction = (TextView) findViewById(R.id.actRestriction);
     }
 
     private void setListeners() {
