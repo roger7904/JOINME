@@ -466,7 +466,7 @@ public class signup extends AppCompatActivity {
                                 }
                             }
                         });
-                favoritebtn.setBackground(getResources().getDrawable(R.drawable.savestar));
+                favoritebtn.setBackground(getResources().getDrawable(R.drawable.heart));
                 favoritebtn.setEnabled(false);
             }
         });

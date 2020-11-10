@@ -39,17 +39,17 @@
                         android:layout_width="300dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:gravity="center_horizontal|center"
+                        android:gravity="center_vertical"
                         android:scrollbars="vertical"
                         android:text="活動標題"
-                        android:textSize="36sp" />
+                        android:textSize="26sp" />
 
                     <Button
                         android:id="@+id/favoritebtn"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/heart"
+                        android:background="@drawable/nojoin"
                         tools:freezesText="true" />
                 </LinearLayout>
 
