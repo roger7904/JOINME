@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity
     private CircleImageView userProfileImage;
     private TextView userProfileName, userProfileStatus;
     private Button SendMessageRequestButton, DeclineMessageRequestButton;
-    public String fromWhichPage = "";
+    public String fromWhichPage = "",UserID="";
 
 //    private DatabaseReference UserRef, ChatRequestRef, ContactsRef, NotificationRef;
     private FirebaseFirestore db;
@@ -131,15 +131,10 @@ public class ProfileActivity extends AppCompatActivity
     //鎖手機的返回鍵
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR && fromWhichPage.equals("personal")) {
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR) {
                 event.startTracking();
                 Intent intent = new Intent();
-                intent.setClass(ProfileActivity.this, personalpage.class);
-                startActivity(intent);
-            }else if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR && fromWhichPage.equals("findfriend")) {
-                event.startTracking();
-                Intent intent = new Intent();
-                intent.setClass(ProfileActivity.this, FindFriendsActivity.class);
+                intent.setClass(ProfileActivity.this, home.class);
                 startActivity(intent);
             }else{
                 onBackPressed();
