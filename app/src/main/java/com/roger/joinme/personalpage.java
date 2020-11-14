@@ -484,6 +484,7 @@ public class personalpage extends AppCompatActivity {
                 String visit_user_id = currentUserID;
                 Intent profileIntent = new Intent(personalpage.this , ProfileActivity.class);
                 profileIntent.putExtra("visit_user_id", visit_user_id);
+                profileIntent.putExtra("fromPersonal","personal");
                 startActivity(profileIntent);
             }
         });
