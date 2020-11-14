@@ -131,10 +131,15 @@ public class ProfileActivity extends AppCompatActivity
     //鎖手機的返回鍵
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR && fromWhichPage.equals("personal")){
+            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR && fromWhichPage.equals("personal")) {
                 event.startTracking();
                 Intent intent = new Intent();
                 intent.setClass(ProfileActivity.this, personalpage.class);
+                startActivity(intent);
+            }else if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR && fromWhichPage.equals("findfriend")) {
+                event.startTracking();
+                Intent intent = new Intent();
+                intent.setClass(ProfileActivity.this, FindFriendsActivity.class);
                 startActivity(intent);
             }else{
                 onBackPressed();

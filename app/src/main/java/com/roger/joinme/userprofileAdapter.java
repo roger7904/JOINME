@@ -51,7 +51,7 @@ public class userprofileAdapter extends RecyclerView.Adapter<userprofileAdapter.
                     String visit_user_id = userprofile.getID();
                     Intent profileIntent = new Intent(holder.itemView.getContext(), ProfileActivity.class);
                     profileIntent.putExtra("visit_user_id", visit_user_id);
-                    profileIntent.putExtra("fromPersonal","personal");
+                    profileIntent.putExtra("fromPersonal","findfriend");
                     holder.itemView.getContext().startActivity(profileIntent);
                 }else if(userprofile.getActivity().equals("chat")){
                     Intent chatIntent = new Intent(holder.itemView.getContext(), ChatActivity.class);
