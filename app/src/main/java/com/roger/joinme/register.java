@@ -102,7 +102,14 @@ public class register extends AppCompatActivity {
                 CreateNewAccount();
             }
         });
-        loginBtn.setEnabled(false);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent();
+                                            intent.setClass(register.this,MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
         registerBtn.setEnabled(false);
     }
     private void CreateNewAccount()

@@ -318,6 +318,11 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         notice_count.setText(String.valueOf(n));
                                     }
                                 }
+                                if( n == 0){
+                                    notice_count.setVisibility(View.INVISIBLE);
+                                }else{
+                                    notice_count.setVisibility(View.VISIBLE);
+                                }
                             } else {
 
                             }
@@ -857,6 +862,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, noticeupdate.class);
                 startActivity(intent);
+                n=0;
             }
         });
 

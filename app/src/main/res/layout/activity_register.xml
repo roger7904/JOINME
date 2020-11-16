@@ -90,6 +90,7 @@
 
     <Button
         android:id="@+id/loginPage"
+        android:stateListAnimator="@null"
         android:layout_width="94dp"
         android:layout_height="43dp"
         android:background="#e0e0e0"
