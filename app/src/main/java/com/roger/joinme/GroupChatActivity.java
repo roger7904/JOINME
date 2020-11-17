@@ -57,7 +57,6 @@ public class GroupChatActivity extends AppCompatActivity
     private MessageAdapter messageAdapter;
     private RecyclerView userMessagesList;
 
-
     private ImageButton SendMessageButton;
     private EditText userMessageInput;
 
