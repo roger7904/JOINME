@@ -78,16 +78,15 @@
         android:layout_height="wrap_content"
         android:background="#e0e0e0"
         android:stateListAnimator="@null"
-
         android:text="@string/register"
         android:textColor="@color/colorButtonText"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@id/account"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toEndOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/imageView"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.543"
+        app:layout_constraintHorizontal_bias="0.162"/>
 
     <Button
         android:id="@+id/loginPage"
@@ -95,16 +94,15 @@
         android:layout_height="43dp"
         android:background="@drawable/loginbtnbck"
         android:stateListAnimator="@null"
-
+        app:layout_constraintVertical_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.892"
         android:text="登入"
         android:textColor="@color/colorButtonText"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@id/account"
         app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@id/imageView"/>
 
     <Button
         android:id="@+id/forgetpassword"

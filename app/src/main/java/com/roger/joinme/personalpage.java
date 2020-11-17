@@ -148,9 +148,9 @@ public class personalpage extends AppCompatActivity {
                                 .into(userProfileImage);
                     }
                     userProfileName.setText(userName);
-                    userAge.setText(userage);
-                    userSex.setText(usersex);
-                    userStatus.setText(userstatus);
+                    userAge.setText("年齡：" + userage);
+                    userSex.setText("性別：" + usersex);
+                    userStatus.setText("狀態：" + userstatus);
                 }
             }
         });

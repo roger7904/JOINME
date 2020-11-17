@@ -99,10 +99,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/editText_email"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
-        app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView2"
-        app:layout_constraintVertical_bias="0.542" />
+        app:layout_constraintVertical_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.892"/>
 
     <Button
         android:id="@+id/registerPage"
@@ -114,9 +114,9 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/editText_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.162"
         app:layout_constraintStart_toStartOf="@id/guideline3"
         app:layout_constraintTop_toBottomOf="@id/imageView2"
-        app:layout_constraintVertical_bias="0.543" />
+        app:layout_constraintVertical_bias="0.543"
+        app:layout_constraintHorizontal_bias="0.162"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
