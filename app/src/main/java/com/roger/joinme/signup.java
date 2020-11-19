@@ -1,11 +1,16 @@
 package com.roger.joinme;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,11 +38,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -46,6 +56,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,9 +64,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -64,6 +77,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class signup extends AppCompatActivity {
 
@@ -85,6 +101,9 @@ public class signup extends AppCompatActivity {
     final private String serverKey = "key=" + "AAAAoxsFReA:APA91bFrtTvCQxgBDQMTB7MddpMquycE2wOqh4K4_-yHNC2KSxCW0exYbpzx62KmVMNfY8HoZz67HrSc_xbo9NeWPSB13LGBxmAJujI-n90hm3zYLKbZGkqgGo_GIrdFLvcKP77GE5yA";
     final private String contentType = "application/json";
     private StorageReference UserActImageRef;
+    private LocationManager locationManager;
+    public String commadStr;
+    public double userLat,userLog;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -97,6 +116,8 @@ public class signup extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.BLACK);
 
+        commadStr = LocationManager.GPS_PROVIDER;
+
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
         firebaseStorage=FirebaseStorage.getInstance();
@@ -106,6 +127,7 @@ public class signup extends AppCompatActivity {
         initViews();
         initData();
         setListeners();
+        getUserLocation();
 
         final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
                 .document(currentUserID);
@@ -273,6 +295,144 @@ public class signup extends AppCompatActivity {
         });
     }
 
+    public void getUserLocation(){
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(signup.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(signup.this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(signup.this, new String[]{ACCESS_FINE_LOCATION}, Integer.parseInt(ACCESS_COARSE_LOCATION));
+            return;
+        }
+        locationManager.requestLocationUpdates(commadStr,1000,0,locationListener);
+    }
+
+    public LocationListener locationListener = new LocationListener(){
+        @Override
+        public void onLocationChanged(Location location){
+            userLat = location.getLatitude();
+            userLog = location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+    };
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getDBlistener();
+    }
+
+    private static double rad(double d) {
+        return d * Math.PI / 180.00; //角度轉換成弧度
+    }
+    /*
+     * 根據經緯度計算兩點之間的距離（單位米）
+     * */
+    public static String algorithm(double longitude1, double latitude1, double longitude2, double latitude2) {
+
+        double Lat1 = rad(latitude1); // 緯度
+        double Lat2 = rad(latitude2);
+
+        double a = Lat1 - Lat2;//兩點緯度之差
+        double b = rad(longitude1) - rad(longitude2); //經度之差
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(Lat1) * Math.cos(Lat2) * Math.pow(Math.sin(b / 2), 2)));//計算兩點距離的公式
+        s = s * 6378137.0;//弧長乘地球半徑（半徑為米）
+        s = Math.round(s * 10000d) / 10000d;//精確距離的數值
+
+        //四捨五入 保留一位小數
+        DecimalFormat df = new DecimalFormat("#.0");
+
+        return df.format(s);
+
+    }
+
+    public void getDBlistener() {
+        System.out.println("Lat:" + userLat + "\nLog:" + userLog);
+        Date curDate = new Date(System.currentTimeMillis());
+        db.collection("activity").document(activitytitle).collection("participant").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        db.collection("activity").document(activitytitle)
+                                .collection("participant")
+                                .document(currentUserID).get()
+                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                final DocumentReference docRef = db.collection("activity").document(activitytitle);
+                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                       @Override
+                                                                                       public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                           if (task.isSuccessful()) {
+                                                                                               DocumentSnapshot snapshot = task.getResult();
+                                                                                               double activityLog = snapshot.getGeoPoint("geopoint").getLongitude();
+                                                                                               double activityLat = snapshot.getGeoPoint("geopoint").getLatitude();
+                                                                                               double distance = Double.parseDouble(algorithm(activityLog, activityLat, userLog, userLat));
+                                                                                               if (snapshot.getTimestamp("startTime").toDate().getTime() <= curDate.getTime() && curDate.getTime() <= snapshot.getTimestamp("endTime").toDate().getTime() && distance <= 100) {
+                                                                                                    signupbtn.setEnabled(true);
+                                                                                                    signupbtn.setText("報到");
+                                                                                               }else if(snapshot.getTimestamp("startTime").toDate().getTime() <= curDate.getTime() && curDate.getTime() <= snapshot.getTimestamp("endTime").toDate().getTime() && distance > 100){
+                                                                                                    signupbtn.setEnabled(false);
+                                                                                                    signupbtn.setText("報到");
+                                                                                               }else if(curDate.getTime() > snapshot.getTimestamp("endTime").toDate().getTime()){
+                                                                                                   db.collection("activity").document(activitytitle).collection("participant")
+                                                                                                            .get()
+                                                                                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                                                @Override
+                                                                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                                                    if (task.isSuccessful()) {
+                                                                                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                                                                            if(!document.contains("checkIn")){
+                                                                                                                                HashMap<String, Object> check = new HashMap<>();
+                                                                                                                                check.put("checkIn", false);
+                                                                                                                                db.collection("activity").document(activitytitle)
+                                                                                                                                        .collection("participant")
+                                                                                                                                        .document(currentUserID)
+                                                                                                                                        .set(check, SetOptions.merge())
+                                                                                                                                        .addOnCompleteListener(new OnCompleteListener() {
+                                                                                                                                            @Override
+                                                                                                                                            public void onComplete(@NonNull Task task) {
+                                                                                                                                                if (task.isSuccessful()) {
+
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
+                                                                                                                            }else{
+                                                                                                                                signupbtn.setEnabled(false);
+                                                                                                                                signupbtn.setText("報到成功");
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            });
+                                                                                               }
+                                                                                           }
+                                                                                       }
+                                                                                   });
+
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
+        });
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -371,80 +531,99 @@ public class signup extends AppCompatActivity {
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, String> join = new HashMap<>();
-                join.put("UserID", currentUserID);
-                db.collection("join_act_request").document(activitytitle)
-                        .collection("UserID")
-                        .document(currentUserID)
-                        .set(join)
-                        .addOnCompleteListener(new OnCompleteListener() {
-                               @Override
-                               public void onComplete(@NonNull Task task) {
-                                   if (task.isSuccessful()) {
+                if(signupbtn.getText().equals("報名")){
+                    HashMap<String, String> join = new HashMap<>();
+                    join.put("UserID", currentUserID);
+                    db.collection("join_act_request").document(activitytitle)
+                            .collection("UserID")
+                            .document(currentUserID)
+                            .set(join)
+                            .addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful()) {
 
-                                   }
-                               }
-                           });
-                String saveCurrentTime, saveCurrentDate;
-
-                Calendar calendar = Calendar.getInstance();
-
-                SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-                saveCurrentDate = currentDate.format(calendar.getTime());
-
-                SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
-                saveCurrentTime = currentTime.format(calendar.getTime());
-
-                Long tsLong = System.currentTimeMillis()/1000;
-                String ts = tsLong.toString();
-
-                HashMap<String, String> chatNotificationMap = new HashMap<>();
-                chatNotificationMap.put("from", currentUserID);
-                chatNotificationMap.put("type", "joinact");
-                chatNotificationMap.put("time", saveCurrentTime);
-                chatNotificationMap.put("date", saveCurrentDate);
-                chatNotificationMap.put("millisecond", ts);
-
-                db.collection("user").document(organizerID).
-                        collection("notification").
-                        document().
-                        set(chatNotificationMap)
-                        .addOnCompleteListener(new OnCompleteListener() {
-                            @Override
-                            public void onComplete(@NonNull Task task) {
-                                if (task.isSuccessful()) {
+                                    }
                                 }
-                            }
-                        });
-                db.collection("user").document(organizerID).
-                        get().
-                        addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        String RECEIVER_DEVICE = document.getString("device_token");
-                                        JSONObject notification = new JSONObject();
-                                        JSONObject notifcationBody = new JSONObject();
-                                        try {
-                                            notifcationBody.put("title", "您有新的入團申請");
-                                            notifcationBody.put("message", currentUserName+"對"+activitytitle+"提出了入團申請");
-                                            notification.put("to", RECEIVER_DEVICE);
-                                            notification.put("data", notifcationBody);
-                                        } catch (JSONException e) {
+                            });
+                    String saveCurrentTime, saveCurrentDate;
+
+                    Calendar calendar = Calendar.getInstance();
+
+                    SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+                    saveCurrentDate = currentDate.format(calendar.getTime());
+
+                    SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+                    saveCurrentTime = currentTime.format(calendar.getTime());
+
+                    Long tsLong = System.currentTimeMillis()/1000;
+                    String ts = tsLong.toString();
+
+                    HashMap<String, String> chatNotificationMap = new HashMap<>();
+                    chatNotificationMap.put("from", currentUserID);
+                    chatNotificationMap.put("type", "joinact");
+                    chatNotificationMap.put("time", saveCurrentTime);
+                    chatNotificationMap.put("date", saveCurrentDate);
+                    chatNotificationMap.put("millisecond", ts);
+
+                    db.collection("user").document(organizerID).
+                            collection("notification").
+                            document().
+                            set(chatNotificationMap)
+                            .addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful()) {
+                                    }
+                                }
+                            });
+                    db.collection("user").document(organizerID).
+                            get().
+                            addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            String RECEIVER_DEVICE = document.getString("device_token");
+                                            JSONObject notification = new JSONObject();
+                                            JSONObject notifcationBody = new JSONObject();
+                                            try {
+                                                notifcationBody.put("title", "您有新的入團申請");
+                                                notifcationBody.put("message", currentUserName+"對"+activitytitle+"提出了入團申請");
+                                                notification.put("to", RECEIVER_DEVICE);
+                                                notification.put("data", notifcationBody);
+                                            } catch (JSONException e) {
+                                            }
+                                            sendNotification(notification);
+                                        } else {
                                         }
-                                        sendNotification(notification);
                                     } else {
                                     }
-                                } else {
                                 }
-                            }
-                        });
-                signupbtn.setText("已申請報名");
-                signupbtn.setEnabled(false);
-                Intent settingsIntent = new Intent(signup.this, home.class);
-                startActivity(settingsIntent);
+                            });
+                    signupbtn.setText("已申請報名");
+                    signupbtn.setEnabled(false);
+                    Intent settingsIntent = new Intent(signup.this, home.class);
+                    startActivity(settingsIntent);
+                }else if(signupbtn.getText().equals("報到")){
+                    HashMap<String, Object> check = new HashMap<>();
+                    check.put("checkIn", true);
+                    db.collection("activity").document(activitytitle)
+                            .collection("participant")
+                            .document(currentUserID)
+                            .set(check, SetOptions.merge())
+                            .addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful()) {
+
+                                    }
+                                }
+                            });
+                    signupbtn.setText("報到成功");
+                    signupbtn.setEnabled(false);
+                }
             }
         });
 

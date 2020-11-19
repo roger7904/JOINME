@@ -783,7 +783,12 @@ public class jo extends AppCompatActivity {
             book.put("numberOfPeople", limitBtn.getText());
             book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
             book.put("endTime", ets);
-                    book.put("organizerID", currentUserID);
+            book.put("organizerID", currentUserID);
+            if(flag_list[0] || flag_list[1] || flag_list[2] || flag_list[3] || flag_list[4] || flag_list[5]){
+                book.put("notification",true);
+            }else{
+                book.put("notification",false);
+            }
             book.put("onlyMale",flag_list[0]);
             book.put("onlyFemale",flag_list[1]);
             book.put("Ontime",flag_list[2]);
