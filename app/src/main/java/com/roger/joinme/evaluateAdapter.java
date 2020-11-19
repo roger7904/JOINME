@@ -3,6 +3,7 @@ package com.roger.joinme;
 import android.content.Context;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHolder> {
@@ -39,22 +45,6 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
         db=FirebaseFirestore.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
-//        final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
-//                .document(currentUserID);
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot snapshot = task.getResult();
-//                    if (snapshot != null && snapshot.exists()) {
-//                        currentUserName=snapshot.getString("name");
-//                    } else {
-//
-//                    }
-//                }
-//            }
-//        });
-
         View view = LayoutInflater.from(context).inflate(R.layout.evaluate_layout, parent, false);
         return new ViewHolder(view);
     }
@@ -62,7 +52,26 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
     @Override
     public void onBindViewHolder(evaluateAdapter.ViewHolder holder, int position) {
         evaluate evaluate = evaluateList.get(position);
-        holder.textName.setText(evaluate.getName());
+        String userID = evaluate.getID();
+
+        final DocumentReference docRef = db.collection("activity").document(evaluate.getActivityname()).collection("participant")
+                .document(userID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists()) {
+                        if(snapshot.getBoolean("checkIn").equals(false)){
+                            holder.textName.setTextColor(Color.RED);
+                            holder.textName.setText(evaluate.getName() + " (未出席)");
+                        }else{
+                            holder.textName.setText(evaluate.getName());
+                        }
+                    }
+                }
+            }
+        });
 
         Glide.with(holder.itemView.getContext())
                 .load(evaluate.getImage())

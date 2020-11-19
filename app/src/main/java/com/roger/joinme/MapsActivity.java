@@ -140,7 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                distanceresult = getDistance(userlnt,userlat,120.277872,22.734315);
 //                if(distanceresult <= 5000) {
 
-                System.out.println("1");
+//                System.out.println("1");
 //                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(test, 14));
 //                }
                 //這一部分還有很大問題 geocoder的調用

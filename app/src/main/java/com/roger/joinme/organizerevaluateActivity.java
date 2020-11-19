@@ -1,6 +1,7 @@
 package com.roger.joinme;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 
 import android.os.Bundle;
@@ -35,7 +36,7 @@ import java.util.Map;
 public class organizerevaluateActivity extends AppCompatActivity
 {
     private Button one,two,three,four,five,send;
-    private TextView textName;
+    private TextView textName,evaluateContent;
     private EditText evaluatecontent;
     private ImageView userProfileImage;
     private Integer star;
@@ -85,6 +86,7 @@ public class organizerevaluateActivity extends AppCompatActivity
         userProfileImage = (ImageView) findViewById(R.id.users_profile_image);
 
         textName = (TextView) findViewById(R.id.user_name);
+        evaluateContent = (TextView) findViewById(R.id.editText_evaluate_content);
 
     }
 
@@ -221,7 +223,22 @@ public class organizerevaluateActivity extends AppCompatActivity
                     DocumentSnapshot snapshot = task.getResult();
                     if (snapshot != null && snapshot.exists() && snapshot.contains("name") && snapshot.contains("image")) {
                         String retrieveUserName = snapshot.getString("name");
-
+                        final DocumentReference docRef2 = db.collection("activity").document(activityname).collection("participant")
+                                .document(UserID);
+                        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                               @Override
+                                                               public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                   if (task.isSuccessful()) {
+                                                                       DocumentSnapshot snapshot = task.getResult();
+                                                                       if (snapshot != null && snapshot.exists()) {
+                                                                           if(snapshot.getBoolean("checkIn").equals(false)){
+                                                                               textName.setTextColor(Color.RED);
+                                                                               evaluateContent.setText("未出席");
+                                                                           }
+                                                                       }
+                                                                   }
+                                                               }
+                                                           });
                         textName.setText(retrieveUserName);
 
                         UserProfileImagesRef.child(UserID+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
