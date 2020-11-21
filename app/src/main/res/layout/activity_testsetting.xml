@@ -73,7 +73,7 @@
             app:layout_constraintStart_toStartOf="@id/guideline7" />
 
         <ScrollView
-            android:layout_width="404dp"
+            android:layout_width="match_parent"
             android:layout_height="323dp"
             app:layout_constraintEnd_toEndOf="@id/guideline7"
             app:layout_constraintStart_toStartOf="@id/guideline7"
@@ -149,8 +149,8 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/shape_textview"
+                    android:hint="年齡"
                     android:onClick="showDayDialog"
-                    android:text="年齡"
                     android:textColor="#000000"
                     android:textSize="18sp"
                     android:visibility="visible" />

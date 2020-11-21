@@ -135,7 +135,7 @@ public class GroupsFragment extends Fragment {
                                                                                                 }else if (document.getString("activityType").equals("限時")) {
                                                                                                     chatroomList.add(new chatroom(name,newestcontent,"限時",id,contentcount,time,"group",date2+" "+date));
                                                                                                     chatroomadapter.notifyDataSetChanged();
-                                                                                                }else if (document.getString("activityType").equals("球類")) {
+                                                                                                }else if (document.getString("activityType").equals("運動")) {
                                                                                                     chatroomList.add(new chatroom(name,newestcontent,"球類",id,contentcount,time,"group",date2+" "+date));
                                                                                                     chatroomadapter.notifyDataSetChanged();
                                                                                                 }

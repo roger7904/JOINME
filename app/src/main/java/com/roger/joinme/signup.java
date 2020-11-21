@@ -145,6 +145,22 @@ public class signup extends AppCompatActivity {
             }
         });
 
+        final DocumentReference docRef2 = db.collection("user").document(currentUserID).collection("favorite")
+                .document(activitytitle);
+        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists()) {
+                        favoritebtn.setBackground(getResources().getDrawable(R.drawable.heart));
+                    } else {
+
+                    }
+                }
+            }
+        });
+
         db.collection("activity").document(activitytitle)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -170,6 +186,9 @@ public class signup extends AppCompatActivity {
                                     });
                                 }else{
                                     String activityType = document.getString("activityType");
+                                    if(activityType.equals("運動")){
+                                        activityType = "球類";
+                                    }
                                     UserActImageRef.child(activityType + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
@@ -630,23 +649,43 @@ public class signup extends AppCompatActivity {
         favoritebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, String> favoritemap = new HashMap<>();
-                favoritemap.put("activity", activitytitle);
-                db.collection("user")
-                        .document(currentUserID)
-                        .collection("favorite")
-                        .document(activitytitle)
-                        .set(favoritemap)
-                        .addOnCompleteListener(new OnCompleteListener() {
-                            @Override
-                            public void onComplete(@NonNull Task task) {
-                                if (task.isSuccessful()) {
+                if(favoritebtn.getBackground().getConstantState() == getResources().getDrawable(R.drawable.heart).getConstantState()){
+                    favoritebtn.setBackground(getResources().getDrawable(R.drawable.nojoin));
+                    db.collection("user")
+                            .document(currentUserID)
+                            .collection("favorite")
+                            .document(activitytitle)
+                            .delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
 
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                }else{
+                    HashMap<String, String> favoritemap = new HashMap<>();
+                    favoritemap.put("activity", activitytitle);
+                    db.collection("user")
+                            .document(currentUserID)
+                            .collection("favorite")
+                            .document(activitytitle)
+                            .set(favoritemap)
+                            .addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful()) {
+
+                                    }
                                 }
-                            }
-                        });
-                favoritebtn.setBackground(getResources().getDrawable(R.drawable.heart));
-                favoritebtn.setEnabled(false);
+                            });
+                    favoritebtn.setBackground(getResources().getDrawable(R.drawable.heart));
+                }
             }
         });
     }

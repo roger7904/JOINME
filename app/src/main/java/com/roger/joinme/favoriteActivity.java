@@ -62,6 +62,7 @@ public class favoriteActivity extends AppCompatActivity {
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference();
 
         initView();
+
         db.collection("user")
                 .document(currentUserID)
                 .collection("favorite")
@@ -80,14 +81,14 @@ public class favoriteActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 if (d.getBoolean("img")) {
                                                     String name = d.getId();
-                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds() * 1000).toString();
                                                     String place = d.getString("location");
                                                     UserProfileImagesRef.child(name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                         @Override
                                                         public void onSuccess(Uri uri) {
                                                             // Got the download URL for 'users/me/profile.png'
                                                             favoriteList.add(new favorite(
-                                                                    uri,name,place,time));
+                                                                    uri, name, place, time));
                                                             favoriteadapter.notifyDataSetChanged();
                                                         }
                                                     }).addOnFailureListener(new OnFailureListener() {
@@ -96,78 +97,83 @@ public class favoriteActivity extends AppCompatActivity {
                                                             // Handle any errors
                                                         }
                                                     });
-                                                }else if (d.getString("activityType").equals("商家優惠")) {
-                                                    String name = d.getId();
-                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
-                                                    String place = d.getString("location");
-                                                    UserProfileImagesRef.child("商家優惠.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                        @Override
-                                                        public void onSuccess(Uri uri) {
-                                                            // Got the download URL for 'users/me/profile.png'
-                                                            favoriteList.add(new favorite(
-                                                                    uri,name,place,time));
-                                                            favoriteadapter.notifyDataSetChanged();
+                                                }else{
+                                                        if (d.getString("activityType").equals("商家優惠")) {
+                                                            String name = d.getId();
+                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String place = d.getString("location");
+                                                            UserProfileImagesRef.child("商家優惠.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                    favoriteList.add(new favorite(
+                                                                            uri,name,place,time));
+                                                                    favoriteadapter.notifyDataSetChanged();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception exception) {
+                                                                    // Handle any errors
+                                                                }
+                                                            });
                                                         }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception exception) {
-                                                            // Handle any errors
+                                                        if (d.getString("activityType").equals("KTV")) {
+                                                            String name = d.getId();
+                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String place = d.getString("location");
+                                                            UserProfileImagesRef.child("KTV.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                    favoriteList.add(new favorite(
+                                                                            uri,name,place,time));
+                                                                    favoriteadapter.notifyDataSetChanged();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception exception) {
+                                                                    // Handle any errors
+                                                                }
+                                                            });
                                                         }
-                                                    });
-                                                }else if (d.getString("activityType").equals("KTV")) {
-                                                    String name = d.getId();
-                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
-                                                    String place = d.getString("location");
-                                                    UserProfileImagesRef.child("KTV.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                        @Override
-                                                        public void onSuccess(Uri uri) {
-                                                            // Got the download URL for 'users/me/profile.png'
-                                                            favoriteList.add(new favorite(
-                                                                    uri,name,place,time));
-                                                            favoriteadapter.notifyDataSetChanged();
+                                                        if (d.getString("activityType").equals("限時")) {
+                                                            String name = d.getId();
+                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String place = d.getString("location");
+                                                            UserProfileImagesRef.child("限時.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                    favoriteList.add(new favorite(
+                                                                            uri,name,place,time));
+                                                                    favoriteadapter.notifyDataSetChanged();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception exception) {
+                                                                    // Handle any errors
+                                                                }
+                                                            });
                                                         }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception exception) {
-                                                            // Handle any errors
+                                                        if (d.getString("activityType").equals("運動")) {
+                                                            String name = d.getId();
+                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String place = d.getString("location");
+                                                            UserProfileImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                @Override
+                                                                public void onSuccess(Uri uri) {
+                                                                    // Got the download URL for 'users/me/profile.png'
+                                                                    favoriteList.add(new favorite(
+                                                                            uri,name,place,time));
+                                                                    favoriteadapter.notifyDataSetChanged();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception exception) {
+                                                                    // Handle any errors
+                                                                }
+                                                            });
                                                         }
-                                                    });
-                                                }else if (d.getString("activityType").equals("限時")) {
-                                                    String name = d.getId();
-                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
-                                                    String place = d.getString("location");
-                                                    UserProfileImagesRef.child("限時.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                        @Override
-                                                        public void onSuccess(Uri uri) {
-                                                            // Got the download URL for 'users/me/profile.png'
-                                                            favoriteList.add(new favorite(
-                                                                    uri,name,place,time));
-                                                            favoriteadapter.notifyDataSetChanged();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception exception) {
-                                                            // Handle any errors
-                                                        }
-                                                    });
-                                                }else if (d.getString("activityType").equals("球類")) {
-                                                    String name = d.getId();
-                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
-                                                    String place = d.getString("location");
-                                                    UserProfileImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                        @Override
-                                                        public void onSuccess(Uri uri) {
-                                                            // Got the download URL for 'users/me/profile.png'
-                                                            favoriteList.add(new favorite(
-                                                                    uri,name,place,time));
-                                                            favoriteadapter.notifyDataSetChanged();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception exception) {
-                                                            // Handle any errors
-                                                        }
-                                                    });
                                                 }
 
                                             }

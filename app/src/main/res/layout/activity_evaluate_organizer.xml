@@ -114,7 +114,7 @@
 
             <EditText
                 android:id="@+id/editText_evaluate_content"
-                android:layout_width="323dp"
+                android:layout_width="300dp"
                 android:layout_height="108dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"

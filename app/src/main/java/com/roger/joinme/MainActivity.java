@@ -94,9 +94,6 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-//        currentUser = firebaseAuth.getCurrentUser();
-//        currentUserID = firebaseAuth.getCurrentUser().getUid();
-
 
         initViews();
         initData();
@@ -144,8 +141,6 @@ public class MainActivity extends FragmentActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     docString[count] = document.getId();
-                                    System.out.println(count);
-                                    System.out.println(docString[count]);
                                     count++;
                                 }
                             }

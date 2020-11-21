@@ -39,6 +39,8 @@
                         android:layout_width="300dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
                         android:scrollbars="vertical"
                         android:text="活動標題"
@@ -77,19 +79,17 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:layout_marginTop="5dp"
                         android:id="@+id/activityStartTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:layout_marginTop="5dp"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:layout_marginTop="5dp"
                         android:id="@+id/activityEndTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:layout_marginTop="5dp"
                         android:textSize="20sp" />
 
                     <LinearLayout
@@ -110,17 +110,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="TextView"
                             android:textColor="#5599FF"
                             android:textSize="20sp" />
                     </LinearLayout>
 
                     <TextView
-                        android:layout_marginTop="5dp"
                         android:id="@+id/activityPost"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:layout_marginTop="5dp"
                         android:textSize="20sp" />
 
                     <TextView
@@ -128,7 +126,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="TextView"
                         android:textSize="20sp" />
 
                     <LinearLayout
@@ -146,10 +143,9 @@
 
                         <TextView
                             android:id="@+id/activityOrgName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:text="TextView"
                             android:textColor="#5599FF"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -196,6 +192,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="206dp" />
+        app:layout_constraintGuide_end="206dp"
+        app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

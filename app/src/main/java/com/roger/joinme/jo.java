@@ -292,7 +292,11 @@ public class jo extends AppCompatActivity {
                                 if (activityTitle.getText().toString().equals("") || userSelectLocation.equals("") || limitBtn.getText().toString().equals("選擇")||!ifTimeSelected) {
                                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                                 }else{
-                                    if (sts.compareTo(ets) < 0) {
+                                    Date curDate = new Date(System.currentTimeMillis());
+                                    if(sts.toDate().compareTo(curDate) < 0){
+                                        Toast.makeText(jo.this, "活動開始時間早於現在時間", Toast.LENGTH_LONG).show();
+                                    }
+                                    else if (sts.compareTo(ets) < 0) {
                                         //初始化Places API
 //                        mLoadhandler=new Handler(){
 //                            @Override
@@ -781,7 +785,7 @@ public class jo extends AppCompatActivity {
             String[] tokens = getLocationFromAddress(userSelectLocation).toString().split(",|\\(|\\)");
             book.put("geopoint", new GeoPoint(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2])));
             book.put("numberOfPeople", limitBtn.getText());
-            book.put("startTime", sts);//之後討論下資料庫內的型別要直接用String還是時間戳記
+            book.put("startTime", sts);
             book.put("endTime", ets);
             book.put("organizerID", currentUserID);
             if(flag_list[0] || flag_list[1] || flag_list[2] || flag_list[3] || flag_list[4] || flag_list[5]){
