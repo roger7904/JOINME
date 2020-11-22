@@ -1,5 +1,6 @@
 package com.roger.joinme;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -844,6 +845,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, jo.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
 
@@ -853,6 +855,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, testmain.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
 
@@ -863,6 +866,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 intent.setClass(home.this, noticeupdate.class);
                 startActivity(intent);
                 n=0;
+                home.this.onStop();
             }
         });
 
@@ -872,6 +876,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, favoriteActivity.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
 
@@ -980,6 +985,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, FindFriendsActivity.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
         setProfileBtn.setOnClickListener(new View.OnClickListener() {
@@ -988,6 +994,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, testsetting.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
         inviteFriendBtn.setOnClickListener(new View.OnClickListener() {
@@ -996,6 +1003,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, friend_request.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
         actInviteBtn.setOnClickListener(new View.OnClickListener() {
@@ -1004,6 +1012,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent();
                 intent.setClass(home.this, verifyActivity.class);
                 startActivity(intent);
+                home.this.onStop();
             }
         });
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -1047,25 +1056,25 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
     }
 
     //鎖手機的返回鍵
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
-                event.startTracking();
-                Intent home = new Intent(Intent.ACTION_MAIN);
-                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                home.addCategory(Intent.CATEGORY_HOME);
-                startActivity(home);
-                return true;
-            }else{
-                onBackPressed();
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public  boolean onKeyUp(int keyCode, KeyEvent event){
-        return super.onKeyUp(keyCode, event);
-    }
+//    public boolean onKeyDown(int keyCode, KeyEvent event){
+//        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+//                event.startTracking();
+//                Intent home = new Intent(Intent.ACTION_MAIN);
+//                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                home.addCategory(Intent.CATEGORY_HOME);
+//                startActivity(home);
+//                return true;
+//            }else{
+//                onBackPressed();
+//            }
+//        }
+//        return false;
+//    }
+//
+//    @Override
+//    public  boolean onKeyUp(int keyCode, KeyEvent event){
+//        return super.onKeyUp(keyCode, event);
+//    }
 
 }

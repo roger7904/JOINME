@@ -373,7 +373,6 @@ public class signup extends AppCompatActivity {
     }
 
     public void getDBlistener() {
-        System.out.println("Lat:" + userLat + "\nLog:" + userLog);
         Date curDate = new Date(System.currentTimeMillis());
         db.collection("activity").document(activitytitle).collection("participant").document(currentUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -399,13 +398,17 @@ public class signup extends AppCompatActivity {
                                                                                                double activityLog = snapshot.getGeoPoint("geopoint").getLongitude();
                                                                                                double activityLat = snapshot.getGeoPoint("geopoint").getLatitude();
                                                                                                double distance = Double.parseDouble(algorithm(activityLog, activityLat, userLog, userLat));
-                                                                                               if (snapshot.getTimestamp("startTime").toDate().getTime() <= curDate.getTime() && curDate.getTime() <= snapshot.getTimestamp("endTime").toDate().getTime() && distance <= 100) {
+
+                                                                                               if (snapshot.getTimestamp("startTime").toDate().before(curDate) && curDate.before(snapshot.getTimestamp("endTime").toDate()) && distance <= 500) {
                                                                                                     signupbtn.setEnabled(true);
                                                                                                     signupbtn.setText("報到");
-                                                                                               }else if(snapshot.getTimestamp("startTime").toDate().getTime() <= curDate.getTime() && curDate.getTime() <= snapshot.getTimestamp("endTime").toDate().getTime() && distance > 100){
+                                                                                               }
+                                                                                               if(snapshot.getTimestamp("startTime").toDate().before(curDate) && curDate.before(snapshot.getTimestamp("endTime").toDate()) && distance > 500){
                                                                                                     signupbtn.setEnabled(false);
+                                                                                                   System.out.println("2");
                                                                                                     signupbtn.setText("報到");
-                                                                                               }else if(curDate.getTime() > snapshot.getTimestamp("endTime").toDate().getTime()){
+                                                                                               }
+                                                                                               if(curDate.after(snapshot.getTimestamp("endTime").toDate())){
                                                                                                    db.collection("activity").document(activitytitle).collection("participant")
                                                                                                             .get()
                                                                                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -732,22 +735,22 @@ public class signup extends AppCompatActivity {
     }
 
     //鎖手機的返回鍵
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
-                event.startTracking();
-                Intent intent = new Intent();
-                intent.setClass(signup.this, home.class);
-                startActivity(intent);
-            }else{
-                onBackPressed();
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public  boolean onKeyUp(int keyCode, KeyEvent event){
-        return super.onKeyUp(keyCode, event);
-    }
+//    public boolean onKeyDown(int keyCode, KeyEvent event){
+//        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+//                event.startTracking();
+//                Intent intent = new Intent();
+//                intent.setClass(signup.this, home.class);
+//                startActivity(intent);
+//            }else{
+//                onBackPressed();
+//            }
+//        }
+//        return false;
+//    }
+//
+//    @Override
+//    public  boolean onKeyUp(int keyCode, KeyEvent event){
+//        return super.onKeyUp(keyCode, event);
+//    }
 }

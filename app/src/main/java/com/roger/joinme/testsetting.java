@@ -147,24 +147,24 @@ public class testsetting extends AppCompatActivity
     }
 
     //鎖手機的返回鍵
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
-                event.startTracking();
-                Intent intent = new Intent();
-                intent.setClass(testsetting.this, home.class);
-                startActivity(intent);
-            }else{
-                onBackPressed();
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public  boolean onKeyUp(int keyCode, KeyEvent event){
-        return super.onKeyUp(keyCode, event);
-    }
+//    public boolean onKeyDown(int keyCode, KeyEvent event){
+//        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+//                event.startTracking();
+//                Intent intent = new Intent();
+//                intent.setClass(testsetting.this, home.class);
+//                startActivity(intent);
+//            }else{
+//                onBackPressed();
+//            }
+//        }
+//        return false;
+//    }
+//
+//    @Override
+//    public  boolean onKeyUp(int keyCode, KeyEvent event){
+//        return super.onKeyUp(keyCode, event);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)

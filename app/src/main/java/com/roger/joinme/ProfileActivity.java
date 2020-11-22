@@ -129,24 +129,25 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     //鎖手機的返回鍵
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR) {
-                event.startTracking();
-                Intent intent = new Intent();
-                intent.setClass(ProfileActivity.this, home.class);
-                startActivity(intent);
-            }else{
-                onBackPressed();
-            }
-        }
-        return false;
-    }
+//    public boolean onKeyDown(int keyCode, KeyEvent event){
+//        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR) {
+//                event.startTracking();
+//                Intent intent = new Intent();
+//                intent.setClass(ProfileActivity.this, home.class);
+//                startActivity(intent);
+//            }else{
+//                onBackPressed();
+//            }
+//        }
+//        return false;
+//    }
+//
+//    @Override
+//    public  boolean onKeyUp(int keyCode, KeyEvent event){
+//        return super.onKeyUp(keyCode, event);
+//    }
 
-    @Override
-    public  boolean onKeyUp(int keyCode, KeyEvent event){
-        return super.onKeyUp(keyCode, event);
-    }
 
     private void RetrieveUserInfo()
     {
@@ -200,6 +201,7 @@ public class ProfileActivity extends AppCompatActivity
                                 myIntent.putExtras(bundle);
                                 myIntent.setClass( ProfileActivity.this, personalpage.class);
                                 startActivity(myIntent);
+                                ProfileActivity.this.onStop();
                             }
                         });
                         ManageChatRequests();
@@ -223,6 +225,7 @@ public class ProfileActivity extends AppCompatActivity
                                 myIntent.putExtras(bundle);
                                 myIntent.setClass( ProfileActivity.this, personalpage.class);
                                 startActivity(myIntent);
+                                ProfileActivity.this.onStop();
                             }
                         });
 

@@ -186,24 +186,24 @@ public class favoriteActivity extends AppCompatActivity {
     }
 
     //鎖手機的返回鍵
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
-                event.startTracking();
-                Intent intent = new Intent();
-                intent.setClass(favoriteActivity.this, home.class);
-                startActivity(intent);
-            }else{
-                onBackPressed();
-            }
-        }
-        return false;
-    }
+//    public boolean onKeyDown(int keyCode, KeyEvent event){
+//        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
+//                event.startTracking();
+//                Intent intent = new Intent();
+//                intent.setClass(favoriteActivity.this, home.class);
+//                startActivity(intent);
+//            }else{
+//                onBackPressed();
+//            }
+//        }
+//        return false;
+//    }
 
-    @Override
-    public  boolean onKeyUp(int keyCode, KeyEvent event){
-        return super.onKeyUp(keyCode, event);
-    }
+//    @Override
+//    public  boolean onKeyUp(int keyCode, KeyEvent event){
+//        return super.onKeyUp(keyCode, event);
+//    }
 
     public void initView(){
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.favorite_recycle);
