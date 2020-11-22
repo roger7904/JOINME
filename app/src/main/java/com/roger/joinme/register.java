@@ -49,6 +49,9 @@ public class register extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         initViews();
         setListeners();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
 
 //        memberaccount.addValueEventListener(new ValueEventListener() {
