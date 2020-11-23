@@ -333,8 +333,50 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
         }
 
+        Date curDate = new Date(System.currentTimeMillis());
+        db.collection("activity")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getTimestamp("endTime").toDate().before(curDate)){
+                                    String actName = document.getId();
+                                    db.collection("activity").document(document.getId()).collection("participant")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            if(!document.contains("checkIn")){
+                                                                HashMap<String, Object> check = new HashMap<>();
+                                                                check.put("checkIn", false);
+                                                                db.collection("activity").document(actName)
+                                                                        .collection("participant")
+                                                                        .document(document.getId())
+                                                                        .set(check, SetOptions.merge())
+                                                                        .addOnCompleteListener(new OnCompleteListener() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                }
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
 
+                                }
+                            }
+                        }
+                    }
+                });
     }
+
 
 //    @Override
 //    protected void onStop()

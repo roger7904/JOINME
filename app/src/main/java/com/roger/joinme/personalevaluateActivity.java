@@ -1,6 +1,7 @@
 package com.roger.joinme;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 
 import android.os.Build;
@@ -226,6 +227,21 @@ public class personalevaluateActivity extends AppCompatActivity
 
     private void RetrieveUserInfo()
     {
+        final DocumentReference docReff = db.collection("activity").document(activityname).collection("participant").document(UserID);
+        docReff.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot != null && snapshot.exists() && snapshot.contains("checkIn")) {
+                        if(snapshot.getBoolean("checkIn") == false){
+                            textName.setTextColor(Color.RED);
+                            evaluatecontent.setText("未出席");
+                        }
+                    }
+                }
+            }
+        });
 
         final DocumentReference docRef = db.collection("user").document(UserID).collection("profile")
                 .document(UserID);
