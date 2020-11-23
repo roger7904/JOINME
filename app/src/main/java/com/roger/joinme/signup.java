@@ -219,7 +219,7 @@ public class signup extends AppCompatActivity {
                                                 activityPlace.setText(document.getString("location"));
                                                 activityPost.setText("備註：" + document.getString("postContent"));
                                                 activityOrgName.setText(organizerName);
-                                                if(document.getBoolean("notification")){
+                                                if(document.getBoolean("restriction")){
                                                     String noEatingout = "";
                                                     String noSmoking = "";
                                                     String noWine = "";

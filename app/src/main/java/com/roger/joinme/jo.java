@@ -789,9 +789,9 @@ public class jo extends AppCompatActivity {
             book.put("endTime", ets);
             book.put("organizerID", currentUserID);
             if(flag_list[0] || flag_list[1] || flag_list[2] || flag_list[3] || flag_list[4] || flag_list[5]){
-                book.put("notification",true);
+                book.put("restriction",true);
             }else{
-                book.put("notification",false);
+                book.put("restriction",false);
             }
             book.put("onlyMale",flag_list[0]);
             book.put("onlyFemale",flag_list[1]);

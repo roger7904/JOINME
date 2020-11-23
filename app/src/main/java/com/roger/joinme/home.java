@@ -197,7 +197,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (((document.getTimestamp("endTime").getSeconds()) < System.currentTimeMillis() / 1000) && !document.contains("notification")) {
+                                Date curDate = new Date(System.currentTimeMillis());
+                                if (document.getTimestamp("endTime").toDate().before(curDate) && !document.contains("notification")) {
                                     String activityname = document.getId();
                                     HashMap<String, Object> notimap = new HashMap<>();
                                     notimap.put("notification", true);
@@ -331,6 +332,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     });
 
         }
+
 
     }
 
