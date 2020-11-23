@@ -115,6 +115,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                                                             });
                                                         }
                                                         else if(documentt.contains("name")){
+                                                            System.out.println("測試");
                                                             String name=documentt.getString("name");
                                                             String status=documentt.getString("status");
                                                             String id=documentt.getString("currentUserID");

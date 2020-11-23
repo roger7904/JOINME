@@ -69,7 +69,6 @@ public class ProfileActivity extends AppCompatActivity
     private CircleImageView userProfileImage;
     private TextView userProfileName, userProfileStatus;
     private Button SendMessageRequestButton, DeclineMessageRequestButton;
-    public String fromWhichPage = "",UserID="";
 
 //    private DatabaseReference UserRef, ChatRequestRef, ContactsRef, NotificationRef;
     private FirebaseFirestore db;
@@ -96,7 +95,6 @@ public class ProfileActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
 
-        fromWhichPage = getIntent().getExtras().get("fromPersonal").toString();
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         senderUserID = mAuth.getCurrentUser().getUid();
         currentUserID = mAuth.getCurrentUser().getUid();

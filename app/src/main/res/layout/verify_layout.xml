@@ -13,11 +13,10 @@
         android:layout_marginBottom="10sp"
         android:background="@drawable/box"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:padding="5sp">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="349dp"
+            android:layout_width="338dp"
             android:layout_height="272dp"
             android:orientation="vertical">
 
@@ -26,8 +25,7 @@
                 android:layout_height="53dp"
                 android:layout_margin="10dp"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="60dp">
+                android:paddingLeft="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/users_profile_image"

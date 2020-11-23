@@ -284,7 +284,6 @@ public class jo extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-//                            System.out.println(activityTitle.getText().toString());
                             if (document.exists()) {
                                 Toast.makeText(jo.this, "有重複活動存在", Toast.LENGTH_LONG).show();
                             }
@@ -293,7 +292,8 @@ public class jo extends AppCompatActivity {
                                     Toast.makeText(jo.this, "資料未填寫完成", Toast.LENGTH_LONG).show();
                                 }else{
                                     Date curDate = new Date(System.currentTimeMillis());
-                                    if(sts.toDate().compareTo(curDate) < 0){
+                                    Date errDate = new Date(curDate.getTime() - 60000);
+                                    if(sts.toDate().compareTo(errDate) < 0){
                                         Toast.makeText(jo.this, "活動開始時間早於現在時間", Toast.LENGTH_LONG).show();
                                     }
                                     else if (sts.compareTo(ets) < 0) {
