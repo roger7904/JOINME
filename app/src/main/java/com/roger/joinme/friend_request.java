@@ -69,55 +69,57 @@ public class friend_request extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                db.collection("user").document(document.getId()).collection("profile")
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot documentt : task.getResult()) {
-                                                        if (documentt.contains("name") && documentt.contains("image")) {
-                                                            String name = documentt.getString("name");
-                                                            String status = documentt.getString("status");
-                                                            String id = documentt.getString("currentUserID");
-                                                            UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                @Override
-                                                                public void onSuccess(Uri uri) {
-                                                                    // Got the download URL for 'users/me/profile.png'
-                                                                    requestList.add(new request(
-                                                                            name, status, uri, id));
-                                                                    requestadapter.notifyDataSetChanged();
-                                                                }
-                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception exception) {
-                                                                    // Handle any errors
-                                                                }
-                                                            });
-                                                        }
-                                                        else if(documentt.contains("name")){
-                                                            String name=documentt.getString("name");
-                                                            String status=documentt.getString("status");
-                                                            String id=documentt.getString("currentUserID");
-                                                            UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                                @Override
-                                                                public void onSuccess(Uri uri) {
-                                                                    // Got the download URL for 'users/me/profile.png'
-                                                                    requestList.add(new request(
-                                                                            name, status, uri, id));
-                                                                    requestadapter.notifyDataSetChanged();
-                                                                }
-                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception exception) {
-                                                                    // Handle any errors
-                                                                }
-                                                            });
+                                if(!document.getString("request_type").equals("sent")){
+                                    db.collection("user").document(document.getId()).collection("profile")
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot documentt : task.getResult()) {
+                                                            if (documentt.contains("name") && documentt.contains("image")) {
+                                                                String name = documentt.getString("name");
+                                                                String status = documentt.getString("status");
+                                                                String id = documentt.getString("currentUserID");
+                                                                UserProfileImagesRef.child(id + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                    @Override
+                                                                    public void onSuccess(Uri uri) {
+                                                                        // Got the download URL for 'users/me/profile.png'
+                                                                        requestList.add(new request(
+                                                                                name, status, uri, id));
+                                                                        requestadapter.notifyDataSetChanged();
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception exception) {
+                                                                        // Handle any errors
+                                                                    }
+                                                                });
+                                                            }
+                                                            else if(documentt.contains("name")){
+                                                                String name=documentt.getString("name");
+                                                                String status=documentt.getString("status");
+                                                                String id=documentt.getString("currentUserID");
+                                                                UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                    @Override
+                                                                    public void onSuccess(Uri uri) {
+                                                                        // Got the download URL for 'users/me/profile.png'
+                                                                        requestList.add(new request(
+                                                                                name, status, uri, id));
+                                                                        requestadapter.notifyDataSetChanged();
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception exception) {
+                                                                        // Handle any errors
+                                                                    }
+                                                                });
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            }
-                                        });
+                                            });
+                                }
                             }
                         }
                     }
