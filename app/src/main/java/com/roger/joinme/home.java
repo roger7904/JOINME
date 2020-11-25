@@ -177,6 +177,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -552,7 +553,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                     switch (doc.getType()) {
                         case ADDED:
                             maplistener = 1;
-//                            addItems();
                             break;
                         case REMOVED:
                             maplistener = 1;
@@ -611,7 +611,8 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         camera_position_lat = mMap.getCameraPosition().target.latitude;
         camera_position_lng = mMap.getCameraPosition().target.longitude;
         float zoom = mMap.getCameraPosition().zoom;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(camera_position_lat + 0.0000001, camera_position_lng + 0.0000001), zoom));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(camera_position_lat + 0.000001, camera_position_lng + 0.000001), zoom));
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
@@ -626,10 +627,18 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                 new ClusterManager.OnClusterItemInfoWindowClickListener<MyItem>() {
                     @Override
                     public void onClusterItemInfoWindowClick(MyItem stringClusterItem) {
-                        Intent intent = new Intent();
-                        intent.setClass(home.this, signup.class);
-                        intent.putExtra("activitytitle", stringClusterItem.getTitle());
-                        startActivity(intent);
+                        if (stringClusterItem.getTitle().equals("此處有多個活動")){
+                            Intent intent = new Intent();
+                            intent.setClass(home.this, signupPageActivity.class);
+                            intent.putExtra("activityLat", stringClusterItem.getPosition().latitude);
+                            intent.putExtra("activityLong", stringClusterItem.getPosition().longitude);
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent();
+                            intent.setClass(home.this, signup.class);
+                            intent.putExtra("activitytitle", stringClusterItem.getTitle());
+                            startActivity(intent);
+                        }
                     }
                 });
         mMap.setOnInfoWindowClickListener(mClusterManager);
@@ -639,26 +648,55 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         mClusterManager.clearItems();
 
         db.collection("activity")
+                .orderBy("geopoint")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if ((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) {
-                                    lat = document.getGeoPoint("geopoint").getLatitude();
-                                    lng = document.getGeoPoint("geopoint").getLongitude();
-                                    markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                            double latitude = 0;
+                            double longitude = 0;
+                            String lonLat = "";
+                            ArrayList geopoint = new ArrayList();
+                            String actName = "";
+                            Date snnippet = new Date();
+                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH:mm ");
+                            int count = 0;
+                            boolean flag = false;
 
-                                    //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                    Date snnippet = document.getTimestamp("startTime").toDate();
-                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
-                                    offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
-                                    mClusterManager.addItem(offsetItem);
-                                    mMap.setOnInfoWindowClickListener(mClusterManager);
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getTimestamp("endTime").getSeconds() > System.currentTimeMillis() / 1000) {
+                                    if(latitude != document.getGeoPoint("geopoint").getLatitude()
+                                            && longitude != document.getGeoPoint("geopoint").getLongitude()){
+                                        if(count == 1){
+                                            offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
+                                        count++;
+                                        if(count != 1){
+                                            offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
+
+                                        latitude = document.getGeoPoint("geopoint").getLatitude();
+                                        longitude = document.getGeoPoint("geopoint").getLongitude();
+                                        snnippet = document.getTimestamp("startTime").toDate();
+                                        actName = document.getString("title");
+
+                                    }else{
+                                        lonLat = latitude + "," + longitude;
+                                        offsetItem = new MyItem(latitude, longitude, "此處有多個活動", "", markerDescriptor);
+                                        mClusterManager.addItem(offsetItem);
+                                        mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        geopoint.add(lonLat);
+                                    }
                                 }
                             }
+
                         }
+
                     }
                 });
 
@@ -668,28 +706,66 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
+
     }
 
     private void addItemType(String type){
         mClusterManager.clearItems();
 
         db.collection("activity")
+                .orderBy("geopoint")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            double latitude = 0;
+                            double longitude = 0;
+                            String lonLat = "";
+                            ArrayList geopoint = new ArrayList();
+                            String actName = "";
+                            Date snnippet = new Date();
+                            SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH:mm ");
+                            int count = 0;
+                            boolean flag = false;
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) && document.getString("activityType").equals(type)) {
-                                    lat = document.getGeoPoint("geopoint").getLatitude();
-                                    lng = document.getGeoPoint("geopoint").getLongitude();
+                                    if(latitude != document.getGeoPoint("geopoint").getLatitude()
+                                            && longitude != document.getGeoPoint("geopoint").getLongitude()){
+                                        if(count == 1){
+                                            offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
+                                        count++;
+                                        if(count != 1){
+                                            offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
+                                            mClusterManager.addItem(offsetItem);
+                                            mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        }
 
-                                    //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-                                    Date snnippet = document.getTimestamp("startTime").toDate();
-                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
-                                    offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
-                                    mClusterManager.addItem(offsetItem);
-                                    mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        latitude = document.getGeoPoint("geopoint").getLatitude();
+                                        longitude = document.getGeoPoint("geopoint").getLongitude();
+                                        snnippet = document.getTimestamp("startTime").toDate();
+                                        actName = document.getString("title");
+
+                                    }else{
+                                        lonLat = latitude + "," + longitude;
+                                        offsetItem = new MyItem(latitude, longitude, "此處有多個活動", "", markerDescriptor);
+                                        mClusterManager.addItem(offsetItem);
+                                        mMap.setOnInfoWindowClickListener(mClusterManager);
+                                        geopoint.add(lonLat);
+                                    }
+//                                    lat = document.getGeoPoint("geopoint").getLatitude();
+//                                    lng = document.getGeoPoint("geopoint").getLongitude();
+//
+//                                    //將資料庫中timestamp型態轉為date後用simpledateformat儲存
+//                                    Date snnippet = document.getTimestamp("startTime").toDate();
+//                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH:mm ");
+//                                    offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
+//                                    mClusterManager.addItem(offsetItem);
+//                                    mMap.setOnInfoWindowClickListener(mClusterManager);
                                 }
                             }
                         }
@@ -848,27 +924,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
-//        addItems();
-    }
-
-    //地址轉經緯度method(很容易讀不到資料)
-    public LatLng getLocationFromAddress(String address) {
-        Geocoder geo = new Geocoder(this);
-        List<Address> adres;
-        LatLng point = null;
-        try {
-            adres = geo.getFromLocationName(address, 5);
-            Thread.sleep(500);
-            while (adres.size() == 0) {
-                adres = geo.getFromLocationName(address, 5);
-                Thread.sleep(500);
-            }
-            Address location = adres.get(0);
-            point = new LatLng(location.getLatitude(), location.getLongitude());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return point;
     }
 
     @Override
@@ -928,6 +983,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("運動");
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(onMapReadyCallback);
+
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ballclick));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -940,6 +1001,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("商家優惠");
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(onMapReadyCallback);
+
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.storeclick));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -952,6 +1019,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("KTV");
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(onMapReadyCallback);
+
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktvclick));
@@ -964,6 +1037,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("限時");
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(onMapReadyCallback);
+
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -976,6 +1055,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("其他");
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(onMapReadyCallback);
+
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -988,6 +1073,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItems();
+
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(onMapReadyCallback);
+
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -1098,27 +1189,5 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
-
-    //鎖手機的返回鍵
-//    public boolean onKeyDown(int keyCode, KeyEvent event){
-//        if(keyCode == KeyEvent.KEYCODE_BACK){
-//            if(getApplicationInfo().targetSdkVersion >= Build.VERSION_CODES.ECLAIR){
-//                event.startTracking();
-//                Intent home = new Intent(Intent.ACTION_MAIN);
-//                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                home.addCategory(Intent.CATEGORY_HOME);
-//                startActivity(home);
-//                return true;
-//            }else{
-//                onBackPressed();
-//            }
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public  boolean onKeyUp(int keyCode, KeyEvent event){
-//        return super.onKeyUp(keyCode, event);
-//    }
 
 }
