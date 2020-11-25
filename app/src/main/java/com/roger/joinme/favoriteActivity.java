@@ -81,7 +81,7 @@ public class favoriteActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 if (d.getBoolean("img")) {
                                                     String name = d.getId();
-                                                    String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds() * 1000).toString();
+                                                    String time = DateFormat.format("yyyy/MM/dd HH:mm", d.getTimestamp("startTime").getSeconds() * 1000).toString();
                                                     String place = d.getString("location");
                                                     UserProfileImagesRef.child(name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                         @Override
@@ -100,7 +100,7 @@ public class favoriteActivity extends AppCompatActivity {
                                                 }else{
                                                         if (d.getString("activityType").equals("商家優惠")) {
                                                             String name = d.getId();
-                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String time = DateFormat.format("yyyy/MM/dd HH:mm", d.getTimestamp("startTime").getSeconds()*1000).toString();
                                                             String place = d.getString("location");
                                                             UserProfileImagesRef.child("商家優惠.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override
@@ -119,7 +119,7 @@ public class favoriteActivity extends AppCompatActivity {
                                                         }
                                                         if (d.getString("activityType").equals("KTV")) {
                                                             String name = d.getId();
-                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String time = DateFormat.format("yyyy/MM/dd HH:mm", d.getTimestamp("startTime").getSeconds()*1000).toString();
                                                             String place = d.getString("location");
                                                             UserProfileImagesRef.child("KTV.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override
@@ -138,7 +138,7 @@ public class favoriteActivity extends AppCompatActivity {
                                                         }
                                                         if (d.getString("activityType").equals("限時")) {
                                                             String name = d.getId();
-                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String time = DateFormat.format("yyyy/MM/dd HH:mm", d.getTimestamp("startTime").getSeconds()*1000).toString();
                                                             String place = d.getString("location");
                                                             UserProfileImagesRef.child("限時.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override
@@ -157,7 +157,7 @@ public class favoriteActivity extends AppCompatActivity {
                                                         }
                                                         if (d.getString("activityType").equals("運動")) {
                                                             String name = d.getId();
-                                                            String time = DateFormat.format("yyyy/MM/dd mm:ss", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                            String time = DateFormat.format("yyyy/MM/dd HH:mm", d.getTimestamp("startTime").getSeconds()*1000).toString();
                                                             String place = d.getString("location");
                                                             UserProfileImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                 @Override

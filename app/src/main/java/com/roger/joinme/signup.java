@@ -173,7 +173,7 @@ public class signup extends AppCompatActivity {
                                 Date snnippet = document.getTimestamp("startTime").toDate();
                                 Date snnippet2 = document.getTimestamp("endTime").toDate();
                                 Boolean haveImg=document.getBoolean("img");
-                                SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH :mm:ss ");
+                                SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH:mm ");
                                 title.setText(activitytitle);
                                 organizerID=document.getString("organizerID");
                                 if(haveImg) {
@@ -453,13 +453,6 @@ public class signup extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.homepage, menu);
-        return true;
     }
 
     private void initData() {

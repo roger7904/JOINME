@@ -60,6 +60,12 @@ public class totalEvaluteActivity extends AppCompatActivity {
         initView();
         setListeners();
 
+        fiveText.setText("(0)");
+        fourText.setText("(0)");
+        threeText.setText("(0)");
+        twoText.setText("(0)");
+        oneText.setText("(0)");
+
         fiveText.bringToFront();
         fourText.bringToFront();
         threeText.bringToFront();

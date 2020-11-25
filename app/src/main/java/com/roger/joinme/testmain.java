@@ -37,13 +37,20 @@ public class testmain extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testmain);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        currentUserID = mAuth.getCurrentUser().getUid();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.BLACK);
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        currentUserID = mAuth.getCurrentUser().getUid();
 
         myViewPager = (ViewPager) findViewById(R.id.main_tabs_pager);
         myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
@@ -52,7 +59,6 @@ public class testmain extends AppCompatActivity
         myTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         myTabLayout.setupWithViewPager(myViewPager);
         myTabLayout.setTabTextColors(Color.parseColor("#000000"),Color.parseColor("#000000"));
-
     }
 
     //鎖手機的返回鍵

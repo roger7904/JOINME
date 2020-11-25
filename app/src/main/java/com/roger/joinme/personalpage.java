@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -163,14 +164,16 @@ public class personalpage extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         double score = 0;
                         int count = 0;
+                        double finalescore = 0;
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                  score = score + document.getDouble("star");
                                  count++;
                             }
                         }
-                        double finalescore = score / count;
-                        evaluation.setText(String.valueOf(finalescore));
+                        finalescore = score / count;
+                        DecimalFormat df = new DecimalFormat("##.0");
+                        evaluation.setText(String.valueOf(df.format(finalescore)));
                         if(finalescore >= 4.5){
                             first.setBackground(getResources().getDrawable(R.drawable.brightstar));
                             second.setBackground(getResources().getDrawable(R.drawable.brightstar));

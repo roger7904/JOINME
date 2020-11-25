@@ -53,9 +53,11 @@ public class chatroomAdapter extends RecyclerView.Adapter<chatroomAdapter.ViewHo
         holder.contentCount.setText(chatroom.getContentcount().toString());
         holder.textName.setText(chatroom.getName());
         holder.textContent.setText(chatroom.getNewestcontent());
-
-        holder.textTime.setText(chatroom.getDate());
-
+        if(chatroom.getDate().equals("null null")){
+            holder.textTime.setText("");
+        }else{
+            holder.textTime.setText(chatroom.getDate());
+        }
 
         if(chatroom.getActivity().equals("contact")){
             UserProfileImagesRef.child(chatroom.getId() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
