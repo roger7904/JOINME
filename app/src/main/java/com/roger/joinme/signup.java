@@ -86,7 +86,9 @@ public class signup extends AppCompatActivity {
     public Button signupbtn, deletebtn, favoritebtn;
     public TextView title;
     public ImageView activityPhoto;
-    public TextView activityContent,activityStartTime,activityEndTime,activityPlace,activityPost,activityOrgName,actRestriction;
+    public TextView activityContent,activityStartTime,activityEndTime
+                    ,activityPlace,activityPost,activityOrgName
+                    ,actRestriction,checkInCount;
     public static double camera_Position_Lat;
     public static double camera_Position_Lng;
 
@@ -275,8 +277,27 @@ public class signup extends AppCompatActivity {
                                     }
                                 });
 
+                                db.collection("activity").document(activitytitle)
+                                        .collection("participant")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    int checkInNum = 0;
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        if(document.getBoolean("checkIn") == true){
+                                                            checkInNum++;
+                                                        }
+                                                    }
+                                                    checkInCount.setText("報到人數：" + String.valueOf(checkInNum));
+                                                }
+                                            }
+                                        });
+
                                 if (!document.getString("organizerID").equals(currentUserID)) {
                                     deletebtn.setVisibility(View.GONE);
+                                    checkInCount.setVisibility(View.GONE);
                                 }else{
                                     signupbtn.setVisibility(View.GONE);
                                 }
@@ -471,6 +492,7 @@ public class signup extends AppCompatActivity {
         activityPost = (TextView) findViewById(R.id.activityPost);
         activityOrgName = (TextView) findViewById(R.id.activityOrgName);
         actRestriction = (TextView) findViewById(R.id.actRestriction);
+        checkInCount = (TextView) findViewById(R.id.checkInCount);
     }
 
     private void setListeners() {

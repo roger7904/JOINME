@@ -93,6 +93,13 @@
                         android:layout_marginTop="5dp"
                         android:textSize="20sp" />
 
+                    <TextView
+                        android:id="@+id/actRestriction"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20sp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,13 +129,6 @@
                         android:layout_marginTop="5dp"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/actRestriction"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textSize="20sp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -148,6 +148,20 @@
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
                             android:textColor="#5599FF"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/checkInCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="TextView"
                             android:textSize="20sp" />
                     </LinearLayout>
 
