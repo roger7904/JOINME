@@ -48,7 +48,7 @@
 
             <TextView
                 android:id="@+id/userName"
-                android:layout_width="215dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="姓名：王小明"
@@ -57,7 +57,7 @@
 
             <TextView
                 android:id="@+id/userGender"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
@@ -67,7 +67,7 @@
 
             <TextView
                 android:id="@+id/userAge"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
@@ -76,13 +76,12 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/userPhoneLay"
-                android:layout_width="match_parent"
+                android:id="@+id/userPhone"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="手機：0987777899"
+                android:layout_marginBottom="5dp"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -90,14 +89,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_accept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="2dp"
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:text="V批准"

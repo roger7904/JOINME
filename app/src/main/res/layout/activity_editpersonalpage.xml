@@ -131,7 +131,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/userPhoneLay"
+        android:id="@+id/userPhone"
         android:layout_width="406dp"
         android:layout_height="56dp"
         android:layout_marginTop="15dp"

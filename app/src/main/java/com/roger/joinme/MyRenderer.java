@@ -38,8 +38,8 @@ public class MyRenderer extends DefaultClusterRenderer<MyItem> {
 
     @Override
     protected void onBeforeClusterRendered(Cluster<MyItem> cluster, final MarkerOptions markerOptions) {
-        final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
-        markerOptions.icon(markerDescriptor);
+//        final BitmapDescriptor markerDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+//        markerOptions.icon(markerDescriptor);
     }
 
     @Override

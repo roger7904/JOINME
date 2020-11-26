@@ -181,6 +181,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
         if (currentUser == null) {
             SendUserToLoginActivity();
         }
@@ -608,11 +609,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     private void setUpClusterer() {
         // Position the map.
-        camera_position_lat = mMap.getCameraPosition().target.latitude;
-        camera_position_lng = mMap.getCameraPosition().target.longitude;
-        float zoom = mMap.getCameraPosition().zoom;
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(camera_position_lat + 0.000001, camera_position_lng + 0.000001), zoom));
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
@@ -694,24 +690,20 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                     }
                                 }
                             }
-
+                            mClusterManager.cluster();
                         }
 
                     }
                 });
-
         mClusterManager.cluster();
-        mMap.setOnCameraIdleListener(mClusterManager);
-        mMap.setOnMarkerClickListener(mClusterManager);
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
-
     }
 
     private void addItemType(String type){
-        mClusterManager.clearItems();
 
+        mClusterManager.clearItems();
         db.collection("activity")
                 .orderBy("geopoint")
                 .get()
@@ -757,24 +749,13 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
                                         geopoint.add(lonLat);
                                     }
-//                                    lat = document.getGeoPoint("geopoint").getLatitude();
-//                                    lng = document.getGeoPoint("geopoint").getLongitude();
-//
-//                                    //將資料庫中timestamp型態轉為date後用simpledateformat儲存
-//                                    Date snnippet = document.getTimestamp("startTime").toDate();
-//                                    SimpleDateFormat ft = new SimpleDateFormat(" yyyy-MM-dd HH:mm ");
-//                                    offsetItem = new MyItem(lat, lng, document.getString("title"), ft.format(snnippet), markerDescriptor);
-//                                    mClusterManager.addItem(offsetItem);
-//                                    mMap.setOnInfoWindowClickListener(mClusterManager);
                                 }
                             }
+                            mClusterManager.cluster();
                         }
                     }
                 });
-
         mClusterManager.cluster();
-        mMap.setOnCameraIdleListener(mClusterManager);
-        mMap.setOnMarkerClickListener(mClusterManager);
         setUpClusterer();
         final MyRenderer renderer = new MyRenderer(this, mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
@@ -842,7 +823,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             if (!getDeviceLocation()) {
                 //mMap.addMarker(new MarkerOptions().position(mDefaultLocation).title("Marker in Taipei 101"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(mDefaultLocation));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
             }
 
             if (ActivityCompat.checkSelfPermission(home.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(home.this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -851,7 +832,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             //隱藏放大縮小按鈕
-            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(false);
         }
     };
 
@@ -869,7 +850,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
         if (mLastKnownLocation != null) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(mLastKnownLocation.getLatitude(),
-                            mLastKnownLocation.getLongitude()), 12));
+                            mLastKnownLocation.getLongitude()), 16));
             userlat = mLastKnownLocation.getLatitude();
             userlnt = mLastKnownLocation.getLongitude();
             return true;
@@ -984,11 +965,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             public void onClick(View v) {
                 addItemType("運動");
 
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(onMapReadyCallback);
-
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ballclick));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -1001,11 +977,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("商家優惠");
-
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(onMapReadyCallback);
 
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.storeclick));
@@ -1020,11 +991,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             public void onClick(View v) {
                 addItemType("KTV");
 
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(onMapReadyCallback);
-
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktvclick));
@@ -1037,11 +1003,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItemType("限時");
-
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(onMapReadyCallback);
 
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
@@ -1056,11 +1017,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             public void onClick(View v) {
                 addItemType("其他");
 
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(onMapReadyCallback);
-
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));
                 ktvbtn.setBackground(getResources().getDrawable(R.drawable.ktv));
@@ -1073,11 +1029,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
             @Override
             public void onClick(View v) {
                 addItems();
-
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(onMapReadyCallback);
 
                 ballbtn.setBackground(getResources().getDrawable(R.drawable.ball));
                 storebtn.setBackground(getResources().getDrawable(R.drawable.discount));

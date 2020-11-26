@@ -85,7 +85,7 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
         holder.textName.setText("姓名:"+verify.getName());
         holder.textGender.setText("性別:"+verify.getGender());
         holder.textAge.setText("年齡:"+verify.getAge());
-        holder.textPhone.setText("手機:"+verify.getPhone());
+        holder.textPhone.setText("手機:"+verify.getPhone().replaceAll("\n",""));
         holder.textActivity.setText(verify.getActivity());
 
         Glide.with(holder.itemView.getContext())
@@ -262,7 +262,7 @@ public class verifyAdapter extends RecyclerView.Adapter<verifyAdapter.ViewHolder
             textActivity = (TextView) itemView.findViewById(R.id.activityname);
             textGender = (TextView) itemView.findViewById(R.id.userGender);
             textAge = (TextView) itemView.findViewById(R.id.userAge);
-            textPhone = (TextView) itemView.findViewById(R.id.userPhoneLay);
+            textPhone = (TextView) itemView.findViewById(R.id.userPhone);
             btnaccept=(Button) itemView.findViewById(R.id.btn_accept);
             btncancel=(Button) itemView.findViewById(R.id.btn_reject);
         }

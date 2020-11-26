@@ -109,6 +109,7 @@ public class verifyActivity extends AppCompatActivity {
                                                                                     String gender = d.getString("gender");
                                                                                     String age = d.getString("age");
                                                                                     String phone = d.getString("phone");
+
                                                                                     UserProfileImagesRef.child("head.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                                         @Override
                                                                                         public void onSuccess(Uri uri) {
