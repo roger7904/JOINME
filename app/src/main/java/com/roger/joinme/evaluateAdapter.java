@@ -39,22 +39,6 @@ public class evaluateAdapter extends RecyclerView.Adapter<evaluateAdapter.ViewHo
         db=FirebaseFirestore.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
-//        final DocumentReference docRef = db.collection("user").document(currentUserID).collection("profile")
-//                .document(currentUserID);
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot snapshot = task.getResult();
-//                    if (snapshot != null && snapshot.exists()) {
-//                        currentUserName=snapshot.getString("name");
-//                    } else {
-//
-//                    }
-//                }
-//            }
-//        });
-
         View view = LayoutInflater.from(context).inflate(R.layout.evaluate_layout, parent, false);
         return new ViewHolder(view);
     }
