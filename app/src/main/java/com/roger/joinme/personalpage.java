@@ -476,9 +476,12 @@ public class personalpage extends AppCompatActivity {
         evaluatePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(personalpage.this, totalEvaluteActivity.class);
-                startActivity(intent);
+                Intent myIntent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("visit_user_id", currentUserID);
+                myIntent.putExtras(bundle);
+                myIntent.setClass(personalpage.this, totalEvaluteActivity.class);
+                startActivity(myIntent);
             }
         });
         addFriend.setOnClickListener(new View.OnClickListener() {

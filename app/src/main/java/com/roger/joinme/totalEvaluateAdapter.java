@@ -44,7 +44,8 @@ public class totalEvaluateAdapter extends RecyclerView.Adapter<totalEvaluateAdap
     public void onBindViewHolder(@NonNull totalEvaluateAdapter.ViewHolder holder, int position) {
         totalEvaluate totalEvaluate = personalEvaluateList.get(position);
         holder.userName.setText(totalEvaluate.getName());
-        if(totalEvaluate.getActivityContent().equals("")){
+        System.out.println(totalEvaluate.getActivityContent());
+        if(totalEvaluate.getActivityContent().equals("null") || totalEvaluate.getActivityContent().equals("")){
             holder.actEva.setText("此人未填寫評論內容喔");
             holder.actEva.setTextColor(Color.LTGRAY);
         }else{

@@ -286,8 +286,10 @@ public class signup extends AppCompatActivity {
                                                 if (task.isSuccessful()) {
                                                     int checkInNum = 0;
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                                        if(document.getBoolean("checkIn") == true){
-                                                            checkInNum++;
+                                                        if(document.contains("checkIn")){
+                                                            if(document.getBoolean("checkIn").equals("true")){
+                                                                checkInNum++;
+                                                            }
                                                         }
                                                     }
                                                     checkInCount.setText("報到人數：" + String.valueOf(checkInNum));
@@ -327,8 +329,8 @@ public class signup extends AppCompatActivity {
                 if(task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        signupbtn.setText("您已加入該活動");
-                        signupbtn.setEnabled(false);
+                        signupbtn.setText("取消參加");
+                        signupbtn.setEnabled(true);
                     }
                 }
             }
@@ -568,7 +570,7 @@ public class signup extends AppCompatActivity {
         signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(signupbtn.getText().equals("報名")){
+                if (signupbtn.getText().equals("報名")) {
                     HashMap<String, String> join = new HashMap<>();
                     join.put("UserID", currentUserID);
                     db.collection("join_act_request").document(activitytitle)
@@ -593,7 +595,7 @@ public class signup extends AppCompatActivity {
                     SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
                     saveCurrentTime = currentTime.format(calendar.getTime());
 
-                    Long tsLong = System.currentTimeMillis()/1000;
+                    Long tsLong = System.currentTimeMillis() / 1000;
                     String ts = tsLong.toString();
 
                     HashMap<String, String> chatNotificationMap = new HashMap<>();
@@ -627,7 +629,7 @@ public class signup extends AppCompatActivity {
                                             JSONObject notifcationBody = new JSONObject();
                                             try {
                                                 notifcationBody.put("title", "您有新的入團申請");
-                                                notifcationBody.put("message", currentUserName+"對"+activitytitle+"提出了入團申請");
+                                                notifcationBody.put("message", currentUserName + "對" + activitytitle + "提出了入團申請");
                                                 notification.put("to", RECEIVER_DEVICE);
                                                 notification.put("data", notifcationBody);
                                             } catch (JSONException e) {
@@ -643,7 +645,7 @@ public class signup extends AppCompatActivity {
                     signupbtn.setEnabled(false);
                     Intent settingsIntent = new Intent(signup.this, home.class);
                     startActivity(settingsIntent);
-                }else if(signupbtn.getText().equals("報到")){
+                } else if (signupbtn.getText().equals("報到")) {
                     HashMap<String, Object> check = new HashMap<>();
                     check.put("checkIn", true);
                     db.collection("activity").document(activitytitle)
@@ -660,6 +662,26 @@ public class signup extends AppCompatActivity {
                             });
                     signupbtn.setText("報到成功");
                     signupbtn.setEnabled(false);
+                } else if (signupbtn.getText().equals("取消參加")) {
+                    db.collection("activity")
+                            .document(activitytitle)
+                            .collection("participant")
+                            .document(currentUserID)
+                            .delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    signupbtn.setText("取消成功");
+                                    try{
+                                        Toast.makeText(signup.this, "取消成功", Toast.LENGTH_LONG).show();
+                                        Thread.sleep(500);
+                                        Intent intent = new Intent(signup.this, home.class);
+                                        startActivity(intent);
+                                    }catch (Exception e){
+
+                                    }
+                                }
+                            });
                 }
             }
         });

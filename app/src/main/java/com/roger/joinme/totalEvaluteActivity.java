@@ -51,7 +51,7 @@ public class totalEvaluteActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
+        currentUserID = getIntent().getExtras().get("visit_user_id").toString();
         UserID = mAuth.getCurrentUser().getUid();
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
 
