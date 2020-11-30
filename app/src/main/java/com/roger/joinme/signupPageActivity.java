@@ -77,23 +77,26 @@ public class signupPageActivity extends AppCompatActivity {
                                     String actTypeRes = actType.equals("運動") ? "球類" : actType;
 
                                     if (isImage) {
-                                        UserActImageRef.child(actTitle + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        UserActImageRef.child(actTitle).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @Override
                                             public void onSuccess(Uri uri) {
                                                 // Got the download URL for 'users/me/profile.png'
-                                                signupList.add(new signuppage(uri, actTitle, activityLocation, actTime));
+                                                signupList.add(new signuppage(uri, actTitle, activityLocation, activityLocation));
                                                 signuppageAdapter.notifyDataSetChanged();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception exception) {
                                                 // Handle any errors
+                                                System.out.println(exception);
                                             }
                                         });
                                     } else {
                                         UserActImageRef.child(actTypeRes + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @Override
                                             public void onSuccess(Uri uri) {
+                                                System.out.println(actTitle);
+                                                System.out.println(activityLocation);
                                                 // Got the download URL for 'users/me/profile.png'
                                                 signupList.add(new signuppage(uri, actTitle, activityLocation, actTime));
                                                 signuppageAdapter.notifyDataSetChanged();
