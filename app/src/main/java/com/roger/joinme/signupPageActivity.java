@@ -81,7 +81,7 @@ public class signupPageActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Uri uri) {
                                                 // Got the download URL for 'users/me/profile.png'
-                                                signupList.add(new signuppage(uri, actTitle, activityLocation, activityLocation));
+                                                signupList.add(new signuppage(uri, actTitle, activityLocation, actTime));
                                                 signuppageAdapter.notifyDataSetChanged();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
@@ -95,8 +95,6 @@ public class signupPageActivity extends AppCompatActivity {
                                         UserActImageRef.child(actTypeRes + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @Override
                                             public void onSuccess(Uri uri) {
-                                                System.out.println(actTitle);
-                                                System.out.println(activityLocation);
                                                 // Got the download URL for 'users/me/profile.png'
                                                 signupList.add(new signuppage(uri, actTitle, activityLocation, actTime));
                                                 signuppageAdapter.notifyDataSetChanged();
