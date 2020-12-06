@@ -671,31 +671,30 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         }
                                         count++;
 
-                                        latitude = document.getGeoPoint("geopoint").getLatitude();
-                                        longitude = document.getGeoPoint("geopoint").getLongitude();
-                                        snnippet = document.getTimestamp("startTime").toDate();
-                                        actName = document.getString("title");
-
                                         if(count != 1){
                                             offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
                                             mClusterManager.addItem(offsetItem);
                                             mMap.setOnInfoWindowClickListener(mClusterManager);
                                         }
+
+                                        latitude = document.getGeoPoint("geopoint").getLatitude();
+                                        longitude = document.getGeoPoint("geopoint").getLongitude();
+                                        snnippet = document.getTimestamp("startTime").toDate();
+                                        actName = document.getString("title");
+
                                     }else{
                                         lonLat = latitude + "," + longitude;
                                         offsetItem = new MyItem(latitude, longitude, "此處有多個活動", "", markerDescriptor);
                                         mClusterManager.addItem(offsetItem);
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
                                         geopoint.add(lonLat);
+                                        count++;
                                     }
                                 }
                             }
-                            if(count == 1){
-                                offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
-                                mClusterManager.addItem(offsetItem);
-                                mMap.setOnInfoWindowClickListener(mClusterManager);
-                                System.out.println(actName);
-                            }
+                            offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
+                            mClusterManager.addItem(offsetItem);
+                            mMap.setOnInfoWindowClickListener(mClusterManager);
                             mClusterManager.cluster();
                         }
 
@@ -729,14 +728,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (((document.getTimestamp("endTime").getSeconds()) > System.currentTimeMillis() / 1000) && document.getString("activityType").equals(type)) {
-                                    System.out.println("1");
                                     if(latitude != document.getGeoPoint("geopoint").getLatitude()
                                             && longitude != document.getGeoPoint("geopoint").getLongitude()){
                                         if(count == 1){
                                             offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
                                             mClusterManager.addItem(offsetItem);
                                             mMap.setOnInfoWindowClickListener(mClusterManager);
-                                            System.out.println(actName);
                                         }
                                         count++;
 
@@ -749,7 +746,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                             offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
                                             mClusterManager.addItem(offsetItem);
                                             mMap.setOnInfoWindowClickListener(mClusterManager);
-                                            System.out.println(actName);
                                         }
 
                                     }else{
@@ -758,6 +754,7 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                         mClusterManager.addItem(offsetItem);
                                         mMap.setOnInfoWindowClickListener(mClusterManager);
                                         geopoint.add(lonLat);
+                                        count++;
                                     }
                                 }
                             }
@@ -765,7 +762,6 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
                                 mClusterManager.addItem(offsetItem);
                                 mMap.setOnInfoWindowClickListener(mClusterManager);
-                                System.out.println(actName);
                             }
                             mClusterManager.cluster();
                         }
