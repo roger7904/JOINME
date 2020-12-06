@@ -690,6 +690,12 @@ public class home extends AppCompatActivity implements OnMapReadyCallback, Googl
                                     }
                                 }
                             }
+                            if(count == 1){
+                                offsetItem = new MyItem(latitude, longitude, actName, ft.format(snnippet), markerDescriptor);
+                                mClusterManager.addItem(offsetItem);
+                                mMap.setOnInfoWindowClickListener(mClusterManager);
+                                System.out.println(actName);
+                            }
                             mClusterManager.cluster();
                         }
 
