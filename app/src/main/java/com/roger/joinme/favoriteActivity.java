@@ -174,6 +174,25 @@ public class favoriteActivity extends AppCompatActivity {
                                                                 }
                                                             });
                                                         }
+                                                    if (d.getString("activityType").equals("其他")) {
+                                                        String name = d.getId();
+                                                        String time = DateFormat.format("yyyy/MM/dd HH:mm", d.getTimestamp("startTime").getSeconds()*1000).toString();
+                                                        String place = d.getString("location");
+                                                        UserProfileImagesRef.child("球類.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                            @Override
+                                                            public void onSuccess(Uri uri) {
+                                                                // Got the download URL for 'users/me/profile.png'
+                                                                favoriteList.add(new favorite(
+                                                                        uri,name,place,time));
+                                                                favoriteadapter.notifyDataSetChanged();
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception exception) {
+                                                                // Handle any errors
+                                                            }
+                                                        });
+                                                    }
                                                 }
 
                                             }
