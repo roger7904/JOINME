@@ -29,3 +29,5 @@
 我們使用firebase作為我們的backend server，用此存放資料、管理使用者、推撥活動通知。
 
 <h2 id="demo">Demo</h2>
+
+![demo](docs/demo.jpg);
