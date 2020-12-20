@@ -660,6 +660,53 @@ public class signup extends AppCompatActivity {
                                     }
                                 }
                             });
+                    DocumentReference docRef = db.collection("activity").document(activitytitle);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String id=document.getString("organizerID");
+                                    DocumentReference docRef = db.collection("user").document(id);
+                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    String token=document.getString("device_token");
+                                                    JSONObject notification = new JSONObject();
+                                                    JSONObject notifcationBody = new JSONObject();
+                                                    try {
+                                                        notifcationBody.put("title", "您有新的人員報到");
+                                                        notifcationBody.put("message", " ");
+
+                                                        notification.put("to", token);
+                                                        notification.put("data", notifcationBody);
+                                                    } catch (JSONException e) {
+//                                                        Log.e(TAG, "onCreate: " + e.getMessage());
+                                                    }
+                                                    sendNotification(notification);
+//                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                } else {
+//                                    Log.d(TAG, "No such document");
+                                                }
+                                            } else {
+//                                Log.d(TAG, "get failed with ", task.getException());
+                                            }
+                                        }
+                                    });
+//                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                } else {
+//                                    Log.d(TAG, "No such document");
+                                }
+                            } else {
+//                                Log.d(TAG, "get failed with ", task.getException());
+                            }
+                        }
+                    });
+
                     signupbtn.setText("報到成功");
                     signupbtn.setEnabled(false);
                 } else if (signupbtn.getText().equals("取消參加")) {
