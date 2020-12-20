@@ -30,4 +30,4 @@
 
 <h2 id="demo">Demo</h2>
 
-![demo](docs/demo.jpg);
+![demo](docs/demo.jpg)
