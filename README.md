@@ -5,7 +5,7 @@
   <br />  
   
 ![Java](https://img.shields.io/badge/Java-Language-red?logo=java)
-![Firebase](https://img.shields.io/badge/firebase-Server-yello?logo=firebase)
+![Firebase](https://img.shields.io/badge/firebase-Server-yellow?logo=firebase)
 
 </div>
 
