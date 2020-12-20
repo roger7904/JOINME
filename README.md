@@ -22,6 +22,7 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 1. [Features](#features)
 2. [Backend Server](#backendserver)
 3. [Demo](#demo)
+4. [Document](#document)
 
 <h2 id="features">Features</h2>
 
@@ -34,3 +35,7 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 <h2 id="demo">Demo</h2>
 
 ![demo](docs/demo.jpg)
+
+<h2 id="document">Document</h2>
+
+[系統文件](https://github.com/roger7904/JOINME/raw/master/docs/joinme.docx)
