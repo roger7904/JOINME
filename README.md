@@ -23,6 +23,7 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 2. [Backend Server](#backendserver)
 3. [Demo](#demo)
 4. [Document](#document)
+5. [Architecture](#architecture)
 
 <h2 id="features">Features</h2>
 
@@ -35,6 +36,21 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 <h2 id="demo">Demo</h2>
 
 ![demo](docs/demo.jpg)
+
+<h2 id="architecture">architecture</h2>
+
+系統功能架構
+
+| 主要頁面 | 主要功能 |
+|  ---   |  ---   |
+|首頁|以地圖顯示使用者周遭的各類活動|
+|個人頁面|好友列表 <br /> 參與活動的歷史紀錄 <br /> 活動評論|
+|報名頁面|報名資料|
+|揪團頁面|主辦方填寫活動詳細資訊|
+|通知頁面|評論回覆 <br /> 審核通知 <br /> 交友邀請|
+|審核頁面|審核活動參與人|
+|聊天室頁面|聊天記錄 <br /> 群組列表 <br /> 好友列表|
+
 
 <h2 id="document">Document</h2>
 
