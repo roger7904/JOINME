@@ -37,7 +37,7 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 
 ![demo](docs/demo.jpg)
 
-<h2 id="architecture">architecture</h2>
+<h2 id="architecture">Architecture</h2>
 
 系統功能架構
 
