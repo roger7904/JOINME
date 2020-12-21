@@ -2,6 +2,7 @@
 
 <div align="center">這是一個提倡即時性揪團的APP，以地圖更直覺地顯示活動的資訊，更方便、更迅速的建立與參加活動，利用O2O(Online to Offline)的商業模式，以線上的揪團平台帶動線下的活動，並且有良好的活動群組、個人聊天機制，也透過活動與個人的評價保障參加活動的的品質與安全。
 
+<br/>
 
 ![Java](https://img.shields.io/badge/Java-Language-red?logo=java)
 ![Firebase](https://img.shields.io/badge/firebase-Server-yellow?logo=firebase)
