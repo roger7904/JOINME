@@ -11,6 +11,10 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 
 </div>
 
+<div align="center">
+<a href='https://play.google.com/store/apps/details?id=com.roger.joinme'><img alt='home' src='docs/demo.jpg'/></a>
+</div>
+
 ***
 
 ### Introducing JOINME
@@ -35,7 +39,6 @@ Download by [Google Play](https://play.google.com/store/apps/details?id=com.roge
 
 <h2 id="demo">Demo</h2>
 
-![demo](docs/demo.jpg)
 
 <h2 id="architecture">Architecture</h2>
 
