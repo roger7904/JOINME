@@ -27,9 +27,8 @@
 
 1. [Features](#features)
 2. [Backend Server](#backendserver)
-3. [Demo](#demo)
-4. [Document](#document)
-5. [Architecture](#architecture)
+3. [Document](#document)
+4. [Architecture](#architecture)
 
 <h2 id="features">Features</h2>
 
